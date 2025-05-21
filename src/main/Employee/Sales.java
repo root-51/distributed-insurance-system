@@ -5,11 +5,11 @@ import main.Data.Customer;
 import main.Enum.Sex;
 import main.List.CustomerList;
 
-public class Sales extends Employee {
+public class Sales extends User {
 
 	public CustomerList customerList;
 
-	public Sales(int numOfEmployees, EmployeeType employeeType, CustomerList customerList) {
+	public Sales(int numOfEmployees, UserType employeeType, CustomerList customerList) {
 		super(numOfEmployees, employeeType);
 		this.customerList = customerList;
 	}

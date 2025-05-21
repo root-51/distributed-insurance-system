@@ -1,7 +1,7 @@
 package main;
 
 import main.Data.Customer;
-import main.Employee.Employee.EmployeeType;
+import main.Employee.User.UserType;
 import main.Employee.LossAdjuster;
 import main.Employee.ProductManagement;
 import main.Employee.Sales;
@@ -38,17 +38,17 @@ public class LoadData {
 	public void loadEmployeeData() {
 		for (int i = 0; i < 3; i++) { // add temp three Sales
 			int numOfEmployees = employeeList.employees.size();
-			Sales sales = new Sales(numOfEmployees, EmployeeType.Sales, customerList);
+			Sales sales = new Sales(numOfEmployees, UserType.Sales, customerList);
 			employeeList.insert(sales);
 		}
 		for (int i = 0; i < 3; i++) { // add temp three Sales
 			int numOfEmployees = employeeList.employees.size();
-			ProductManagement productManagement = new ProductManagement(numOfEmployees, EmployeeType.ProductManagement, customerList);
+			ProductManagement productManagement = new ProductManagement(numOfEmployees, UserType.ProductManagement, customerList);
 			employeeList.insert(productManagement);
 		}
 		for (int i = 0; i < 3; i++) { // add temp three lossAdjuster
 			int numOfEmployees = employeeList.employees.size();
-			LossAdjuster lossAdjuster = new LossAdjuster(numOfEmployees, EmployeeType.LossAdjuster);
+			LossAdjuster lossAdjuster = new LossAdjuster(numOfEmployees, UserType.LossAdjuster);
 			lossAdjuster.genrateDummy(10);
 			employeeList.insert(lossAdjuster);
 		}

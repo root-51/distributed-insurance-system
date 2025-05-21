@@ -1,7 +1,7 @@
 package main.List;
 
 
-import main.Employee.Employee;
+import main.Employee.User;
 
 public interface EmployeeList {
 		/**
@@ -14,18 +14,18 @@ public interface EmployeeList {
 		 *
 		 * @param employee
 		 */
-		public boolean insert(Employee employee);
+		public boolean insert(User employee);
 
 		/**
 		 *
 		 * @param employeeID
 		 */
-		public Employee search(String employeeID);
+		public User search(String employeeID);
 
 		/**
 		 *
 		 * @param employee
 		 */
-		public boolean update(Employee employee);
+		public boolean update(User employee);
 
 	}

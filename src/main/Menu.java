@@ -5,13 +5,13 @@ import java.util.*;
 
 import main.Data.*;
 import main.Employee.*;
-import main.Employee.Employee.*;
+import main.Employee.User.*;
 import main.Enum.*;
 import main.List.*;
 
 public class Menu {
 
-	private Employee loginedEmployee;
+	private User loginedEmployee;
 	private CustomerList customerList;
 	private EmployeeList employeeList;
 	private InsuranceProductList insuranceProductList;
@@ -19,7 +19,7 @@ public class Menu {
 	private Scanner scanner;
 
 	public Menu(CustomerListImpl customerList, EmployeeListImpl employeeList, InsuranceProductList insuranceProductList,
-			ContractList contractList, Employee loginedEmployee) {
+			ContractList contractList, User loginedEmployee) {
 		this.loginedEmployee = loginedEmployee;
 		this.customerList = customerList;
 		this.employeeList = employeeList;
@@ -29,17 +29,17 @@ public class Menu {
 	}
 
 	public void printMainMenu() {
-		EmployeeType loginedEmployeeType = loginedEmployee.getEmployeeType();
+		UserType loginedEmployeeType = loginedEmployee.getUserType();
 
 		String[] menuList = {};
-		if (loginedEmployeeType == EmployeeType.Sales) {
+		if (loginedEmployeeType == UserType.Sales) {
 			String[] salesMenuList = { "add customer", "delete customer", "modify customer", "search customer",
 					"add contract", "delete contract", "modify contract", "search contract" };
 			menuList = salesMenuList;
-		} else if (loginedEmployeeType == EmployeeType.ProductManagement) {
+		} else if (loginedEmployeeType == UserType.ProductManagement) {
 			String[] productManagementMenuList = { "상품 등록", "상품 수정", "상품 조회", "상품 삭제" };
 			menuList = productManagementMenuList;
-		} else if (loginedEmployeeType == EmployeeType.LossAdjuster) {
+		} else if (loginedEmployeeType == UserType.LossAdjuster) {
 			menuList = new String[] { "보상 지급", "보상 심사" };
 		}
 
@@ -51,8 +51,8 @@ public class Menu {
 	}
 
 	public void excuteSelectedMenu(int selectedMenu) {
-		EmployeeType loginedEmployeeType = loginedEmployee.getEmployeeType();
-		if (loginedEmployeeType == EmployeeType.Sales) {
+		UserType loginedEmployeeType = loginedEmployee.getUserType();
+		if (loginedEmployeeType == UserType.Sales) {
 			switch (selectedMenu) {
 			case 0:
 				System.out.println("Good Bye...");
@@ -84,7 +84,7 @@ public class Menu {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				break;
 			}
-		} else if (loginedEmployeeType == EmployeeType.ProductManagement) {
+		} else if (loginedEmployeeType == UserType.ProductManagement) {
 			switch (selectedMenu) {
 			case 0:
 				System.out.println("Good Bye...");
@@ -105,7 +105,7 @@ public class Menu {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				break;
 			}
-		} else if (loginedEmployeeType == EmployeeType.LossAdjuster) {
+		} else if (loginedEmployeeType == UserType.LossAdjuster) {
 			switch (selectedMenu) {
 			case 0:
 				System.out.println("Good Bye...");

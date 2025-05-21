@@ -7,9 +7,9 @@ import main.Data.InsuranceProduct;
 import main.List.CustomerList;
 import main.List.InsuranceProductList;
 
-public class ProductManagement extends Employee {
+public class ProductManagement extends User {
 
-	public ProductManagement(int numOfEmployees, EmployeeType employeeType, CustomerList customerList) {
+	public ProductManagement(int numOfEmployees, UserType employeeType, CustomerList customerList) {
 		super(numOfEmployees, employeeType);
 	}
 
@@ -35,7 +35,7 @@ public class ProductManagement extends Employee {
 		if (!insuranceProducts.checkProduct(productName)) {
 			product = new InsuranceProduct.InsuranceBuilder().coverageByAge(coverageByAge)
 					.exemptionPeriod(exemptionPeriod).reductionPeriod(reductionPeriod).reductionRatio(reductionRatio)
-					.productManagementID(getEmployeeID()).productName(productName).sex(sex).premium(premium)
+					.productManagementID(getUserID()).productName(productName).sex(sex).premium(premium)
 					.maxAge(maxAge).maxNumberEvent(maxNumberEvent).build();
 		}
 		return insuranceProducts.insert(product);
