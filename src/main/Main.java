@@ -25,7 +25,7 @@ public class Main {
 		loadData.loadInsuranceProductData();
 		loadData.loadContractData();
 
-		loginedEmployee = login("4");
+		loginedEmployee = login("1");
 
 		menu = new SystemManager(customerList, employeeList, insuranceProductList, contractList, loginedEmployee);
 		while (true) {

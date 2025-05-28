@@ -27,6 +27,7 @@ public class Menu { // TODO: rename to IOManager
 
 	}
 
+
 	public void showDetail() {
 
 	}
@@ -75,7 +76,7 @@ public class Menu { // TODO: rename to IOManager
 	}
 
 	public void printMenuGuide(String message) {
-		System.out.println(message + "\n");
+		System.out.println(message);
 	}
 
 	public void printLog(String message, boolean isSuccessed) {
@@ -114,6 +115,13 @@ public class Menu { // TODO: rename to IOManager
 	private int getInputInt(String title) {
 		return Integer.parseInt(getInputStr(title));
 	}
+	public int computMaxPage(int listSize){
+		int maxPage=1;
+		if(listSize%3==0) maxPage = listSize/3;
+		else maxPage = listSize/3+1;
+
+		return maxPage;
+	}
 
 	// inner class =================================
 	public static class CustomerMenu extends Menu {
@@ -143,16 +151,29 @@ public class Menu { // TODO: rename to IOManager
 			// 이유로 못함
 		}
 
-		public void show(ArrayList<Customer> customers) {
-			System.out.println("Customer List===");
+
+		public void show(ArrayList<Customer> customers, int currentPage) {
+			printMenuHeader("고객 조회");
 			if (customers.size() == 0) {
 				System.out.println("   등록된 고객이 없습니다.");
 			}
-			System.out.println("ID \tName");
+			System.out.println("   ID \tName");
 			for (Customer customer : customers) {
-				System.out.println(customer.getCustomerID() + "\t" + customer.getName());
+				System.out.println("   "+customer.getCustomerID() + "\t" + customer.getName());
 			}
+			System.out.println();
+			printMenuGuide("메뉴를 선택해주세요.");
 		}
+		public ArrayList<Customer> getNextCustomersInPage(ArrayList<Customer> customers,int currentPage, int startIndex){
+			ArrayList<Customer> customersInPage= new ArrayList<>();
+			int maxPage = super.computMaxPage(customers.size());
+			for(int i=startIndex ; i<currentPage*3 && currentPage<=maxPage ; i++){
+				if(i<customers.size()) { customersInPage.add(customers.get(i));}
+			}
+
+			return customersInPage;
+		}
+
 
 		public void showDetail(Customer customer) {
 			System.out.println("이름\t" + customer.getName());
@@ -179,18 +200,42 @@ public class Menu { // TODO: rename to IOManager
 			printMenuGuide("신규 상품의 정보를 입력해주세요.");
 		}
 
-		public void show(ArrayList<InsuranceProduct> insuranceProducts) {
+		public void showTenPerPage(ArrayList<InsuranceProduct> products){ //10개씩 보여주기
+			int currentPage=1;
+			int startIndex=0;
+			ArrayList<InsuranceProduct> productsInPage= new ArrayList<>();
+			for(int i=startIndex;i<currentPage*10;i++){
+				productsInPage.add(products.get(i));
+			}
+            int userSelect = 3;
+            if(userSelect==3){
+                currentPage++;
+                startIndex=currentPage*10-1;
+                productsInPage.clear();
+                productsInPage = getNextProductsInPage(products,currentPage,startIndex);
+            }
+
+		}
+
+		public ArrayList<InsuranceProduct> getNextProductsInPage(ArrayList<InsuranceProduct> products,int currentPage, int startIndex){
+            ArrayList<InsuranceProduct> productsInPage= new ArrayList<>();
+            for(int i=startIndex;i<currentPage*10;i++){
+                productsInPage.add(products.get(i));
+            }
+            return productsInPage;
+		}
+		public void show(ArrayList<InsuranceProduct> products) {
 			printMenuHeader("보험 상품 목록");
 			printMenuGuide("메뉴를 선택해주세요.");
-			if (insuranceProducts.size() == 0) {
+			if (products.size() == 0) {
 				System.out.println("   등록된 고객이 없습니다.");
 			}
 			System.out.println("상품ID\t보험상품명\t상품개발자ID");
 			for (int i = 0; i < 10; i++) {
 				System.out.println(
-					insuranceProducts.get(i).getProductID() + "\t" + 
-					insuranceProducts.get(i).getProductName()+ "\t" + 
-					insuranceProducts.get(i).getProductManagementID()
+						products.get(i).getProductID() + "\t" +
+						products.get(i).getProductName()+ "\t" +
+						products.get(i).getProductManagementID()
 				);
 			}
 			printMenuList(new String[] {"보험상품 상세정보 조회","보험상품 키워드 검색", "다음 페이지"});
@@ -199,7 +244,7 @@ public class Menu { // TODO: rename to IOManager
 			case 1: //보험상품 상세정보 조회
 				printMenuGuide("조회할 상품의 번호를 입력해주세요.");
 				int selectedProductNum = super.getInputInt("보험상품 ID");
-				showDetail(insuranceProducts.get(selectedProductNum-1));
+				showDetail(products.get(selectedProductNum-1));
 				break;
 			case 2: //보험상품 키워드 검색
 				break;

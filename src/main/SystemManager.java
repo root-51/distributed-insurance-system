@@ -157,7 +157,42 @@ public class SystemManager {
 	private void showCustomers() {
 		Sales sales = (Sales) loginedEmployee;
 		ArrayList<Customer> customers = sales.getAllCustomer();
-		((SalesMenu) menu).show(customers);
+		// 10개 보여주기
+
+        int maxPage=menu.computMaxPage(customers.size());
+        int currentPage=1;
+        int startIndex=0;
+
+        ((SalesMenu)menu).show(((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex), currentPage);
+
+        while(true){
+            // 메뉴출력 ["상세정보조회", "키워드검색","다음페이지"]
+            menu.printMenuList(new String[]{"상세정보조회", "키워드검색","다음페이지"});
+            // 선택 입력
+            int userSelect = getUserSelectInt();
+            // case3: 다음페이지를 선택하였을 경우
+            switch(userSelect){
+                case 0: // 종료
+                    System.exit(0);
+                case 1: // 상세정보조회
+                    break;
+                case 2: // 키워드검색
+                    break;
+                case 3: // 다음 페이지 출력
+                    if(currentPage==maxPage){
+                        startIndex=0;
+                        currentPage=1;
+                    }else {
+                        startIndex = currentPage * 3;
+                        currentPage++;
+                    }
+                    ((SalesMenu)menu).show(
+                            ((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex),
+                            currentPage
+                    );
+                    break;
+            }
+        }
 	}
 
 	private Customer showCustomerDetail(Customer customer) {
@@ -234,13 +269,13 @@ public class SystemManager {
 				getInputInt("감액기간 보장금액 비율(%)"), getInputStr("보험상품 이름"), checkSexInput(), getInputInt("보험료"),
 				getInputInt("최대 가입 연령"), getInputInt("최대 사고 횟수")))
 			menu.printLog("상품이 정상적으로 등록되었습니다.", true);
-			
-		else 
+
+		else
 			menu.printLog("같은 이름의 상품이 있어 등록이 실패했습니다.", false);
 	}
 
 	public void searchInsuaranceProduct() {
-		
+
 		int index = 0;
 		final int maxCount = 10;
 		String input = "";
@@ -385,7 +420,7 @@ public class SystemManager {
 
 	/**
 	 * string입력 값을 HashMap<String,String>으로 변환
-	 * 
+	 *
 	 * @param scanner
 	 * @return coverageByAge값을 HashMap<String,String>으로 반환
 	 */
@@ -408,7 +443,7 @@ public class SystemManager {
 
 	/**
 	 * 입력값에 따라 Sex 결정
-	 * 
+	 *
 	 * @param scanner
 	 * @return 입력값에 따른 Sex 반환
 	 */
