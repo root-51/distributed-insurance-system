@@ -2,6 +2,8 @@ package main.List;
 
 import main.Data.InsuranceProduct;
 
+import java.util.ArrayList;
+
 public interface InsuranceProductList {
 
 	public boolean delete(String productID);
@@ -21,6 +23,6 @@ public interface InsuranceProductList {
 	public int size();
 
 	public InsuranceProduct getProduct(int index);
-
+	public ArrayList<InsuranceProduct> getAllProducts();
 	public void printAllProducts();
 }
