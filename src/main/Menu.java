@@ -8,6 +8,7 @@ import main.Data.Customer;
 import main.Data.InsuranceProduct;
 import main.Enum.Sex;
 
+
 public class Menu { // TODO: rename to IOManager
 	private String[] menuList;
 	private String userTypeText;
@@ -28,6 +29,7 @@ public class Menu { // TODO: rename to IOManager
 	}
 	public void setUserTypeStr(String userTypeStr) {
 		this.userTypeText = userTypeStr;
+
 	}
 	public void printMenuHeader(String message) {
 		System.out.println("============================");

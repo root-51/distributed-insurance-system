@@ -6,9 +6,11 @@ import main.Enum.Sex;
 import main.Data.InsuranceProduct;
 import main.List.InsuranceProductList;
 
+
 public class ProductManagement extends Employee {
 	public InsuranceProductList insuranceProductList;
 	public ProductManagement(int numOfEmployees, EmployeeType employeeType, InsuranceProductList insuranceProductList) {
+
 		super(numOfEmployees, employeeType);
 		this.insuranceProductList=insuranceProductList;
 	}
@@ -20,7 +22,7 @@ public class ProductManagement extends Employee {
 		if (!insuranceProductList.checkProduct(productName)) {
 			product = new InsuranceProduct.Builder().coverageByAge(coverageByAge)
 					.exemptionPeriod(exemptionPeriod).reductionPeriod(reductionPeriod).reductionRatio(reductionRatio)
-					.productManagementID(getEmployeeID()).productName(productName).sex(sex).premium(premium)
+					.productManagementID(getUserID()).productName(productName).sex(sex).premium(premium)
 					.maxAge(maxAge).maxNumberEvent(maxNumberEvent).build();
 		}
 		return insuranceProductList.insert(product);

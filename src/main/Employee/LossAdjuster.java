@@ -11,11 +11,11 @@ import main.List.EventListImpl;
  * @version 1.0
  * @created 11-5-2025 ���� 11:25:09
  */
- public class LossAdjuster extends Employee {
+ public class LossAdjuster extends User {
 
 	private final EventList EventList;
 
-	public LossAdjuster(int numOfEmployees, EmployeeType employeeType) {
+	public LossAdjuster(int numOfEmployees, UserType employeeType) {
 		super(numOfEmployees, employeeType);
 		this.EventList = new EventListImpl();
 	}

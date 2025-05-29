@@ -1,12 +1,13 @@
 package main;
 
-import main.Employee.Employee;
+import main.Employee.User;
 import main.List.*;
 
 public class Main {
 
 	private static Employee loginedEmployee;
 	private static SystemManager menu;
+
 	private static LoadData loadData;
 	private static CustomerListImpl customerList;
 	private static EmployeeListImpl employeeList;
@@ -36,7 +37,7 @@ public class Main {
 
 	}
 
-	public static Employee login(String loginID) {
+	public static User login(String loginID) {
 		return employeeList.search(loginID);
 	}
 

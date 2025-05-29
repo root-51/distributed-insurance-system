@@ -2,14 +2,14 @@ package main.List;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import main.Employee.Employee;
+import main.Employee.User;
 
 public class EmployeeListImpl implements EmployeeList {
 
-	public ArrayList<Employee> employees;
+	public ArrayList<User> employees;
 
 	public EmployeeListImpl() {
-		this.employees = new ArrayList<Employee>();
+		this.employees = new ArrayList<User>();
 	}
 
 	/**
@@ -17,10 +17,10 @@ public class EmployeeListImpl implements EmployeeList {
 	 * @param employeeID
 	 */
 	public boolean delete(String employeeID) {
-		Iterator<Employee> iterator = employees.iterator();
+		Iterator<User> iterator = employees.iterator();
 		while (iterator.hasNext()) {
-			Employee employee = iterator.next();
-			if (employee.getEmployeeID().equals(employeeID)) {
+			User employee = iterator.next();
+			if (employee.getUserID().equals(employeeID)) {
 				iterator.remove();
 				return true;
 			}
@@ -32,7 +32,7 @@ public class EmployeeListImpl implements EmployeeList {
 	 *
 	 * @param employee
 	 */
-	public boolean insert(Employee employee) {
+	public boolean insert(User employee) {
 		return this.employees.add(employee);
 	}
 
@@ -40,9 +40,9 @@ public class EmployeeListImpl implements EmployeeList {
 	 *
 	 * @param employeeID
 	 */
-	public Employee search(String employeeID) {
-		for (Employee employee : employees) {
-			if (employee.getEmployeeID().equals(employeeID)) {
+	public User search(String employeeID) {
+		for (User employee : employees) {
+			if (employee.getUserID().equals(employeeID)) {
 				return employee;
 			}
 		}
@@ -53,10 +53,10 @@ public class EmployeeListImpl implements EmployeeList {
 	 *
 	 * @param updatedEmployee
 	 */
-	public boolean update(Employee updatedEmployee) {
+	public boolean update(User updatedEmployee) {
 		for (int i = 0; i < employees.size(); i++) {
-			Employee existingCustomer = employees.get(i);
-			if (existingCustomer.getEmployeeID().equals(updatedEmployee.getEmployeeID())) {
+			User existingCustomer = employees.get(i);
+			if (existingCustomer.getUserID().equals(updatedEmployee.getUserID())) {
 				employees.set(i, updatedEmployee);
 				return true;
 			}
