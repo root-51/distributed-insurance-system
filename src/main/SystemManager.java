@@ -3,7 +3,6 @@ package main;
 import java.time.LocalDate;
 import java.util.*;
 
-import main.Menu;
 import main.Menu.*;
 
 import main.Data.*;
@@ -72,13 +71,13 @@ public class SystemManager {
 				createCustomer();
 				break;
 			case 2:
-				deleteCustomer();
+				showCustomers("상세정보조회");
 				break;
 			case 3:
 				updateCustomer();
 				break;
 			case 4:
-				searchCustomer();
+				deleteCustomer();
 				break;
 			case 5:
 				// createContract();
@@ -101,13 +100,13 @@ public class SystemManager {
 				System.out.println("Good Bye...");
 				System.exit(0);
 			case 1:
-				createInsuaranceProduct();
+				createInsuranceProduct();
 				break;
 			case 2:
-				updateInsuaranceProduct();
+				showInsuranceProduct("상세정보조회");
 				break;
 			case 3:
-				searchInsuaranceProduct();
+				updateInsuranceProduct();
 				break;
 			case 4:
 				deleteInsuaranceProduct();
@@ -135,6 +134,8 @@ public class SystemManager {
 
 	}
 
+	// Sales =============================================================
+	// 0529 완
 	private void createCustomer() { //
 		menu.createPrompt();
 		if (((Sales) loginedEmployee).createCustomer(getInputStr("계좌번호"), getInputStr("주소"), getInputInt("나이"),
@@ -146,126 +147,116 @@ public class SystemManager {
 		}
 	}
 
+	// 0529 완
+	private void showCustomers(String nextCommand) {
+		menu.printMenuHeader(nextCommand);
+		Sales sales = (Sales) loginedEmployee;
+		ArrayList<Customer> customers = sales.getAllCustomer();
+        int maxPage=menu.computeMaxPage(customers.size());
+        int currentPage=1;
+        int startIndex=0;
+
+        ((SalesMenu)menu).show(((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex), currentPage);
+		boolean escapeMenu = false;
+		do{
+			menu.printMenuList(new String[]{
+					nextCommand.equals("상세정보조회")?"종료":nextCommand,
+					"상세정보조회", "키워드검색","다음페이지"});
+			int userSelect = getUserSelectInt();
+			switch(userSelect){
+				case 0:
+					escapeMenu=true;
+					break;
+				case 1: // 상세정보조회
+					menu.printMenuGuide("상세정보를 조회할 고객의 ID를 입력해주세요");
+					int selectedUserID=getInputInt("고객 ID");
+					menu.printMenuHeader(nextCommand);
+					showCustomerDetail(customers.get(selectedUserID-1));
+					break;
+				case 2: // TODO: 키워드검색
+					System.out.println("서비스 준비중입니다.");
+					break;
+				case 3: // 다음 페이지 출력
+					if(currentPage==maxPage){
+						startIndex=0;
+						currentPage=1;
+					}else {
+						startIndex = currentPage * 3;
+						currentPage++;
+					}
+					((SalesMenu)menu).show(
+							((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex),
+							currentPage
+					);
+					break;
+			}
+		}while(!escapeMenu);
+	}
+
+	// TODO: searchCustomer 키워드 검색 메뉴
 	private Customer searchCustomer() {
-		showCustomers();
-		String customerID = getInputStr("select customerID");
+		String customerID = getInputStr("검색할 고객 ID를 입력해주세요");
 		Sales sales = (Sales) loginedEmployee;
 		Customer selectedCustomer = sales.getCustomer(customerID);
 		return showCustomerDetail(selectedCustomer);
 	}
 
-	private void showCustomers() {
-		Sales sales = (Sales) loginedEmployee;
-		ArrayList<Customer> customers = sales.getAllCustomer();
-		// 10개 보여주기
-
-        int maxPage=menu.computMaxPage(customers.size());
-        int currentPage=1;
-        int startIndex=0;
-
-        ((SalesMenu)menu).show(((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex), currentPage);
-
-        while(true){
-            // 메뉴출력 ["상세정보조회", "키워드검색","다음페이지"]
-            menu.printMenuList(new String[]{"상세정보조회", "키워드검색","다음페이지"});
-            // 선택 입력
-            int userSelect = getUserSelectInt();
-            // case3: 다음페이지를 선택하였을 경우
-            switch(userSelect){
-                case 0: // 종료
-                    System.exit(0);
-                case 1: // 상세정보조회
-                    break;
-                case 2: // 키워드검색
-                    break;
-                case 3: // 다음 페이지 출력
-                    if(currentPage==maxPage){
-                        startIndex=0;
-                        currentPage=1;
-                    }else {
-                        startIndex = currentPage * 3;
-                        currentPage++;
-                    }
-                    ((SalesMenu)menu).show(
-                            ((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex),
-                            currentPage
-                    );
-                    break;
-            }
-        }
-	}
-
+	// 0529 완
 	private Customer showCustomerDetail(Customer customer) {
 		((SalesMenu) menu).showDetail(customer);
 		return customer;
 	}
 
+	// 0529 완
 	private void updateCustomer() {
 		Sales sales = (Sales) loginedEmployee;
+		showCustomers("고객정보 수정");
 
-		Customer customer = searchCustomer();
-		String customerID = customer.getCustomerID();
+		menu.printMenuGuide("수정할 고객의 ID를 선택해주세요");
+		Customer customer = sales.getCustomer(getInputStr("고객ID"));
+		String customerID = customer.getCustomerID(); // 입력한 고객 ID 에 해당하는 고객이 없는 경우 방지
 
-		System.out.println("Enter customer details:");
-		String accountNumber = getInputOrKeepStr("Account Number", customer.getAccountNumber());
-		String address = getInputOrKeepStr("Address", customer.getAddress());
-		int age = getInputOrKeepInt("Age", customer.getAge());
-		String job = getInputOrKeepStr("Job", customer.getJob());
-		String name = getInputOrKeepStr("Name", customer.getName());
-		String phoneNumber = getInputOrKeepStr("Phone Number", customer.getPhoneNumber());
-		String rrn = getInputOrKeepStr("RRN", customer.getRrn());
-		String sexStr = getInputOrKeepStr("Sex (M/F)", customer.getSex().toString().substring(0, 1)); // SEX의 ENUM을
-																										// String으로 변환 후
-																										// 첫 글자만 가져옴
-		Sex sex = sexStr.equalsIgnoreCase("M") ? Sex.MALE : Sex.FEMALE;
-		String log = "";
-		if (sales.updateCustomer(accountNumber, address, age, customerID, job, name, phoneNumber, rrn, sex)) {
-			log = "Customer updated successfully.";
+		if (sales.updateCustomer(
+				getInputOrKeepStr("계좌번호", customer.getAccountNumber()),
+				getInputOrKeepStr("주소", customer.getAddress()),
+				getInputOrKeepInt("나이", customer.getAge()),
+				customer.getCustomerID(),
+				getInputOrKeepStr("직업", customer.getJob()),
+				getInputOrKeepStr("이름", customer.getName()),
+				getInputOrKeepStr("전화번호", customer.getPhoneNumber()),
+				getInputOrKeepStr("주민번호", customer.getRrn()),
+				checkSexInput() //TODO: keep 확장 필요
+			)
+		) {
+			menu.printLog("고객 정보 수정에 성공했습니다.",true);
 			showCustomerDetail(sales.getCustomer(customerID));
 		} else {
-			log = "Failed: cannot update customer(" + customerID + ")";
+			menu.printLog("고객 정보 수정에 실패했습니다.", false);
 		}
-		System.out.println(log);
 	}
 
-	private String getInputOrKeepStr(String title, String prevValue) {
-		String userInput = "";
-		System.out.print(title + ": ");
-		userInput = scanner.nextLine().trim();
-		if (userInput == null || userInput.equals("")) {
-			userInput = prevValue;
-		}
-		return userInput;
-	}
-
-	private int getInputOrKeepInt(String title, int prevValue) {
-		return Integer.parseInt(getInputOrKeepStr(title, Integer.toString(prevValue)));
-	}
-
+	// 0529 완
 	private void deleteCustomer() {
 		Sales sales = (Sales) loginedEmployee;
+		showCustomers("고객삭제");
+		menu.printMenuGuide("삭제할 고객의 ID를 선택해주세요");
+		String customerID = getInputStr("고객 ID");
 
-		showCustomers();
-		System.out.println("Enter customer ID to delete.");
-		String customerID = getInputStr("customerID");
-
-		String log = "";
-		if (sales.deleteCustomer(customerID)) {
-			log = "Customer(" + customerID + ") deleted successfully.";
+		if (sales.deleteCustomer(customerID)){
+			menu.printLog("고객 삭제에 성공했습니다.",true);
 		} else {
-			log = "Failed: cannot delete customer(" + customerID + ")";
+			menu.printLog("고객 삭제에 실패했습니다.", false);
 		}
-		System.out.println(log);
 
 	}
 
-// ==============================
-
-	public void createInsuaranceProduct() {
+	// ProductManagement =============================================================
+	// 0529 완
+	public void createInsuranceProduct() {
 		menu.createPrompt();
 
 		// TODO: createProduct에 insuranceProductList 를 파라미터로 넣는 이유?
-		if (((ProductManagement) loginedEmployee).createProduct(insuranceProductList, checkHashMap(), getInputInt("면책기간(년)"), getInputInt("감액기간(년)"),
+		if (((ProductManagement) loginedEmployee).createProduct(checkHashMap(), getInputInt("면책기간(년)"), getInputInt("감액기간(년)"),
 				getInputInt("감액기간 보장금액 비율(%)"), getInputStr("보험상품 이름"), checkSexInput(), getInputInt("보험료"),
 				getInputInt("최대 가입 연령"), getInputInt("최대 사고 횟수")))
 			menu.printLog("상품이 정상적으로 등록되었습니다.", true);
@@ -274,7 +265,54 @@ public class SystemManager {
 			menu.printLog("같은 이름의 상품이 있어 등록이 실패했습니다.", false);
 	}
 
-	public void searchInsuaranceProduct() {
+	// 0529 완
+	private void showInsuranceProduct(String nextCommand){
+		menu.printMenuHeader(nextCommand);
+		ProductManagement productManagement = (ProductManagement) loginedEmployee;
+
+		ArrayList<InsuranceProduct> products = productManagement.getAllProducts();
+		int maxPage=menu.computeMaxPage(products.size());
+		int currentPage=1;
+		int startIndex=0;
+		((ProductManagementMenu)menu).show(((ProductManagementMenu)menu).getNextProductsInPage(products,currentPage,startIndex),currentPage);
+		boolean escapeMenu = false;
+		do{
+			menu.printMenuList(new String[]{
+					nextCommand.equals("상세정보조회")?"종료":nextCommand,
+					"상세정보조회", "키워드검색","다음페이지"});
+			int userSelect = getUserSelectInt();
+			switch(userSelect){
+				case 0:
+					escapeMenu=true;
+					break;
+				case 1: // 상세정보조회
+					menu.printMenuGuide("상세정보를 조회할 상품의 ID를 입력해주세요");
+					String selectedProductID=getInputStr("상품 ID");
+					menu.printMenuHeader(nextCommand);
+					showProductDetail(productManagement.searchProduct(selectedProductID));
+					break;
+				case 2: // TODO: 키워드검색
+					System.out.println("서비스 준비중입니다.");
+					break;
+				case 3: // 다음 페이지 출력
+					if(currentPage==maxPage){
+						startIndex=0;
+						currentPage=1;
+					}else {
+						startIndex = currentPage * 3;
+						currentPage++;
+					}
+					((ProductManagementMenu)menu).show(
+							((ProductManagementMenu)menu).getNextProductsInPage(products,currentPage,startIndex),
+							currentPage
+					);
+					break;
+			}
+		}while(!escapeMenu);
+	}
+
+	// TODO: 검토
+	public void searchInsuranceProduct() {
 
 		int index = 0;
 		final int maxCount = 10;
@@ -312,12 +350,11 @@ public class SystemManager {
 				} catch (NumberFormatException e) {
 					index = getInputInt("잘못된 입력입니다. 번호를 다시 입력해주세요 ");
 				}
-				System.out.println( ((ProductManagement) loginedEmployee).getProduct(insuranceProductList, index - 1).toString());
+				System.out.println( ((ProductManagement) loginedEmployee).getProduct( index - 1).toString());
 				break;
 			}
 		}
 	}
-
 	public void searchKeyWord() {
 		ProductManagement manager = (ProductManagement) loginedEmployee;
 		InsuranceProductList products = null;
@@ -327,77 +364,49 @@ public class SystemManager {
 		int chooseMenu = getUserSelectInt();
 
 		switch (chooseMenu) {
-		case 1:
-			String checkProductID = getInputStr("찾으려는 상품의 ID를 입력하세요");
-			products = manager.searchProducts(insuranceProductList, "productID", checkProductID);
-			break;
-		case 2:
-			String checkProductName = getInputStr("찾으려는 상품의 이름을 입력하세요");
-			products = manager.searchProducts(insuranceProductList, "productName", checkProductName);
-			break;
-		case 3:
-			String checkProductManagerID = getInputStr("찾으려는 상품의 상품관리자 id를 입력하세요");
-			products = manager.searchProducts(insuranceProductList, "productManagementID", checkProductManagerID);
-			break;
+			case 1:
+				String checkProductID = getInputStr("찾으려는 상품의 ID를 입력하세요");
+				products = manager.searchProducts("productID", checkProductID);
+				break;
+			case 2:
+				String checkProductName = getInputStr("찾으려는 상품의 이름을 입력하세요");
+				products = manager.searchProducts("productName", checkProductName);
+				break;
+			case 3:
+				String checkProductManagerID = getInputStr("찾으려는 상품의 상품관리자 id를 입력하세요");
+				products = manager.searchProducts("productManagementID", checkProductManagerID);
+				break;
 		}
 
 		insuranceProductList.printAllProducts();
 	}
 
-	public void updateInsuaranceProduct() {
-		String productID = getInputStr("업데이트하려는 상품의 ID를 적어주세요");
+	// 0529 완
+	private InsuranceProduct showProductDetail(InsuranceProduct product) {
+		((ProductManagementMenu) menu).showDetail(product);
+		return product;
+	}
 
-		ProductManagement manager = (ProductManagement) loginedEmployee;
-		InsuranceProduct product = manager.searchProduct(insuranceProductList, productID);
-		if (product == null) {
-			System.out.println("일치하는 상품이 없습니다.");
-			return;
+
+	public void updateInsuranceProduct() {
+		ProductManagement productManagement = (ProductManagement) loginedEmployee;
+		showInsuranceProduct("상품정보 수정");
+
+		menu.printMenuGuide("수정할 상품의 ID를 선택해주세요");
+		InsuranceProduct product = productManagement.searchProduct(getInputStr("상품ID"));
+		String productID = product.getProductID();
+		String productManagementID= productManagement.getEmployeeID();
+		menu.printMenuGuide("상품 정보를 수정해주세요.(비어있으면 이전 정보가 유지됩니다)");
+
+		if (productManagement.updateProduct(
+				((ProductManagementMenu)menu).updateProductPrompt(product,productManagementID))
+		) {
+			menu.printLog("상품 정보 수정에 성공했습니다.",true);
+			showProductDetail(productManagement.searchProduct(productID));
+		} else {
+			menu.printLog("상품 정보 수정에 실패했습니다.", false);
 		}
 
-		System.out.println("수정하려는 정보를 선택해주세요.");
-		String[] menuList = { "product name", "max age", "max number event", "premium", "reduction period",
-				"reduction ratio", "sex", "exemption period", "coverage by age" };
-		for (int i = 0; i < menuList.length; i++) {
-			System.out.println((i + 1) + " " + menuList);
-		}
-		int chooseMenu = getUserSelectInt();
-		System.out.println("수정된 값을 입력해주세요 : ");
-		boolean result = false;
-
-		switch (chooseMenu) {
-		case 1:
-			result = product.setProductName(scanner.nextLine());
-			break;
-		case 2:
-			result = product.setMaxAge(getInputInt("product name"));
-			break;
-		case 3:
-			result = product.setMaxNumberEvent(getInputInt("max number event"));
-			break;
-		case 4:
-			result = product.setPremium(getInputInt("premium"));
-			break;
-		case 5:
-			result = product.setReductionPeriod(getInputInt("reduction period"));
-			break;
-		case 6:
-			result = product.setReductionRatio(getInputInt("reduction ratio"));
-			break;
-		case 7:
-			result = product.setSex(checkSexInput());
-			break;
-		case 8:
-			result = product.setExemptionPeriod(getInputInt("exemption period"));
-			break;
-		case 9:
-			result = product.setCoverageByAge(checkHashMap());
-			break;
-		}
-
-		if (result)
-			System.out.println("성공적으로 수정되었습니다.");
-		else
-			System.out.println("문제가 발생하였습니다.");
 	}
 
 	public void deleteInsuaranceProduct() {
@@ -408,7 +417,7 @@ public class SystemManager {
 		while (true) {
 			input = getInputStr("삭제하려는 상품의 ID를 입력해주세요");
 			if (input != null) {
-				result = manager.deleteProduct(insuranceProductList, input);
+				result = manager.deleteProduct(input);
 				break;
 			}
 		}
@@ -418,12 +427,6 @@ public class SystemManager {
 			System.out.println("문제가 발생했습니다.");
 	}
 
-	/**
-	 * string입력 값을 HashMap<String,String>으로 변환
-	 *
-	 * @param scanner
-	 * @return coverageByAge값을 HashMap<String,String>으로 반환
-	 */
 	public HashMap<String, String> checkHashMap() {
 		HashMap<String, String> hash = new HashMap<>();
 		while (true) {
@@ -440,13 +443,6 @@ public class SystemManager {
 		}
 		return hash;
 	}
-
-	/**
-	 * 입력값에 따라 Sex 결정
-	 *
-	 * @param scanner
-	 * @return 입력값에 따른 Sex 반환
-	 */
 	public Sex checkSexInput() {
 		Sex sex = null;
 		String value = "";
@@ -465,7 +461,7 @@ public class SystemManager {
 		return sex;
 	}
 
-	// ----------------LossAdjuster--------------------------------------
+	// Loss Adjuster =============================================================
 
 	/**
 	 * search관련 메소드 분리되지 않음
@@ -604,6 +600,22 @@ public class SystemManager {
 		return null;
 	}
 
+
+	// Common method =============================================================
+
+	private String getInputOrKeepStr(String title, String prevValue) {
+		String userInput = "";
+		System.out.print(title + ": ");
+		userInput = scanner.nextLine().trim();
+		if (userInput == null || userInput.equals("")) {
+			userInput = prevValue;
+		}
+		return userInput;
+	}
+
+	private int getInputOrKeepInt(String title, int prevValue) {
+		return Integer.parseInt(getInputOrKeepStr(title, Integer.toString(prevValue)));
+	}
 	public int getUserSelectInt() {
 		System.out.print(">> ");
 		return Integer.parseInt(scanner.nextLine());
@@ -638,9 +650,5 @@ public class SystemManager {
 
 	private int getInputInt(String title) {
 		return Integer.parseInt(getInputStr(title));
-	}
-
-	private LocalDate getInputDate(String title) {
-		return null;
 	}
 }

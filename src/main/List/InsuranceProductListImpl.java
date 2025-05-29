@@ -61,7 +61,6 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 		Iterator<InsuranceProduct> iterator = insuranceProducts.iterator();
 		while(iterator.hasNext()){
 			InsuranceProduct insuranceProduct = iterator.next();
-			System.out.println(insuranceProduct);
 			if (insuranceProduct.getProductID().equals(productID)) {
 				return insuranceProduct;
 			}
@@ -148,6 +147,11 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 	 */
 	public InsuranceProduct getProduct(int index){
 		return this.insuranceProducts.get(index);
+	}
+
+	@Override
+	public ArrayList<InsuranceProduct> getAllProducts() {
+		return this.insuranceProducts;
 	}
 
 	public void printAllProducts(){

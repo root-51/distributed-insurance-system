@@ -18,14 +18,14 @@ public class Main {
 		employeeList = new EmployeeListImpl();
 		insuranceProductList = new InsuranceProductListImpl();
 		contractList = new ContractListImpl();
-		loadData = new LoadData(customerList, employeeList);
+		loadData = new LoadData(customerList, employeeList,insuranceProductList);
 
 		loadData.loadCustomerData();
 		loadData.loadEmployeeData();
 		loadData.loadInsuranceProductData();
 		loadData.loadContractData();
 
-		loginedEmployee = login("1");
+		loginedEmployee = login("4");
 
 		menu = new SystemManager(customerList, employeeList, insuranceProductList, contractList, loginedEmployee);
 		while (true) {
