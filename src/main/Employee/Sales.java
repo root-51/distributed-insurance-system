@@ -14,6 +14,11 @@ public class Sales extends User {
 		this.customerList = customerList;
 	}
 
+	public Sales(String id, UserType employeeType, CustomerList customerList) {
+		super(id, employeeType);
+		this.customerList = customerList;
+	}
+
 	public boolean createCustomer(String accountNumber, String address, int age, String customerID, String job,
 			String name, String phoneNumber, String rrn, Sex sex) {
 		Customer customer = new Customer.Builder().accountNumber(accountNumber).address(address).age(age)

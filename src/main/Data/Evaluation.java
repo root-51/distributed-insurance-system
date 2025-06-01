@@ -16,8 +16,8 @@ public class Evaluation {
 		this.evaluationID = builder.evaluationID;
 		this.eventID = builder.eventID;
 		this.customerID = builder.customerID;
-		this.compensation = builder.m_Compensation;
-		this.resultOfEvaluation = ProcessState.Awaiting;
+		this.compensation = builder.compensation;
+		this.resultOfEvaluation = (builder.resultOfEvaluation != null) ? builder.resultOfEvaluation : ProcessState.Awaiting;
 	}
 
 	// Getters
@@ -73,35 +73,29 @@ public class Evaluation {
 		private final String customerID;
 		private final String evaluationID;
 		// Optional fields
-		private Compensation m_Compensation;
+		private Compensation compensation;
+		private ProcessState resultOfEvaluation;
 
 
-		public Builder(String evaluationID,String eventID, String customerID) {
+		public Builder(String evaluationID, String eventID, String customerID) {
 			this.eventID = eventID;
 			this.customerID = customerID;
 			this.evaluationID = evaluationID;
 		}
 
 		public Builder compensation(Compensation compensation) {
-			this.m_Compensation = compensation;
+			this.compensation = compensation;
+			return this;
+		}
+		public Builder resultOfEvaluation(ProcessState state){
+			this.resultOfEvaluation = state;
 			return this;
 		}
 
 		public Evaluation build() {
-					return new Evaluation(this);
+			return new Evaluation(this);
 		}
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Evaluation that = (Evaluation) o;
-		return Objects.equals(evaluationID, that.evaluationID) &&
-						Objects.equals(eventID, that.eventID) &&
-						Objects.equals(customerID, that.customerID) &&
-						Objects.equals(resultOfEvaluation, that.resultOfEvaluation) &&
-						Objects.equals(compensation, that.compensation);
-	}
 
 }

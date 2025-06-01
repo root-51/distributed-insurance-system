@@ -1,40 +1,51 @@
 package main.List;
+import java.sql.Date;
+import main.DAO.DAO;
 import main.Data.Contract;
 
 public class ContractListImpl implements ContractList {
-
-	public Contract m_Contract;
-
-	public ContractListImpl(){
-
-	}
-
-	public void finalize() throws Throwable {
-
-	}
-
 	/**
 	 * 
 	 * @param contractID
 	 */
 	public boolean delete(String contractID){
-		return false;
+		try (DAO dao = new DAO()){
+			dao.executeQuery("DELETE FROM contract WHERE ContractID = ?", contractID);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
-
 	/**
 	 * 
 	 * @param contract
 	 */
 	public boolean insert(Contract contract){
-		return false;
-	}
+		try (DAO dao = new DAO()){
+			dao.executeQuery("INSERT INTO contract (contract_id,contract_date,expiration_date,product_id,sales_id,state,customer_id) VALUE(?,?,?,?,?,?,?)",
+					contract.getContractID(),
+					contract.getContractDate(),
+					contract.getExpirationDate(),
+					contract.getProductID(),
+					contract.getSalesID(),
+					contract.getState().getValue(),
+					contract.getCustomerID());
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+  }
 
 	/**
 	 * 
 	 * @param contractID
 	 */
-	public Contract search(int contractID){
-		return null;
+	public Contract search(String contractID){
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM contract WHERE ContractID = ?", contractID).toContracts().get(0);
+		}catch(Exception e){
+			return null;
+		}
 	}
 
 	/**
@@ -42,7 +53,17 @@ public class ContractListImpl implements ContractList {
 	 * @param contract
 	 */
 	public boolean update(Contract contract){
-		return false;
+		try (DAO dao = new DAO()){
+			dao.executeQuery("UPDATE contract SET contract_date = ?, expiration_date = ?, product_id = ?, sales_id = ?, state = ?, customer_id = ? WHERE contract_id = ?",
+					contract.getContractDate(),
+					contract.getExpirationDate(),
+					contract.getProductID(),
+					contract.getSalesID(),
+					contract.getState().getValue(),
+					contract.getCustomerID(),
+					contract.getContractID());
+			return true;
+		}catch(Exception e){ return false; }
 	}
 
 }

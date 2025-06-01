@@ -2,20 +2,24 @@ package main.Employee;
 
 import java.util.*;
 
+import main.Employee.User.UserType;
 import main.Enum.Sex;
 import main.Data.InsuranceProduct;
 import main.List.InsuranceProductList;
 
 
-public class ProductManagement extends Employee {
+public class ProductManagement extends User {
 	public InsuranceProductList insuranceProductList;
-	public ProductManagement(int numOfEmployees, EmployeeType employeeType, InsuranceProductList insuranceProductList) {
+	public ProductManagement(int numOfEmployees, UserType userType, InsuranceProductList insuranceProductList) {
 
-		super(numOfEmployees, employeeType);
+		super(numOfEmployees, userType);
 		this.insuranceProductList=insuranceProductList;
 	}
 
-	public boolean createProduct(HashMap<String, String> coverageByAge,
+  public ProductManagement(String userID, UserType userType) {
+  }
+
+  public boolean createProduct(HashMap<String, String> coverageByAge,
 			int exemptionPeriod, int reductionPeriod, int reductionRatio, String productName, Sex sex, int premium,
 			int maxAge, int maxNumberEvent) {
 		InsuranceProduct product = null;
