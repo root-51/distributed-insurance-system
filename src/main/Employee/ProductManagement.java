@@ -7,9 +7,9 @@ import main.Data.InsuranceProduct;
 import main.List.InsuranceProductList;
 
 
-public class ProductManagement extends Employee {
+public class ProductManagement extends User {
 	public InsuranceProductList insuranceProductList;
-	public ProductManagement(int numOfEmployees, EmployeeType employeeType, InsuranceProductList insuranceProductList) {
+	public ProductManagement(int numOfEmployees, UserType employeeType, InsuranceProductList insuranceProductList) {
 
 		super(numOfEmployees, employeeType);
 		this.insuranceProductList=insuranceProductList;

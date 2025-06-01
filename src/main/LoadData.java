@@ -3,26 +3,27 @@ package main;
 import main.Data.Customer;
 
 import main.Data.InsuranceProduct;
-import main.Employee.Employee.EmployeeType;
 
 import main.Employee.LossAdjuster;
 import main.Employee.ProductManagement;
 import main.Employee.Sales;
+import main.Employee.User.UserType;
 import main.Enum.Sex;
 import main.List.CustomerListImpl;
-import main.List.EmployeeListImpl;
+
 import main.List.InsuranceProductList;
+import main.List.UserListImpl;
 
 import java.util.HashMap;
 
 public class LoadData {
 	private CustomerListImpl customerList;
-	private EmployeeListImpl employeeList;
+	private UserListImpl userList;
 	private InsuranceProductList insuranceProductList;
 	
-	public LoadData(CustomerListImpl customerList,EmployeeListImpl employeeList,InsuranceProductList insuranceProductList) {
+	public LoadData(CustomerListImpl customerList,UserListImpl userList,InsuranceProductList insuranceProductList) {
 		this.customerList = customerList;
-		this.employeeList = employeeList;
+		this.userList = userList;
 		this.insuranceProductList = insuranceProductList;
 	}
 	public void loadCustomerData() {
@@ -76,21 +77,21 @@ public class LoadData {
 
 	public void loadEmployeeData() {
 		for (int i = 0; i < 3; i++) { // add temp three Sales
-			int numOfEmployees = employeeList.employees.size();
+			int numOfEmployees = userList.employees.size();
 			Sales sales = new Sales(numOfEmployees, UserType.Sales, customerList);
-			employeeList.insert(sales);
+			userList.insert(sales);
 		}
 		for (int i = 0; i < 3; i++) { // add temp three Sales
-			int numOfEmployees = employeeList.employees.size();
-			ProductManagement productManagement = new ProductManagement(numOfEmployees, EmployeeType.ProductManagement, insuranceProductList);
+			int numOfEmployees = userList.employees.size();
+			ProductManagement productManagement = new ProductManagement(numOfEmployees, UserType.ProductManagement, insuranceProductList);
 
-			employeeList.insert(productManagement);
+			userList.insert(productManagement);
 		}
 		for (int i = 0; i < 3; i++) { // add temp three lossAdjuster
-			int numOfEmployees = employeeList.employees.size();
+			int numOfEmployees = userList.employees.size();
 			LossAdjuster lossAdjuster = new LossAdjuster(numOfEmployees, UserType.LossAdjuster);
 			lossAdjuster.genrateDummy(10);
-			employeeList.insert(lossAdjuster);
+			userList.insert(lossAdjuster);
 		}
 
 	}
