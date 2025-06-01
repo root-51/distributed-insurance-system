@@ -1,7 +1,6 @@
 package main.Employee;
 
 import java.util.*;
-import main.Data.Customer;
 import main.Enum.Sex;
 import main.List.CustomerList;
 
@@ -42,10 +41,6 @@ public class Sales extends Employee {
 		return customerList.getAll();
 	}
 
-	/**
-	 *
-	 * @param Customer
-	 */
 	public boolean updateCustomer(String accountNumber, String address, int age, String customerID, String job,
 			String name, String phoneNumber, String rrn, Sex sex) {
 		Customer customer = new Customer.Builder().accountNumber(accountNumber).address(address).age(age)

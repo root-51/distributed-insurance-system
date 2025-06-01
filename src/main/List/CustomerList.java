@@ -1,7 +1,7 @@
 package main.List;
 
 import java.util.ArrayList;
-import main.Data.Customer;
+import main.Employee.Customer;
 
 public interface CustomerList {
 

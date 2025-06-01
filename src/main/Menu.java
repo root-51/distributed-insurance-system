@@ -461,7 +461,7 @@ public class Menu {
 	/**
 	 * string입력 값을 HashMap<String,String>으로 변환
 	 * 
-	 * @param scanner
+	 * @param
 	 * @return coverageByAge값을 HashMap<String,String>으로 반환
 	 */
 	public HashMap<String, String> checkHashMap() {

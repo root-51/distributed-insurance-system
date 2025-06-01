@@ -16,7 +16,7 @@ public class InsuranceProduct {
 	private int reductionRatio;
 	private Sex sex;
 
-	public InsuranceProduct(InsuranceBuilder builder){
+	public InsuranceProduct(Builder builder){
 		this.coverageByAge = builder.coverageByAge;
 		this.maxAge = builder.maxAge;
 		this.maxNumberEvent = builder.maxNumberEvent;
@@ -26,6 +26,7 @@ public class InsuranceProduct {
 		this.productName = builder.productName;
 		this.reductionPeriod = builder.reductionPeriod;
 		this.reductionRatio = builder.reductionRatio;
+		this.exemptionPeriod = builder.exemptionPeriod;
 		this.sex = builder.sex;
 	}
 
@@ -125,11 +126,7 @@ public class InsuranceProduct {
 	}
 
 
-	public static InsuranceBuilder builder() {
-		return new InsuranceBuilder();
-	}
-
-	public static class InsuranceBuilder {
+	public static class Builder {
 		private HashMap<String,String> coverageByAge;
 		private int exemptionPeriod;
 		public int maxAge;
@@ -141,58 +138,59 @@ public class InsuranceProduct {
 		private int reductionPeriod;
 		private int reductionRatio;
 		public Sex sex;
+		private String userID;
 
-		public InsuranceBuilder coverageByAge(HashMap<String,String> coverageByAge) {
+		public Builder coverageByAge(HashMap<String,String> coverageByAge) {
 			this.coverageByAge = coverageByAge;
 			return this;
 		}
 
-		public InsuranceBuilder exemptionPeriod(int exemptionPeriod) {
+		public Builder exemptionPeriod(int exemptionPeriod) {
 			this.exemptionPeriod = exemptionPeriod;
 			return this;
 		}
 
-		public InsuranceBuilder maxAge(int maxAge) {
+		public Builder maxAge(int maxAge) {
 			this.maxAge = maxAge;
 			return this;
 		}
 
-		public InsuranceBuilder maxNumberEvent(int maxNumberEvent) {
+		public Builder maxNumberEvent(int maxNumberEvent) {
 			this.maxNumberEvent = maxNumberEvent;
 			return this;
 		}
 
-		public InsuranceBuilder premium(int premium) {
+		public Builder premium(int premium) {
 			this.premium = premium;
 			return this;
 		}
 
-		public InsuranceBuilder productManagementID(String productManagementID) {
+		public Builder productManagementID(String productManagementID) {
 			this.productManagementID = productManagementID;
 			return this;
 		}
 
-		public InsuranceBuilder productName(String productName) {
+		public Builder productName(String productName) {
 			this.productName = productName;
 			return this;
 		}
 
-		public InsuranceBuilder productID(String productID){
+		public Builder productID(String productID){
 			this.productID = productID;
 			return this;
 		}
 
-		public InsuranceBuilder reductionPeriod(int reductionPeriod) {
+		public Builder reductionPeriod(int reductionPeriod) {
 			this.reductionPeriod = reductionPeriod;
 			return this;
 		}
 
-		public InsuranceBuilder reductionRatio(int reductionRatio) {
+		public Builder reductionRatio(int reductionRatio) {
 			this.reductionRatio = reductionRatio;
 			return this;
 		}
 
-		public InsuranceBuilder sex(Sex sex) {
+		public Builder sex(Sex sex) {
 			this.sex = sex;
 			return this;
 		}
@@ -200,6 +198,8 @@ public class InsuranceProduct {
 		public InsuranceProduct build() {
 			return new InsuranceProduct(this);
 		}
+
+
 	}
 
 }

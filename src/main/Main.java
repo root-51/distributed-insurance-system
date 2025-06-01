@@ -14,17 +14,10 @@ public class Main {
 	private static InsuranceProductListImpl insuranceProductList;
 
 	public static void main(String[] args) {
-		DBConnection dbConnection = new DBConnection();
 		customerList = new CustomerListImpl();
 		employeeList = new EmployeeListImpl();
 		insuranceProductList = new InsuranceProductListImpl();
 		contractList = new ContractListImpl();
-		loadData = new LoadData(dbConnection, customerList, employeeList, insuranceProductList);
-
-		loadData.loadCustomerData();
-		loadData.loadEmployeeData();
-		loadData.loadInsuranceProductData();
-		loadData.loadContractData();
 
 		loginedEmployee = login("4");
 

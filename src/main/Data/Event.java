@@ -29,7 +29,7 @@ public class Event {
 		this.eventID = builder.customerID;
 		this.eventLocation = builder.eventLocation;
 		this.receiptDate = builder.receiptDate;
-		this.evaluation = builder.m_Evaluation;
+		this.evaluation = builder.evaluation;
 	}
 
 	public int getClaimValue() {
@@ -85,7 +85,7 @@ public class Event {
 		private String eventDescription;
 		private String eventLocation;
 		private Date receiptDate;
-		private Evaluation m_Evaluation;
+		private Evaluation evaluation;
 
 		public Builder(String eventID,String customerID){
 			this.eventID = eventID;
@@ -120,8 +120,8 @@ public class Event {
 			this.receiptDate = receiptDate;
 			return this;
 		}
-		public Builder m_Evaluation(Evaluation m_Evaluation) {
-			this.m_Evaluation = m_Evaluation;
+		public Builder evaluation(Evaluation evaluation) {
+			this.evaluation = evaluation;
 			return this;
 		}
 
@@ -145,12 +145,12 @@ public class Event {
 	}
 	public boolean equals(Object o) {
 		if (this == o) {
-      return true;
-    }
+			return true;
+		}
 		if (null == o || getClass() != o.getClass()) return false;
 		Event event;
-    event = (Event) o;
-    return claimValue == event.claimValue && Objects.equals(customerID, event.customerID) && Objects.equals(documents, event.documents) && Objects.equals(eventDate, event.eventDate) && Objects.equals(eventDescription, event.eventDescription) && Objects.equals(eventID, event.eventID) && Objects.equals(eventLocation, event.eventLocation) && Objects.equals(receiptDate, event.receiptDate) && Objects.equals(
+		event = (Event) o;
+		return claimValue == event.claimValue && Objects.equals(customerID, event.customerID) && Objects.equals(documents, event.documents) && Objects.equals(eventDate, event.eventDate) && Objects.equals(eventDescription, event.eventDescription) && Objects.equals(eventID, event.eventID) && Objects.equals(eventLocation, event.eventLocation) && Objects.equals(receiptDate, event.receiptDate) && Objects.equals(
 				evaluation, event.evaluation);
 	}
 
