@@ -19,7 +19,7 @@ public interface ContractList {
 	 * 
 	 * @param contractID
 	 */
-	public Contract search(int contractID);
+	public Contract search(String contractID);
 
 	/**
 	 * 

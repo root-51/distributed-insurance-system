@@ -41,6 +41,10 @@ public class InsuranceProduct {
 		return null;
 	}
 
+	public HashMap<String, String> getCoverageByAge(){
+		return this.coverageByAge;
+	}
+
 	public int getExemptionPeriod(){return exemptionPeriod;}
 	public boolean setExemptionPeriod(int value){
 		this.exemptionPeriod = value;

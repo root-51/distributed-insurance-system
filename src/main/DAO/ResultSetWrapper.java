@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 import main.Data.Compensation;
 import main.Data.Contract;
-import main.Data.CustomerDTO;
+import main.Data.Customer;
 import main.Data.Evaluation;
 import main.Data.Event;
 import main.Data.InsuranceProduct;
-import main.Employee.Customer;
 import main.Employee.LossAdjuster;
 import main.Employee.ProductManagement;
 import main.Employee.Sales;
@@ -40,23 +39,23 @@ public class ResultSetWrapper {
     int userTypeID = (Integer) userData.get("user_type_id");
     if (userData != null) {
       switch (userTypeID){
-        case 1:return new Customer(userID, UserType.fromValue(userTypeID));
-        case 2:return new Sales(userID, UserType.fromValue(userTypeID));
-        case 3:return new UnderWriter(userID, UserType.fromValue(userTypeID));
-        case 4:return new ProductManagement(userID, UserType.fromValue(userTypeID));
-        case 5:return new LossAdjuster(userID, UserType.fromValue(userTypeID));
+//       case 1:return new Customer(userID, UserType.fromValue(userTypeID));
+//        case 2:return new Sales(userID, UserType.fromValue(userTypeID));
+//        case 3:return new UnderWriter(userID, UserType.fromValue(userTypeID));
+//        case 4:return new ProductManagement(userID, UserType.fromValue(userTypeID));
+//        case 5:return new LossAdjuster(userID, UserType.fromValue(userTypeID));
         default:
       }
     }
     return null;
   }
 
-  public List<CustomerDTO> toCustomer(){
-    ArrayList<CustomerDTO> customers = new ArrayList<>();
+  public List<Customer> toCustomer(){
+    ArrayList<Customer> customers = new ArrayList<>();
     for (Map<String, Object> row : resultSetList) {
       try {
         customers.add(
-            new CustomerDTO.Builder()
+            new Customer.Builder()
                 .customerID((String) row.get("user_id"))
                 .accountNumber((String) row.get("account_number"))
                 .address((String) row.get("address"))

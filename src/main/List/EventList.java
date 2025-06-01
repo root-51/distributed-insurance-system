@@ -17,12 +17,8 @@ public interface EventList {
 
 	//search
 	public ArrayList<Event> searchEvent(String key, String value);
-	public ArrayList<Event> searchEvaluation(String key, String value);
-	public ArrayList<Event> searchCompensation(String key, String value);
 
 	//update
 	public boolean update(Event event);
-	public boolean update(Evaluation evaluation);
-	public boolean update(Compensation compensation);
 
 }
