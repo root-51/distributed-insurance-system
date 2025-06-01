@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import main.Employee.User;
 
-public class EmployeeListImpl implements EmployeeList {
+public class UserListImpl implements UserList {
 
 	public ArrayList<User> employees;
 
-	public EmployeeListImpl() {
+	public UserListImpl() {
 		this.employees = new ArrayList<User>();
 	}
 
