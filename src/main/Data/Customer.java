@@ -1,9 +1,5 @@
-package main.Employee;
+package main.Data;
 
-import java.util.Date;
-import main.DAO.DAO;
-import main.DAO.Utillity;
-import main.Enum.ProcessState;
 import main.Enum.Sex;
 
 public class Customer {
@@ -65,28 +61,6 @@ public class Customer {
 		return sex;
 	}
 
-	/**
-	 *
-	 * 성공하면 True, 실패하면 False
-	 * @param claim_value
-	 * @param documents
-	 * @param event_date
-	 * @param event_description
-	 * @param event_location
-	 * @param event_receipt_date
-	 * @return
-	 */
-	public boolean acceptEvent(int claim_value, String documents, Date event_date, String event_description, String event_location, Date event_receipt_date){
-		try {
-			DAO.executeQuery("INSERT into event(event_id, claim_value, documents, event_date, event_description, event_location, event_receipt_date, state_of_evaluation, state_of_compensation, user_id) VALUES(?,?,?,?,?,?,?,?,?,?)",
-					Utillity.generateID('E'),claim_value,documents,(java.sql.Date)event_date,event_description,event_location,(java.sql.Date)event_receipt_date,
-					ProcessState.Awaiting.getValue(),ProcessState.Awaiting.getValue(),/*여기에 UserID들어가야됨*/);
-			return true;
-		} catch (Exception e){
-			return false;
-		}
-	}
-
 	@Override
 	public String toString() {
 		return "Customer{" +
@@ -98,8 +72,12 @@ public class Customer {
 				", name='" + name + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", rrn='" + rrn + '\'' +
-				", sex=" + sex + 
+				", sex=" + sex +
 				'}';
+	}
+
+	public static Builder builder() {
+		return new Builder();
 	}
 
 
@@ -128,7 +106,7 @@ public class Customer {
 			this.age = age;
 			return this;
 		}
-		
+
 		public Builder customerID(String customerID) {
 			this.customerID = customerID;
 			return this;
@@ -160,6 +138,7 @@ public class Customer {
 		}
 
 		public Customer build() {
+
 			// if (name == null || customerID == null) {
 			//     throw new IllegalStateException("Name and CustomerID cannot be null");
 			// }

@@ -2,25 +2,29 @@ package main.List;
 
 import main.Data.InsuranceProduct;
 
+import java.util.ArrayList;
+
 public interface InsuranceProductList {
 
 	public boolean delete(String productID);
 
-	public InsuranceProduct insert(InsuranceProduct insuranceProduct);
+	public boolean insert(InsuranceProduct insuranceProduct);
 
 	public InsuranceProduct search(String productID);
 
-	public InsuranceProductList searchProducts(String key,String value);
+	public ArrayList<InsuranceProduct> searchProducts(String key,String value);
 
 	public boolean update(InsuranceProduct insuranceProduct);
 
-	public String generateProductID();
+//	public String generateProductID();
 
 	public boolean checkProduct(String productName);
 
 	public int size();
 
-	public InsuranceProduct getProduct(int index);
-
+	//	public InsuranceProduct getProduct(int index);
+	public ArrayList<InsuranceProduct> getAllProducts();
 	public void printAllProducts();
+
+	public InsuranceProduct getProduct(int index);
 }

@@ -1,6 +1,10 @@
 
 package main.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import main.DAO.DAO;
+import main.DAO.ResultSetWrapper;
 import main.Data.Compensation;
 import main.Data.Evaluation;
 import main.Data.Event;
@@ -15,154 +19,111 @@ public class EventListImpl implements EventList {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param eventID
 	 */
 	public boolean delete(String eventID){
-		for (Event event : Events) {
-			if (String.valueOf(event.getEventID()).equals(eventID)) {
-				Events.remove(event);
-				return true;
-			}
+		try (DAO dao = new DAO()){
+			dao.executeQuery("DELETE FROM Event WHERE EventID = ?", eventID);
+			return true;
+		}catch(Exception e){
+			return false;
 		}
-		return false;
-	}
-
-	public boolean delete(Event tragetEvent){
-		for (Event event : Events) {
-			if (event.equals(tragetEvent)) {
-				Events.remove(event);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
 	public boolean insert(Event event) {
-		if(event==null)return false;
-		return Events.add(event);
+		try (DAO dao = new DAO()){
+			dao.executeQuery("INSERT INTO Event (event_id, claim_value, documents, event_date, event_description, event_location, event_receipt_date, state_of_evaluation, state_of_compensation, user_id, paid_value)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+					event.getEventID(),
+					event.getClaimValue(),
+					event.getDocuments(),
+					event.getEventDate(),
+					event.getEventDescription(),
+					event.getEventLocation(),
+					event.getReceiptDate(),
+					event.getEvaluation().getResultOfEvaluation().getValue(),
+					event.getEvaluation().getCompensation().getResultOfPaid().getValue(),
+					event.getCustomerID(),
+					event.getEvaluation().getCompensation().getAmountOfPaid());
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 
 
-//Search
+	//Search
 	@Override
 	public ArrayList<Event> searchEvent(String key, String value) {
-		ArrayList<Event> result = new ArrayList<>();
-		for(Event event : this.Events){
-			switch (key.toLowerCase()){
-				case "keyword":
-					if(event.toString().toLowerCase().contains(value.toLowerCase())) result.add(event);
-					break;
-				case "state":
-					if(event.getEvaluation().getResultOfEvaluation() == ProcessState.fromString(value)) result.add(event);
-					break;
-				case "id":
-					if(event.getEventID().equals(value)) result.add(event);
-					break;
-				case "all":
-					result.add(event);
-					break;
-				default:
-					System.out.println("지원하지 않는 검색 필드입니다: " + key);
-					return result;
-			}
+		try (DAO dao = new DAO()) {
+			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM Event WHERE ? = ?", key, value)
+					.toEvents();
+		} catch (Exception e) {
+			return null;
 		}
-		return result;
-	}
-
-	@Override
-	public ArrayList<Event> searchEvaluation(String key, String value) {
-		ArrayList<Event> result = new ArrayList<>();
-		for(Event event : this.Events){
-			Evaluation evaluation = event.getEvaluation();
-			if(evaluation==null) continue;
-			switch (key.toLowerCase()){
-				case "keyword":
-					if(evaluation.toString().toLowerCase().contains(value.toLowerCase())) result.add(event);
-					break;
-				case "state":
-					if(evaluation.getResultOfEvaluation() == ProcessState.fromString(value)) result.add(event);
-					break;
-				case "id":
-					if(evaluation.getEvaluationID().equals(value)) result.add(event);
-					break;
-				case "all":
-					result.add(event);
-					break;
-				default:
-					System.out.println("지원하지 않는 검색 필드입니다: " + key);
-					return result;
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public ArrayList<Event> searchCompensation(String key, String value) {
-		ArrayList<Event> result = new ArrayList<>();
-		for(Event event : this.Events){
-			Compensation compensation = event.getEvaluation().getCompensation();
-			if(compensation==null) continue;
-			switch (key.toLowerCase()){
-				case "keyword":
-					if(compensation.toString().toLowerCase().contains(value.toLowerCase())) result.add(event);
-					break;
-				case "state":
-					if(compensation.getState() == ProcessState.fromString(value)) result.add(event);
-					break;
-				case "id":
-					if(compensation.getCompensationID().equals(value)) result.add(event);
-					break;
-				case "all":
-					result.add(event);
-					break;
-				default:
-					System.out.println("지원하지 않는 검색 필드입니다: " + key);
-					return result;
-			}
-		}
-		return result;
 	}
 
 
-//Update
+	//Update
 	@Override
 	public boolean update(Event updatedEvent) {
-		for (int i = 0; i < Events.size(); i++) {
-			Event existingEvents = Events.get(i);
-			if (existingEvents.getEventID().equals(updatedEvent.getEventID())) {
-				this.Events.set(i, updatedEvent);
-				return true;
-			}
+		try (DAO dao = new DAO()){
+			dao.executeQuery("UPDATE Event SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? WHERE event_id = ?",
+					updatedEvent.getClaimValue(),
+					updatedEvent.getDocuments(),
+					updatedEvent.getEventDate(),
+					updatedEvent.getEventDescription(),
+					updatedEvent.getEventLocation(),
+					updatedEvent.getReceiptDate(),
+					updatedEvent.getEvaluation().getResultOfEvaluation().getValue(),
+					updatedEvent.getEvaluation().getCompensation().getResultOfPaid().getValue(),
+					updatedEvent.getCustomerID(),
+					updatedEvent.getEvaluation().getCompensation().getAmountOfPaid(),
+					updatedEvent.getEventID());
+			return true;
+		}catch(Exception e){
+			return false;
 		}
-		return false;
 	}
 
-	@Override
-	public boolean update(Evaluation updatedEvaluation) {
-		// 수정된 코드
-    // 리스트에서 Event 객체를 가져옵니다.
-    for (Event eventInList : Events) {
-      Evaluation existingEvaluation = eventInList.getEvaluation();
-      if (existingEvaluation.getEvaluationID().equals(updatedEvaluation.getEvaluationID())) {
-        eventInList.setEvaluation(updatedEvaluation);
-        return true;
-      }
-    }
-		return false;
+	public boolean updateEvaluation(Evaluation targetEvaluation){
+		try(DAO dao = new DAO()){
+			dao.executeQuery("UPDATE event set state_of_evaluation = ? where event_id = ?",targetEvaluation.getResultOfEvaluation(),targetEvaluation.getEvaluationID());
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 
-	@Override
-	public boolean update(Compensation compensation) {
-    for (Event event : Events) {
-      Compensation existingCompensation = event.getEvaluation().getCompensation();
-      if (existingCompensation.getCompensationID().equals(compensation.getCompensationID())) {
-        event.getEvaluation().setCompensation(compensation);
-        return true;
-      }
-    }
-		return false;
-//update compensation
+	public boolean updateCompensation(Compensation targetCompensation){
+		try(DAO dao = new DAO()){
+			dao.executeQuery("UPDATE event set state_of_compensation = ? where evaluation_id = ?",targetCompensation.getResultOfPaid(),targetCompensation.getEvaluationID());
+			return true;
+		}catch (Exception e){
+			return false;
+		}
 	}
+
+	public List<Event> searchCompensation(String state, String awaiting) {
+		try(DAO dao = new DAO()){
+			ResultSetWrapper wrapper = dao.executeQuery("SELECT * FROM event where result_of_evaluation in (?,?)",state,awaiting);
+			return wrapper.toEvents();
+		}catch(Exception e){
+			return null;
+		}
+	}
+
+	public List<Event> searchEvaluation(String state, String awaiting) {
+		try(DAO dao = new DAO()){
+			ResultSetWrapper wrapper = dao.executeQuery("SELECT * FROM event where result_of_compensation in (?,?)",state,awaiting);
+			return wrapper.toEvents();
+		}catch (Exception e){
+			return null;
+		}
+	}
+
+//	public ArrayList<Event> searchCompensation(String state, String awaiting){
+//
+//	}
 }//end EventListImpl

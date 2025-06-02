@@ -26,8 +26,8 @@ public class InsuranceProduct {
 		this.productName = builder.productName;
 		this.reductionPeriod = builder.reductionPeriod;
 		this.reductionRatio = builder.reductionRatio;
-		this.exemptionPeriod = builder.exemptionPeriod;
 		this.sex = builder.sex;
+		this.exemptionPeriod=builder.exemptionPeriod;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class InsuranceProduct {
 		return null;
 	}
 
-	public HashMap<String,String> getCoverageByAge(){
+	public HashMap<String, String> getCoverageByAge(){
 		return this.coverageByAge;
 	}
 
@@ -99,9 +99,8 @@ public class InsuranceProduct {
 		return true;
 	}
 
-	public boolean setProductID(String productID){
+	public void setProductID(String productID){
 		this.productID = productID;
-		return true;
 	}
 
 	public String toString() {
@@ -126,6 +125,10 @@ public class InsuranceProduct {
 	}
 
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
 	public static class Builder {
 		private HashMap<String,String> coverageByAge;
 		private int exemptionPeriod;
@@ -138,7 +141,6 @@ public class InsuranceProduct {
 		private int reductionPeriod;
 		private int reductionRatio;
 		public Sex sex;
-		private String userID;
 
 		public Builder coverageByAge(HashMap<String,String> coverageByAge) {
 			this.coverageByAge = coverageByAge;
@@ -198,8 +200,6 @@ public class InsuranceProduct {
 		public InsuranceProduct build() {
 			return new InsuranceProduct(this);
 		}
-
-
 	}
 
 }

@@ -1,12 +1,14 @@
 package main.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import main.DAO.DAO;
+import main.DAO.Utillity;
 import main.Data.InsuranceProduct;
 
 public class InsuranceProductListImpl implements InsuranceProductList {
 
 	private ArrayList<InsuranceProduct> insuranceProducts;
-	private int index = 1;
+//	private int index = 1;
 
 	public InsuranceProductListImpl(){
 		insuranceProducts = new ArrayList<>();
@@ -18,26 +20,21 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 	 * @return delete 성공 시 true, 실패 시 false
 	 */
 	public boolean delete(String productID){
-		Iterator<InsuranceProduct> iterator = insuranceProducts.iterator();
-		while(iterator.hasNext()){
-			InsuranceProduct insuranceProduct = iterator.next();
-			if (insuranceProduct.getProductID().equals(productID)) {
-				iterator.remove();
-				return true;
-			}
+		try (DAO dao = new DAO()){
+			dao.executeQuery("DELETE FROM InsuranceProduct WHERE product_id = ?", productID);
+			return true;
+		}catch(Exception e){
+			return false;
 		}
-		return false;
 	}
 
 	public boolean checkProduct(String productName){
-		Iterator<InsuranceProduct> iterator = insuranceProducts.iterator();
-		while(iterator.hasNext()){
-			InsuranceProduct insuranceProduct = iterator.next();
-			if (insuranceProduct.getProductName().equals(productName)) {
-				return true;
-			}
+		try (DAO dao = new DAO()){
+			dao.executeQuery("SELECT * FROM InsuranceProduct WHERE product_name = ?", productName);
+			return true;
+		}catch(Exception e){
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -45,14 +42,24 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 	 * @param insuranceProduct
 	 * @return insert 성공 시 true, 실패 시 false
 	 */
-	public InsuranceProduct insert(InsuranceProduct insuranceProduct){
-		if(insuranceProduct==null)
-			return null;
-		insuranceProduct.setProductID(generateProductID());
-		if(this.insuranceProducts.add(insuranceProduct)){
-			return insuranceProduct;
+	public boolean insert(InsuranceProduct insuranceProduct){
+		try (DAO dao = new DAO()){
+			dao.executeQuery("INSERT INTO InsuranceProduct (product_id,coverage_by_age,exemption_period,max_age,max_number_event,premium,product_name,reduction_period,reduction_ratio,sex,user_id) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+					insuranceProduct.getProductID(),
+					Utillity.map2Json(insuranceProduct.getCoverageByAge()),
+					insuranceProduct.getExemptionPeriod(),
+					insuranceProduct.getMaxAge(),
+					insuranceProduct.getMaxNumberEvent(),
+					insuranceProduct.getPremium(),
+					insuranceProduct.getProductName(),
+					insuranceProduct.getReductionPeriod(),
+					insuranceProduct.getReductionRatio(),
+					insuranceProduct.getSex().getValue(),
+					insuranceProduct.getProductManagementID());
+			return true;
+		}catch(Exception e){
+			return false;
 		}
-		return null;
 	}
 
 	/**
@@ -61,15 +68,11 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 	 * @return search 성공 시 해당 상품, 실패 시 null
 	 */
 	public InsuranceProduct search(String productID){
-		Iterator<InsuranceProduct> iterator = insuranceProducts.iterator();
-		while(iterator.hasNext()){
-			InsuranceProduct insuranceProduct = iterator.next();
-			System.out.println(insuranceProduct);
-			if (insuranceProduct.getProductID().equals(productID)) {
-				return insuranceProduct;
-			}
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM insurance_product WHERE product_id = ?",productID).toInsuranceProduct().get(0);
+		}catch(Exception e){
+			return null;
 		}
-		return null;
 	}
 
 	/**
@@ -78,37 +81,12 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 	 * @param value
 	 * @return
 	 */
-	public InsuranceProductList searchProducts(String key, String value) {
-		InsuranceProductList insuranceProductList = new InsuranceProductListImpl();
-
-		for (InsuranceProduct product : insuranceProducts) {
-			boolean match = false;
-
-			switch (key.toLowerCase()) {
-				case "productid":
-					match = product.getProductID().equals(value);
-					break;
-				case "productname":
-					match = product.getProductName().equals(value);
-					break;
-				case "productmanagementid":
-					match = product.getProductManagementID().equals(value);
-					break;
-				default:
-					System.out.println("지원하지 않는 검색 필드입니다: " + key);
-					return insuranceProductList;
-			}
-
-			if (match) {
-				insuranceProductList.insert(product);
-			}
+	public ArrayList<InsuranceProduct> searchProducts(String key, String value) {
+		try (DAO dao = new DAO()){
+			return(ArrayList<InsuranceProduct>) dao.executeQuery("SELECT * FROM insurance_product WHERE ? = ?", key, value).toInsuranceProduct();
+		}catch(Exception e){
+			return null;
 		}
-
-		if (insuranceProductList.size()==0) {
-			System.out.println("일치하는 보험상품이 없습니다.");
-		}
-
-		return insuranceProductList;
 	}
 
 
@@ -128,37 +106,56 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 		return false;
 	}
 
-	/**
-	 * 보험 상품의 productID를 자동으로 생성
-	 * @return 생성된 productID
-	 */
-	public String generateProductID(){
-		return "P"+String.format("%08d",index++);
-	}
+//	/**
+//	 * 보험 상품의 productID를 자동으로 생성
+//	 * @return 생성된 productID
+//	 */
+//	public String generateProductID(){
+//		return "P"+String.format("%08d",index++);
+//	}
 
 	/**
 	 * 보험 상품 리스트의 사이즈 값
 	 * @return 보험 상품 개수
 	 */
 	public int size(){
-		return this.insuranceProducts.size();
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM insurance_product").toInsuranceProduct().size();
+		}catch(Exception e){
+			return -1;
+		}
 	}
 
-	/**
-	 * 해당 index값의 보험 상품 반환
-	 * @param index
-	 * @return 해당 index값의 보험 상품 반환
-	 */
-	public InsuranceProduct getProduct(int index){
-		return this.insuranceProducts.get(index);
+//	/**
+//	 * 해당 index값의 보험 상품 반환
+//	 * @param index
+//	 * @return 해당 index값의 보험 상품 반환
+//	 */
+//	public InsuranceProduct getProduct(int index){
+//		return this.insuranceProducts.get(index);
+//	}
+
+	@Override
+	public ArrayList<InsuranceProduct> getAllProducts() {
+		try (DAO dao = new DAO()){
+			return (ArrayList<InsuranceProduct>) dao.executeQuery("SELECT * FROM InsuranceProduct").toInsuranceProduct();
+		}catch(Exception e){
+			return null;
+		}
+
 	}
 
 	public void printAllProducts(){
-		if(insuranceProducts.isEmpty()){
+		ArrayList<InsuranceProduct> products= this.getAllProducts();
+		if(products.isEmpty()){
 			System.out.println("등록된 보험 상품이 없습니다.");
 			return;
 		}
-		for(InsuranceProduct product: insuranceProducts)
+		for(InsuranceProduct product: products)
 			System.out.println(product.toString());
+	}
+
+	public InsuranceProduct getProduct(int index){
+		return insuranceProducts.get(index);
 	}
 }

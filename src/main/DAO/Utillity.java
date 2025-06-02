@@ -8,12 +8,13 @@ public class Utillity {
 
   public static String generateID(char startChar) {
     SecureRandom RANDOM = new SecureRandom();
-    StringBuilder sb = new StringBuilder(14);
-    for (int i = 0; i < 14; i++) {
+    StringBuilder sb = new StringBuilder(9);
+    for (int i = 0; i < 9; i++) {
       // CHARACTERS 문자열에서 랜덤하게 한 문자 선택
       int randomIndex = RANDOM.nextInt("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".length());
       sb.append("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(randomIndex));
     }
+    System.out.println(startChar+sb.toString());
     return startChar+sb.toString();
   }
 
@@ -25,7 +26,7 @@ public class Utillity {
       String key = entry.getKey().replace("\"", "\\\"");
       String value = entry.getValue().replace("\"", "\\\"");
       jsonBuilder.append("\"").append(key).append("\":")
-          .append("\"").append(value).append("\"");
+              .append("\"").append(value).append("\"");
       if (++count < map.size()) {
         jsonBuilder.append(",");
       }

@@ -1,37 +1,36 @@
 package main;
 
-import main.Employee.Employee;
+import main.Employee.User;
 import main.List.*;
+
+import java.awt.*;
+import java.sql.SQLException;
 
 public class Main {
 
-	private static Employee loginedEmployee;
-	private static Menu menu;
-	private static LoadData loadData;
+	private static User loginedUser;
+	private static SystemManager menu;
 	private static CustomerListImpl customerList;
-	private static EmployeeListImpl employeeList;
+	private static UserListImpl userList;
 	private static ContractList contractList;
 	private static InsuranceProductListImpl insuranceProductList;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		customerList = new CustomerListImpl();
-		employeeList = new EmployeeListImpl();
+		userList = new UserListImpl();
 		insuranceProductList = new InsuranceProductListImpl();
 		contractList = new ContractListImpl();
 
-		loginedEmployee = login("4");
+		LoginMenu loginMenu = new LoginMenu();
+		loginedUser = loginMenu.login();
 
-		menu = new Menu(customerList, employeeList, insuranceProductList, contractList, loginedEmployee);
+		menu = new SystemManager(customerList, userList, insuranceProductList, contractList, loginedUser);
 		while (true) {
 			menu.printMainMenu();
 			int selectedMenu = menu.getUserSelectInt();
 			menu.excuteSelectedMenu(selectedMenu);
 		}
 
-	}
-
-	public static Employee login(String loginID) {
-		return employeeList.search(loginID);
 	}
 
 }
