@@ -25,7 +25,7 @@ public class Main {
 //		loadData.loadInsuranceProductData();
 //		loadData.loadContractData();
 
-		loginedUser = login("manager1");
+		loginedUser = login("soyun");
 
 		menu = new SystemManager(customerList, insuranceProductList, contractList,
 				loginedUser);
