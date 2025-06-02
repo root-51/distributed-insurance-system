@@ -9,7 +9,7 @@ public class FileManager {
 
 	public FileManager() {
 		try {
-			fileReader = new FileReader("config.txt");
+			fileReader = new FileReader("src/main/config.txt");
 		} catch (FileNotFoundException e) {
 			System.out.println("config파일이 존재하지 않습니다.");
 			e.printStackTrace();

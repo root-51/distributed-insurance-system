@@ -142,7 +142,6 @@ public class DAO implements AutoCloseable {
     if (this.con != null) {
       try {
         this.con.close();
-        System.out.println("DB 연결 해제 성공!");
       } catch (SQLException e) {
         System.err.println("DB 연결 해제 중 오류 발생: " + e.getMessage());
       } finally {

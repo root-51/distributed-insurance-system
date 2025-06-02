@@ -21,7 +21,7 @@ public class SystemManager {
 
 	private Menu menu;
 
-	public SystemManager(CustomerListImpl customerList,
+	public SystemManager(CustomerList customerList,
 			InsuranceProductList insuranceProductList, ContractList contractList, User loginedUser) {
 		this.loginedUser = loginedUser;
 		this.loginedUserType = loginedUser.getUserType();
@@ -354,7 +354,7 @@ public class SystemManager {
 	}
 	public void searchKeyWord() {
 		ProductManagement manager = (ProductManagement) loginedUser;
-		InsuranceProductList products = null;
+		ArrayList<InsuranceProduct> products = null;
 
 		System.out.println("원하는 키워드를 선택해주세요.");
 		System.out.println("1.product id \n2.product name \n3.product management id");
@@ -375,7 +375,9 @@ public class SystemManager {
 				break;
 		}
 
-		insuranceProductList.printAllProducts();
+		for(InsuranceProduct product : products){
+			System.out.println(product);
+		}
 	}
 
 	// 0529 완
