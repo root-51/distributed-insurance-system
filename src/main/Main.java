@@ -5,7 +5,7 @@ import main.List.*;
 
 public class Main {
 
-	private static Employee loginedEmployee;
+	private static User loginedUser;
 	private static SystemManager menu;
 
 	private static LoadData loadData;
@@ -26,9 +26,10 @@ public class Main {
 		loadData.loadInsuranceProductData();
 		loadData.loadContractData();
 
-		loginedEmployee = login("4");
+		loginedUser = login("4");
 
-		menu = new SystemManager(customerList, employeeList, insuranceProductList, contractList, loginedEmployee);
+		menu = new SystemManager(customerList, employeeList, insuranceProductList, contractList,
+				loginedUser);
 		while (true) {
 			menu.printMainMenu();
 			int selectedMenu = menu.getUserSelectInt();

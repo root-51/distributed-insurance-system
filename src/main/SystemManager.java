@@ -1,20 +1,19 @@
 package main;
 
-import java.time.LocalDate;
 import java.util.*;
 
+import main.Employee.User.UserType;
 import main.Menu.*;
 
 import main.Data.*;
 import main.Employee.*;
-import main.Employee.Employee.*;
 import main.Enum.*;
 import main.List.*;
 
 public class SystemManager {
 
-	private Employee loginedEmployee;
-	private EmployeeType loginedEmployeeType;
+	private User loginedUser;
+	private UserType loginedUserType;
 	private CustomerList customerList;
 	private EmployeeList employeeList;
 	private InsuranceProductList insuranceProductList;
@@ -24,9 +23,9 @@ public class SystemManager {
 	private Menu menu;
 
 	public SystemManager(CustomerListImpl customerList, EmployeeListImpl employeeList,
-			InsuranceProductList insuranceProductList, ContractList contractList, Employee loginedEmployee) {
-		this.loginedEmployee = loginedEmployee;
-		this.loginedEmployeeType = loginedEmployee.getEmployeeType();
+			InsuranceProductList insuranceProductList, ContractList contractList, User loginedUser) {
+		this.loginedUser = loginedUser;
+		this.loginedUserType = loginedUser.getUserType();
 		this.customerList = customerList;
 		this.employeeList = employeeList;
 		this.insuranceProductList = insuranceProductList;
@@ -38,7 +37,7 @@ public class SystemManager {
 	}
 
 	public void setMenu() {
-		switch (loginedEmployeeType) {
+		switch (loginedUserType) {
 		case Sales:
 			this.menu = new SalesMenu();
 			break;
@@ -61,8 +60,8 @@ public class SystemManager {
 	}
 
 	public void excuteSelectedMenu(int selectedMenu) {
-		EmployeeType loginedEmployeeType = loginedEmployee.getEmployeeType();
-		if (loginedEmployeeType == EmployeeType.Sales) {
+		UserType loginedUserType = loginedUser.getUserType();
+		if (loginedUserType == UserType.Sales) {
 			switch (selectedMenu) {
 			case 0:
 				System.out.println("Good Bye...");
@@ -94,7 +93,7 @@ public class SystemManager {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				break;
 			}
-		} else if (loginedEmployeeType == EmployeeType.ProductManagement) {
+		} else if (loginedUserType == UserType.ProductManagement) {
 			switch (selectedMenu) {
 			case 0:
 				System.out.println("Good Bye...");
@@ -115,7 +114,7 @@ public class SystemManager {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				break;
 			}
-		} else if (loginedEmployeeType == EmployeeType.LossAdjuster) {
+		} else if (loginedUserType == UserType.LossAdjuster) {
 			switch (selectedMenu) {
 			case 0:
 				System.out.println("Good Bye...");
@@ -138,7 +137,7 @@ public class SystemManager {
 	// 0529 완
 	private void createCustomer() { //
 		menu.createPrompt();
-		if (((Sales) loginedEmployee).createCustomer(getInputStr("계좌번호"), getInputStr("주소"), getInputInt("나이"),
+		if (((Sales) loginedUser).createCustomer(getInputStr("계좌번호"), getInputStr("주소"), getInputInt("나이"),
 				Integer.toString(customerList.getAll().size()), // TODO: CustomerID는 DB에서 부여하나?
 				getInputStr("직업"), getInputStr("이름"), getInputStr("전화번호"), getInputStr("주민번호"), checkSexInput())) {
 			menu.printLog("신규고객 등록에 성공하였습니다.", true);
@@ -150,7 +149,7 @@ public class SystemManager {
 	// 0529 완
 	private void showCustomers(String nextCommand) {
 		menu.printMenuHeader(nextCommand);
-		Sales sales = (Sales) loginedEmployee;
+		Sales sales = (Sales) loginedUser;
 		ArrayList<Customer> customers = sales.getAllCustomer();
         int maxPage=menu.computeMaxPage(customers.size());
         int currentPage=1;
@@ -196,7 +195,7 @@ public class SystemManager {
 	// TODO: searchCustomer 키워드 검색 메뉴
 	private Customer searchCustomer() {
 		String customerID = getInputStr("검색할 고객 ID를 입력해주세요");
-		Sales sales = (Sales) loginedEmployee;
+		Sales sales = (Sales) loginedUser;
 		Customer selectedCustomer = sales.getCustomer(customerID);
 		return showCustomerDetail(selectedCustomer);
 	}
@@ -209,7 +208,7 @@ public class SystemManager {
 
 	// 0529 완
 	private void updateCustomer() {
-		Sales sales = (Sales) loginedEmployee;
+		Sales sales = (Sales) loginedUser;
 		showCustomers("고객정보 수정");
 
 		menu.printMenuGuide("수정할 고객의 ID를 선택해주세요");
@@ -237,7 +236,7 @@ public class SystemManager {
 
 	// 0529 완
 	private void deleteCustomer() {
-		Sales sales = (Sales) loginedEmployee;
+		Sales sales = (Sales) loginedUser;
 		showCustomers("고객삭제");
 		menu.printMenuGuide("삭제할 고객의 ID를 선택해주세요");
 		String customerID = getInputStr("고객 ID");
@@ -256,7 +255,7 @@ public class SystemManager {
 		menu.createPrompt();
 
 		// TODO: createProduct에 insuranceProductList 를 파라미터로 넣는 이유?
-		if (((ProductManagement) loginedEmployee).createProduct(checkHashMap(), getInputInt("면책기간(년)"), getInputInt("감액기간(년)"),
+		if (((ProductManagement) loginedUser).createProduct(checkHashMap(), getInputInt("면책기간(년)"), getInputInt("감액기간(년)"),
 				getInputInt("감액기간 보장금액 비율(%)"), getInputStr("보험상품 이름"), checkSexInput(), getInputInt("보험료"),
 				getInputInt("최대 가입 연령"), getInputInt("최대 사고 횟수")))
 			menu.printLog("상품이 정상적으로 등록되었습니다.", true);
@@ -268,7 +267,7 @@ public class SystemManager {
 	// 0529 완
 	private void showInsuranceProduct(String nextCommand){
 		menu.printMenuHeader(nextCommand);
-		ProductManagement productManagement = (ProductManagement) loginedEmployee;
+		ProductManagement productManagement = (ProductManagement) loginedUser;
 
 		ArrayList<InsuranceProduct> products = productManagement.getAllProducts();
 		int maxPage=menu.computeMaxPage(products.size());
@@ -350,13 +349,13 @@ public class SystemManager {
 				} catch (NumberFormatException e) {
 					index = getInputInt("잘못된 입력입니다. 번호를 다시 입력해주세요 ");
 				}
-				System.out.println( ((ProductManagement) loginedEmployee).getProduct( index - 1).toString());
+				System.out.println( ((ProductManagement) loginedUser).getProduct( index - 1).toString());
 				break;
 			}
 		}
 	}
 	public void searchKeyWord() {
-		ProductManagement manager = (ProductManagement) loginedEmployee;
+		ProductManagement manager = (ProductManagement) loginedUser;
 		InsuranceProductList products = null;
 
 		System.out.println("원하는 키워드를 선택해주세요.");
@@ -389,13 +388,13 @@ public class SystemManager {
 
 
 	public void updateInsuranceProduct() {
-		ProductManagement productManagement = (ProductManagement) loginedEmployee;
+		ProductManagement productManagement = (ProductManagement) loginedUser;
 		showInsuranceProduct("상품정보 수정");
 
 		menu.printMenuGuide("수정할 상품의 ID를 선택해주세요");
 		InsuranceProduct product = productManagement.searchProduct(getInputStr("상품ID"));
 		String productID = product.getProductID();
-		String productManagementID= productManagement.getEmployeeID();
+		String productManagementID= productManagement.getUserID();
 		menu.printMenuGuide("상품 정보를 수정해주세요.(비어있으면 이전 정보가 유지됩니다)");
 
 		if (productManagement.updateProduct(
@@ -410,7 +409,7 @@ public class SystemManager {
 	}
 
 	public void deleteInsuaranceProduct() {
-		ProductManagement manager = (ProductManagement) loginedEmployee;
+		ProductManagement manager = (ProductManagement) loginedUser;
 		String input = null;
 		boolean result = false;
 
@@ -467,13 +466,13 @@ public class SystemManager {
 	 * search관련 메소드 분리되지 않음
 	 */
 	private void payCompensation() {
-		LossAdjuster lossAdjuster = (LossAdjuster) loginedEmployee; // 관리자 로딩
+		LossAdjuster lossAdjuster = (LossAdjuster) loginedUser; // 관리자 로딩
 
 		EventList eventList = lossAdjuster.getEventList(); // 컴포지션... 관리자가 리스트를 들고 있음, 가져와야함
 
 		// 보상 지급 대기중인 보상 조회 로직, 라인넘버 통해서 선택함,
 		System.out.println("===CompensationList===");
-		ArrayList<Event> events = eventList.searchCompensation("state", "Awaiting"); // 일반 보상 지급이 아직 되지 않은 경우만 골라오긴 하는데,
+		ArrayList<Event> events = eventList.searchEvent("state_of_compensation", "0"); // 일반 보상 지급이 아직 되지 않은 경우만 골라오긴 하는데,
 																						// 보상 지급 결정이 내려졌는지가 반영이 되야할것같음..
 																						// DB 마렵네
 		if (events.size() <= 0) {
@@ -515,7 +514,7 @@ public class SystemManager {
 	}
 
 	private void evaluateCompensation() {
-		LossAdjuster lossAdjuster = (LossAdjuster) loginedEmployee; // 관리자 로딩
+		LossAdjuster lossAdjuster = (LossAdjuster) loginedUser; // 관리자 로딩
 
 		EventList eventList = lossAdjuster.getEventList(); // 컴포지션... 관리자가 리스트를 들고 있음, 가져와야함
 
@@ -570,7 +569,7 @@ public class SystemManager {
 
 	private Event eventDetailVeiw(EventList eventList) {
 		System.out.println("===EventList===");
-		ArrayList<Event> events = eventList.searchEvaluation("state", "Awaiting"); // 심사 대기중 리스트 가져옴
+		ArrayList<Event> events = eventList.searchEvent("state_of_evaluation", "0"); // 심사 대기중 리스트 가져옴
 		if (events.size() <= 0) {
 			System.out.println("보상 지급 대기중인 항목이 없습니다");
 			return null;
