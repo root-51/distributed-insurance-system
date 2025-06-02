@@ -3,7 +3,7 @@ package main.List;
 
 import main.Employee.User;
 
-public interface EmployeeList {
+public interface UserList {
 		/**
 		 *
 		 * @param employeeID

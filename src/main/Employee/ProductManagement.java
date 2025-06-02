@@ -10,13 +10,14 @@ import main.List.InsuranceProductList;
 
 public class ProductManagement extends User {
 	public InsuranceProductList insuranceProductList;
+  
 	public ProductManagement(int numOfEmployees, UserType userType, InsuranceProductList insuranceProductList) {
-
 		super(numOfEmployees, userType);
 		this.insuranceProductList=insuranceProductList;
 	}
 
   public ProductManagement(String userID, UserType userType) {
+    super(numOfEmployees, userType);
   }
 
   public boolean createProduct(HashMap<String, String> coverageByAge,
