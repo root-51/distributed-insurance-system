@@ -15,19 +15,17 @@ public class SystemManager {
 	private User loginedUser;
 	private UserType loginedUserType;
 	private CustomerList customerList;
-	private EmployeeList employeeList;
 	private InsuranceProductList insuranceProductList;
 	private ContractList contractList;
 	private Scanner scanner;
 
 	private Menu menu;
 
-	public SystemManager(CustomerListImpl customerList, EmployeeListImpl employeeList,
+	public SystemManager(CustomerListImpl customerList,
 			InsuranceProductList insuranceProductList, ContractList contractList, User loginedUser) {
 		this.loginedUser = loginedUser;
 		this.loginedUserType = loginedUser.getUserType();
 		this.customerList = customerList;
-		this.employeeList = employeeList;
 		this.insuranceProductList = insuranceProductList;
 		this.contractList = contractList;
 		this.scanner = new Scanner(System.in);
