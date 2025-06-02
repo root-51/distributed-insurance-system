@@ -126,14 +126,20 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 		}
 	}
 
-//	/**
-//	 * 해당 index값의 보험 상품 반환
-//	 * @param index
-//	 * @return 해당 index값의 보험 상품 반환
-//	 */
-//	public InsuranceProduct getProduct(int index){
-//		return this.insuranceProducts.get(index);
-//	}
+	/**
+	 * 해당 index값의 보험 상품 반환
+	 * @param index
+	 * @return 해당 index값의 보험 상품 반환
+	 */
+	public InsuranceProduct getProduct(int index){
+		InsuranceProduct product = null;
+		try (DAO dao = new DAO()){
+			product = dao.executeQuery("SELECT * FROM InsuranceProduct").toInsuranceProduct().get(index);
+		}catch(Exception e){
+			return null;
+		}
+		return product;
+	}
 
 	@Override
 	public ArrayList<InsuranceProduct> getAllProducts() {

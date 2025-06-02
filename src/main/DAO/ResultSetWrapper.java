@@ -33,17 +33,16 @@ public class ResultSetWrapper {
 
 
   public User toUser(){
-    System.out.println(resultSetList.toString());
     Map<String,Object> userData = resultSetList.get(0);
     String userID = (String) userData.get("user_id");
     int userTypeID = (Integer) userData.get("user_type_id");
     if (userData != null) {
       switch (userTypeID){
-//       case 1:return new Customer(userID, UserType.fromValue(userTypeID));
-//        case 2:return new Sales(userID, UserType.fromValue(userTypeID));
-//        case 3:return new UnderWriter(userID, UserType.fromValue(userTypeID));
-//        case 4:return new ProductManagement(userID, UserType.fromValue(userTypeID));
-//        case 5:return new LossAdjuster(userID, UserType.fromValue(userTypeID));
+//        case 1:return new Customer(userID, UserType.fromValue(userTypeID));
+        case 2:return new Sales(userID, UserType.fromValue(userTypeID));
+        case 3:return new UnderWriter(userID, UserType.fromValue(userTypeID));
+        case 4:return new ProductManagement(userID, UserType.fromValue(userTypeID));
+        case 5:return new LossAdjuster(userID, UserType.fromValue(userTypeID));
         default:
       }
     }

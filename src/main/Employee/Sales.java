@@ -14,9 +14,8 @@ public class Sales extends User {
 		this.customerList = customerList;
 	}
 
-	public Sales(String id, UserType employeeType, CustomerList customerList) {
+	public Sales(String id, UserType employeeType) {
 		super(id, employeeType);
-		this.customerList = customerList;
 	}
 
 	public boolean createCustomer(String accountNumber, String address, int age, String customerID, String job,

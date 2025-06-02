@@ -22,7 +22,8 @@ public interface InsuranceProductList {
 
 	public int size();
 
-//	public InsuranceProduct getProduct(int index);
+	public InsuranceProduct getProduct(int index);
 	public ArrayList<InsuranceProduct> getAllProducts();
 	public void printAllProducts();
+
 }

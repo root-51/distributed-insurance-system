@@ -17,7 +17,7 @@ public class ProductManagement extends User {
 	}
 
   public ProductManagement(String userID, UserType userType) {
-    super(numOfEmployees, userType);
+    super(userID, userType);
   }
 
   public boolean createProduct(HashMap<String, String> coverageByAge,
@@ -45,7 +45,7 @@ public class ProductManagement extends User {
 		return insuranceProductList.search(productID);
 	}
 
-	public InsuranceProductList searchProducts(String key, String value) {
+	public ArrayList<InsuranceProduct> searchProducts(String key, String value) {
 		return insuranceProductList.searchProducts(key, value);
 	}
 
