@@ -1,28 +1,25 @@
 package main;
 
-import main.DAO.DAO;
-import main.Employee.UnderWriter;
-import main.Employee.User;
-import main.Employee.User.UserType;
-import main.List.*;
+
+import main.User.User;
+
+import java.sql.SQLException;
 
 public class Main {
 
 	private static User loginedUser;
 	private static SystemManager menu;
-	private static CustomerList customerList;
-	private static InsuranceProductList insuranceProductList;
-	private static ContractList contractList;
 
-	public static void main(String[] args) {
-		customerList = new CustomerListImpl();
-		insuranceProductList = new InsuranceProductListImpl();
-		contractList = new ContractListImpl();
+	public static void main(String[] args) throws SQLException {
+		LoginMenu loginMenu = new LoginMenu();
+		loginedUser = loginMenu.login();
 
-		loginedUser = login("lostmymusic");
+		if(loginedUser==null){
+			System.out.println("일치하는 사용자가 없습니다.");
+			System.exit(0);
+		}
 
-		menu = new SystemManager(customerList, insuranceProductList, contractList,
-				loginedUser);
+		menu = new SystemManager(loginedUser);
 		while (true) {
 			menu.printMainMenu();
 			int selectedMenu = menu.getUserSelectInt();
@@ -30,14 +27,4 @@ public class Main {
 		}
 
 	}
-
-	public static User login(String userID) {
-		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM user WHERE user_id = ?",userID).toUser();
-		}catch(Exception e){
-			System.out.println(e.getClass().getName() + ": " + e.getMessage());
-			return null;
-		}
-	}
-
 }

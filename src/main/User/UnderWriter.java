@@ -1,13 +1,15 @@
-package main.Employee;
+package main.User;
 
-import main.DAO.DAO;
-import main.Data.Contract;
+import main.Data.InsuranceProduct;
 import main.List.ContractList;
 import main.List.ContractListImpl;
 import main.List.CustomerList;
 import main.List.CustomerListImpl;
 import main.List.InsuranceProductList;
 import main.List.InsuranceProductListImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UnderWriter extends User {
@@ -38,6 +40,8 @@ public class UnderWriter extends User {
    * @param ContractID
    */
   public boolean underwrite(String ContractID , boolean approve){
-    return contractList.update(contractList.search(ContractID).receiptEvaluation(approve));
+//    return contractList.update(contractList.search(ContractID).receiptEvaluation(approve));
+    return false;
   }
+
 }//end UnderWriter

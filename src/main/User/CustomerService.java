@@ -1,4 +1,4 @@
-package main.Employee;
+package main.User;
 
 import main.Data.Event;
 import main.List.EventList;
