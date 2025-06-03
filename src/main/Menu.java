@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import main.DAO.Utillity;
+import main.Data.Contract;
 import main.Data.Customer;
 import main.Data.Event;
 import main.Data.InsuranceProduct;
@@ -279,6 +280,35 @@ public class Menu { // TODO: rename to IOManager
 			System.out.println("고객ID\t" + customer.getCustomerID());
 			System.out.println();
 		}
+		public void showContractDetail(Contract contract) {
+			System.out.println("계약ID\t\t" + contract.getContractID());
+			System.out.println("계약날짜\t\t" + contract.getContractDate());
+			System.out.println("만기일\t" + contract.getExpirationDate());
+			System.out.println("상품ID\t" + contract.getProductID());
+			System.out.println("영업사원ID\t\t" + contract.getSalesID());
+			System.out.println("상태\t" + contract.getState());
+			System.out.println("고객ID\t" + contract.getCustomerID());
+			System.out.println();
+		}
+		public void showContract(ArrayList<Contract> contracts, int currentPage){
+			if(contracts.size()==0){
+				System.out.println("   등록된 계약이 없습니다.");
+			}
+			System.out.println("   ID \t상풍ID \t고객ID ");
+			for(Contract contract: contracts){
+				System.out.println("   "+contract.getContractID()+"\t"+contract.getProductID()+"\t"+contract.getCustomerID());
+			}
+			System.out.println();
+			printMenuGuide("메뉴를 선택해주세요.");
+		}
+		public ArrayList<Contract> getNextContractsInPage(ArrayList<Contract> contracts,int currentPage, int startIndex){
+			ArrayList<Contract> customersInPage= new ArrayList<>();
+			int maxPage = super.computeMaxPage(contracts.size());
+			for(int i=startIndex ; i<currentPage*3 && currentPage<=maxPage ; i++){
+				if(i<contracts.size()) { customersInPage.add(contracts.get(i));}
+			}
+			return customersInPage;
+		}
 	}
 	public static class ProductManagementMenu extends Menu {
 		public ProductManagementMenu() {
@@ -323,7 +353,15 @@ public class Menu { // TODO: rename to IOManager
 			System.out.println("   감액기간\t\t" + product.getReductionPeriod());
 			System.out.println("   감액률\t\t" + product.getReductionRatio());
 			System.out.println("   상품개발자ID\t" + product.getProductManagementID());
+			showCoverageByAge(product.getCoverageByAge());
 			System.out.println();
+		}
+		public void showCoverageByAge(HashMap<String,String> map){
+			String cover = "";
+			for(String key : map.keySet()){
+				cover += (key + "대 : "+map.get(key)+"\n           \t");
+			}
+			System.out.println("   연령별 보장범위\t"+cover);
 		}
 		public InsuranceProduct updateProductPrompt(InsuranceProduct product, String productManagementID){
 			InsuranceProduct insuranceProduct = new InsuranceProduct.Builder()
