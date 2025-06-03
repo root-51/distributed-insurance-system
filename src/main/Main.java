@@ -10,8 +10,6 @@ public class Main {
 
 	private static User loginedUser;
 	private static SystemManager menu;
-
-	private static LoadData loadData;
 	private static CustomerList customerList;
 	private static InsuranceProductList insuranceProductList;
 	private static ContractList contractList;
@@ -21,7 +19,7 @@ public class Main {
 		insuranceProductList = new InsuranceProductListImpl();
 		contractList = new ContractListImpl();
 
-		loginedUser = login("overwriter");
+		loginedUser = login("lostmymusic");
 
 		menu = new SystemManager(customerList, insuranceProductList, contractList,
 				loginedUser);

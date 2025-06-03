@@ -1,0 +1,4 @@
+distributed_prgramming_1
+root51.duckdns.org:3306
+solmin
+distributed

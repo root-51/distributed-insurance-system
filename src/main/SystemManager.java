@@ -64,74 +64,74 @@ public class SystemManager {
 		UserType loginedUserType = loginedUser.getUserType();
 		if (loginedUserType == UserType.Sales) {
 			switch (selectedMenu) {
-			case 0:
-				System.out.println("Good Bye...");
-				System.exit(0);
-			case 1:
-				createCustomer();
-				break;
-			case 2:
-				showCustomers("상세정보조회");
-				break;
-			case 3:
-				updateCustomer();
-				break;
-			case 4:
-				deleteCustomer();
-				break;
-			case 5:
-				// createContract();
-				break;
-			case 6:
-				// deleteContract();
-				break;
-			case 7:
-				// updateContract();
-				break;
-			case 8:
-				// searchContract();
-			default:
-				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-				break;
+				case 0:
+					System.out.println("Good Bye...");
+					System.exit(0);
+				case 1:
+					createCustomer();
+					break;
+				case 2:
+					showCustomers("상세정보조회");
+					break;
+				case 3:
+					updateCustomer();
+					break;
+				case 4:
+					deleteCustomer();
+					break;
+				case 5:
+					// createContract();
+					break;
+				case 6:
+					// deleteContract();
+					break;
+				case 7:
+					// updateContract();
+					break;
+				case 8:
+					// searchContract();
+				default:
+					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+					break;
 			}
 		} else if (loginedUserType == UserType.ProductManagement) {
 			switch (selectedMenu) {
-			case 0:
-				System.out.println("Good Bye...");
-				System.exit(0);
-			case 1:
-				createInsuranceProduct();
-				break;
-			case 2:
-				showInsuranceProduct("상세정보조회");
-				break;
-			case 3:
-				updateInsuranceProduct();
-				break;
-			case 4:
-				deleteInsuaranceProduct();
-				break;
-			default:
-				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-				break;
+				case 0:
+					System.out.println("Good Bye...");
+					System.exit(0);
+				case 1:
+					createInsuranceProduct();
+					break;
+				case 2:
+					showInsuranceProduct("상세정보조회");
+					break;
+				case 3:
+					updateInsuranceProduct();
+					break;
+				case 4:
+					deleteInsuaranceProduct();
+					break;
+				default:
+					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+					break;
 			}
 		} else if (loginedUserType == UserType.LossAdjuster) {
 			switch (selectedMenu) {
-			case 0:
-				System.out.println("Good Bye...");
-				System.exit(0);
-			case 1:
-				payCompensation();
-				break;
-			case 2:
-				evaluateCompensation();
-				break;
-			default:
-				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-				break;
+				case 0:
+					System.out.println("Good Bye...");
+					System.exit(0);
+				case 1:
+					payCompensation();
+					break;
+				case 2:
+					evaluateCompensation();
+					break;
+				default:
+					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+					break;
 			}
 		} else if (loginedUserType == UserType.UnderWriter) {
-        switch (selectedMenu) {
+			switch (selectedMenu) {
 				case 0:
 					System.out.println("Good Bye...");
 					System.exit(0);
@@ -140,8 +140,9 @@ public class SystemManager {
 					break;
 				default:
 					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-        }
-		}else if(loginedUserType == UserType.Customer) {
+			}
+		} else if (loginedUserType == UserType.Customer) {
+			switch (selectedMenu) {
 				case 1: // 등록
 					createEvent();
 					break;
