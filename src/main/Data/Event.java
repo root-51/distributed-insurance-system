@@ -84,7 +84,7 @@ public class Event {
 		private LocalDate eventDate;
 		private String eventDescription;
 		private String eventLocation;
-		private Date receiptDate;
+		private LocalDate receiptDate;
 		private Evaluation evaluation;
 
 		public Builder(String eventID,String customerID){
