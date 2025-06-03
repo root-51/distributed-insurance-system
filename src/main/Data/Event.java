@@ -10,15 +10,17 @@ import java.util.Objects;
  * @created 11-5-2025 ���� 11:25:09
  */
 public class Event {
-
-	private int claimValue;
-	public String customerID;
-	private String documents;
-	private Date eventDate;
-	private String eventDescription;
 	public String eventID;
+	private int claimValue;
+	private String documents;
+	private LocalDate eventDate;
+	private String eventDescription;
 	private String eventLocation;
-	private Date receiptDate;
+	private LocalDate receiptDate;
+	// state_of_evealuation
+	// state_of_compensation
+	public String customerID;
+	// paid_value
 	private Evaluation evaluation;
 
 	private Event(Builder builder) {
