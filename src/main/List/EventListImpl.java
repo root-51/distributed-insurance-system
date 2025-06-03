@@ -39,8 +39,8 @@ public class EventListImpl implements EventList {
 					event.getEventDescription(),
 					event.getEventLocation(),
 					event.getReceiptDate(),
-					event.getEvaluation().getResultOfEvaluation().getValue(),
-					event.getEvaluation().getCompensation().getResultOfPaid().getValue(),
+					0, // state_of_evaluation
+					0, // state_of_compensation
 					event.getCustomerID(),
 					event.getEvaluation().getCompensation().getAmountOfPaid());
 			return true;
