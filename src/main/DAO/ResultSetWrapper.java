@@ -160,7 +160,7 @@ public class ResultSetWrapper {
     try {
       // Event 빌더 패턴 사용. 생성자에 필수 파라미터가 있다고 가정합니다.
       events.add(
-          new Event.Builder((String) row.get("event_id"), (String) row.get("customer_id"))
+          new Event.Builder((String) row.get("event_id"), (String) row.get("user_id"))
               .claimValue((Integer) row.get("claim_value"))
               .documents((String) row.get("documents"))
               .eventDate(row.get("event_date") != null ? new Date(((java.sql.Date) row.get("event_date")).getTime()) : null)
