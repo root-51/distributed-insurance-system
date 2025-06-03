@@ -79,7 +79,7 @@ public class Menu { // TODO: rename to IOManager
 		} while (input.isEmpty());
 		return input;
 	}
-	private static String getInputOrKeepStr(String title, String prevValue) {
+	public static String getInputOrKeepStr(String title, String prevValue) {
 		String userInput = "";
 		System.out.print("   "+title + ": ");
 		userInput = scanner.nextLine().trim();
