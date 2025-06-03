@@ -36,6 +36,9 @@ public class SystemManager {
 
 	public void setMenu() {
 		switch (loginedUserType) {
+		case Customer:
+			this.menu = new CustomerMenu();
+			break;
 		case Sales:
 			this.menu = new SalesMenu();
 			break;
@@ -127,10 +130,126 @@ public class SystemManager {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				break;
 			}
+		}else if(loginedUserType == UserType.Customer) {
+			switch (selectedMenu) {
+				case 0:
+					System.out.println("Good Bye...");
+					System.exit(0);
+				case 1: // 등록
+					createEvent();
+					break;
+				case 2: // 조회
+					showMyEvents("상세정보조회");
+					break;
+				case 3: // 수정
+					updateEvent();
+					break;
+				case 4: // 삭제
+					deleteEvent();
+					break;
+				case 5: // 보험료 조회
+					showMyPremieums();
+					break;
+				case 6: // 보험료 지불
+					payMyPremieum();
+					break;
+			}
 		}
 
 	}
+	// Customer =============================================================
 
+	public void createEvent() {
+		menu.createPrompt();
+		Event newEvent = ((CustomerMenu)menu).inputNewEventInfo(loginedUser.getUserID());
+		if(((CustomerService)loginedUser).createEvent(newEvent)) {
+			menu.printLog("사고 접수에 성공하였습니다.", true);
+		}else {
+			menu.printLog("사고 접수에 실패하였습니다.", false);
+		}
+	}
+	public void showMyEvents(String nextCommand) {
+		menu.printMenuHeader(nextCommand);
+		CustomerService customer  = (CustomerService)loginedUser;
+		ArrayList<Event> myEvents = customer.getMyEvents(customer.getUserID());
+		int maxPage = menu.computeMaxPage(myEvents.size());
+		int currentPage = 1;
+		int startIndex=0;
+
+		((CustomerMenu)menu).showEvents(
+				((CustomerMenu)menu).getNextEventsInPage(myEvents, currentPage, startIndex),
+				currentPage
+		);
+		boolean escapeMenu = false;
+		do {
+			menu.printMenuGuide("메뉴를 선택해주세요.");
+			menu.printMenuList(new String[] { nextCommand.equals("상세정보조회") ? "종료" : nextCommand, "상세정보조회", "키워드검색", "다음페이지" });
+			int userSelect = getUserSelectInt();
+			switch (userSelect) {
+				case 0:
+					escapeMenu = true;
+					break;
+				case 1: // 상세정보조회
+					menu.printMenuGuide("상세정보를 조회할 사고의 ID를 입력해주세요");
+					String selectedEventID = getInputStr("사고 ID");
+					menu.printMenuHeader(nextCommand);
+					showEventDetail(customer.getMyEvent(selectedEventID));
+					break;
+				case 2: // TODO: 키워드검색
+					System.out.println("서비스 준비중입니다.");
+					break;
+				case 3: // 다음 페이지 출력
+					if (currentPage == maxPage) {
+						startIndex = 0;
+						currentPage = 1;
+					} else {
+						startIndex = currentPage * 3;
+						currentPage++;
+					}
+					((CustomerMenu) menu).showEvents(((CustomerMenu) menu).getNextEventsInPage(myEvents, currentPage, startIndex),
+							currentPage);
+					break;
+			}
+		} while (!escapeMenu);
+	}
+	public Event showEventDetail(Event myEvent) {
+		if(myEvent !=null){
+			((CustomerMenu)menu).showEventDetail(myEvent);
+			return myEvent;
+		}else{
+			menu.printLog("사고ID를 다시 입력해주세요.",false);
+			return null;
+		}
+
+	}
+	public void updateEvent() {
+		CustomerService customer = (CustomerService)loginedUser;
+		showMyEvents("사고 갱신");
+		menu.printMenuGuide("수정할 사고의 ID를 선택해주세요.");
+		String eventID = menu.getInputStr("사고ID");
+
+		Event currentEvent = customer.getMyEvent(eventID);
+		if(currentEvent !=null){
+			Event updatedEvent = ((CustomerMenu)menu).inputNewOrKeepEventInfo(currentEvent);
+			if(customer.updateEvent(updatedEvent)) { menu.printLog("사고 갱신을 완료하였습니다.",true); }
+			else{ menu.printLog("사고 갱신에 실패하였습니다. 다시 시도해주세요.",false); }
+		}
+		else{menu.printLog("사고 ID를 다시 입력해주세요",false);}
+
+	}
+	public void deleteEvent() {
+		CustomerService customer = (CustomerService)loginedUser;
+		showMyEvents("사고 삭제");
+		menu.printMenuGuide("삭제할 사고의 ID를 선택해주세요.");
+		String eventID = menu.getInputStr("사고ID");
+		if(customer.deleteEvent(eventID)) {
+			menu.printLog("사고 삭제 완료하였습니다.",true);
+		}else{
+			menu.printLog("사고 삭제 실패하였습니다. 다시 시도해주세요.",false);
+		}
+	}
+	public void payMyPremieum() {System.out.println("서비스 준비중입니다.");}
+	public void showMyPremieums(){System.out.println("서비스 준비중입니다.");}
 	// Sales =============================================================
 	// 0529 완
 	private void createCustomer() { //
@@ -143,7 +262,6 @@ public class SystemManager {
 			menu.printLog("신규고객 등록에 실패하였습니다.", false);
 		}
 	}
-
 	// 0529 완
 	private void showCustomers(String nextCommand) {
 		menu.printMenuHeader(nextCommand);
@@ -189,7 +307,6 @@ public class SystemManager {
 			}
 		}while(!escapeMenu);
 	}
-
 	// TODO: searchCustomer 키워드 검색 메뉴
 	private Customer searchCustomer() {
 		String customerID = getInputStr("검색할 고객 ID를 입력해주세요");
@@ -197,13 +314,11 @@ public class SystemManager {
 		Customer selectedCustomer = sales.getCustomer(customerID);
 		return showCustomerDetail(selectedCustomer);
 	}
-
 	// 0529 완
 	private Customer showCustomerDetail(Customer customer) {
 		((SalesMenu) menu).showDetail(customer);
 		return customer;
 	}
-
 	// 0529 완
 	private void updateCustomer() {
 		Sales sales = (Sales) loginedUser;

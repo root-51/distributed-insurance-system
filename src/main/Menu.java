@@ -1,10 +1,14 @@
 package main;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import main.DAO.Utillity;
 import main.Data.Customer;
+import main.Data.Event;
 import main.Data.InsuranceProduct;
 import main.Enum.Sex;
 
@@ -154,6 +158,64 @@ public class Menu { // TODO: rename to IOManager
 			String[] menuList = { "종료", "사고 접수", "사고 조회","사고 갱신", "사고 삭제","보험료 납부","보험료 조회"};
 			setMenuList(menuList);
 			setUserTypeStr("고객");
+		}
+		@Override
+		public void createPrompt() {
+			printMenuHeader("사고 접수");
+			printMenuGuide("사고 정보를 입력해주세요.");
+		}
+		public Event inputNewEventInfo(String userID){
+			Event event = new Event.Builder(Utillity.generateID('E'),userID)
+					.claimValue(getInputInt("보상액"))
+					.documents(getInputStr("증빙자료"))
+					.eventDate(getInputLocalDate("사고일자"))
+					.eventDescription(getInputStr("사고설명"))
+					.eventLocation(getInputStr("사고장소"))
+					.receiptDate(Utillity.getTodayLocalDate())
+					.build();
+			return event;
+		}
+		public void showEvents(ArrayList<Event> events, int currentPage ) {
+			if (events.size() == 0) {
+				System.out.println("   접수된 사고가 없습니다.");
+			}
+			System.out.println("   사고ID\t\t\t사고날짜\t\t\t고객ID");
+			for (Event event : events) {
+				System.out.println("   "+event.getEventID() + "\t\t" + event.getEventDate()+ "\t\t" + event.getCustomerID());
+			}
+			System.out.println();
+
+		}
+		public void showEventDetail(Event event) {
+			System.out.println("   사고ID\t" + event.getEventID());
+			System.out.println("   청구액\t" + event.getClaimValue());
+			System.out.println("   고객ID\t" + event.getCustomerID());
+			System.out.println("   사고날짜\t" + event.getEventDate());
+			System.out.println("   설명\t\t"+event.getEventDescription());
+			System.out.println("   사고장소\t" + event.getEventLocation());
+			System.out.println("   증빙자료\t" + event.getDocuments());
+			System.out.println("   접수날짜\t" + event.getReceiptDate());
+		}
+		public Event inputNewOrKeepEventInfo(Event currentEvent){
+			Event updatedEvent = new Event.Builder(currentEvent.getEventID(),currentEvent.getCustomerID())
+					.claimValue(getInputOrKeepInt("   보상액", currentEvent.getClaimValue()))
+					.documents(getInputOrKeepStr("   증빙자료", currentEvent.getDocuments()))
+					.eventDate(getInputOrKeepLocalDate("   사고일자", currentEvent.getEventDate()))
+					.eventDescription(getInputOrKeepStr("   사고설명",currentEvent.getEventDescription()))
+					.eventLocation(getInputOrKeepStr("   사고장소",currentEvent.getEventLocation()))
+					.receiptDate(currentEvent.getReceiptDate())
+					.evaluation(currentEvent.getEvaluation())
+					.build();
+			return updatedEvent;
+		}
+		public ArrayList<Event> getNextEventsInPage(ArrayList<Event> events,int currentPage, int startIndex){
+			ArrayList<Event> eventsInPage= new ArrayList<>();
+			int maxPage = super.computeMaxPage(events.size());
+			for(int i=startIndex ; i<currentPage*3 && currentPage<=maxPage ; i++){
+				if(i<events.size()) { eventsInPage.add(events.get(i));}
+			}
+
+			return eventsInPage;
 		}
 	}
 	public static class SalesMenu extends Menu {
