@@ -54,7 +54,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public ArrayList<Event> searchEvent(String key, String value) {
 		try (DAO dao = new DAO()) {
-			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM Event WHERE ? = ?", key, value)
+			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM `event` WHERE ? = ?", key, value)
 					.toEvents();
 		} catch (Exception e) {
 			return null;
