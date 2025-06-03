@@ -118,7 +118,29 @@ public class Menu { // TODO: rename to IOManager
 		}while(value.isEmpty());
 		return sex;
 	}
+	public static Sex getInputOrKeepSex(Sex prevValue){
+		Sex sex =null;
+		String value="";
+		do{
+			System.out.println("   성별 [M/F]:");
+			if(!(value.equalsIgnoreCase("m")||value.equalsIgnoreCase("f"))){
+				System.out.println("   * m 또는 f 를 입력해주세요.");
+			}else if(value.isEmpty()){
+				sex = prevValue;
+			} else{
+				if(value.equalsIgnoreCase("f")) sex = Sex.FEMALE;
+				else sex=Sex.MALE;
+			}
+		}while(sex==null);
+		return sex;
+	}
 
+	public static LocalDate getInputLocalDate(String title) {
+		String dateStr = getInputStr(title+"(YYYY-MM-DD)");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(dateStr, formatter);
+		return localDate;
+	}
 
 	// inner class =================================
 	public static class CustomerMenu extends Menu {
