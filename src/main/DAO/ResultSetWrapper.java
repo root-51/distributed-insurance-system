@@ -166,7 +166,7 @@ public class ResultSetWrapper {
               .eventDate(row.get("event_date") != null ? ((java.sql.Date) row.get("event_date")).toLocalDate() : null)
               .eventDescription((String) row.get("event_description"))
               .eventLocation((String) row.get("event_location"))
-              .receiptDate(row.get("event_receipt_date") != null ? new Date(((java.sql.Date) row.get("event_receipt_date")).getTime()) : null)
+              .receiptDate(row.get("event_receipt_date") != null ? ((java.sql.Date) row.get("event_date")).toLocalDate() : null)
               .evaluation(map2Evaluation(row)) // 중첩된 객체 매핑
               .build()
       );
