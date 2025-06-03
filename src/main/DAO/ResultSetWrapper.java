@@ -35,6 +35,7 @@ public class ResultSetWrapper {
   public User toUser(){
     Map<String,Object> userData = resultSetList.get(0);
     String userID = (String) userData.get("user_id");
+    String userPW = (String)userData.get("user_pw");
     int userTypeID = (Integer) userData.get("user_type_id");
     if (userData != null) {
       switch (userTypeID){
