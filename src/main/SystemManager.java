@@ -127,8 +127,19 @@ public class SystemManager {
 				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				break;
 			}
+		} else if (loginedUserType == UserType.UnderWriter) {
+			switch (selectedMenu) {
+				case 0:
+					System.out.println("Good Bye...");
+					System.exit(0);
+				case 1:
+					underWriting();
+					break;
+				default:
+					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+					break;
+			}
 		}
-
 	}
 
 	// Sales =============================================================
@@ -382,7 +393,7 @@ public class SystemManager {
 
 	// 0529 완
 	private InsuranceProduct showProductDetail(InsuranceProduct product) {
-		((ProductManagementMenu) menu).showDetail(product);
+		System.out.println(product);
 		return product;
 	}
 
@@ -473,9 +484,7 @@ public class SystemManager {
 		// 보상 지급 대기중인 보상 조회 로직, 라인넘버 통해서 선택함,
 		System.out.println("===CompensationList===");
 		ArrayList<Event> events = eventList.searchEvent("state_of_compensation", "0"); // 일반 보상 지급이 아직 되지 않은 경우만 골라오긴 하는데,
-																						// 보상 지급 결정이 내려졌는지가 반영이 되야할것같음..
-																						// DB 마렵네
-		if (events.size() <= 0) {
+		if (events == null|| events.isEmpty()) {
 			System.out.println("보상 지급 대기중인 항목이 없습니다");
 			return;
 		}
@@ -518,7 +527,7 @@ public class SystemManager {
 
 		EventList eventList = lossAdjuster.getEventList(); // 컴포지션... 관리자가 리스트를 들고 있음, 가져와야함
 
-		Event selectedEvent = eventDetailVeiw(eventList);
+		Event selectedEvent = genericPageSelection(eventList.getAll(),5);
 		if (selectedEvent == null) {
 			System.out.println("메뉴로 돌아갑니다.");
 			return;
@@ -545,8 +554,8 @@ public class SystemManager {
 		}
 
 	}
-
 	private Customer CustomerDetailView(Event selectedEvent) {
+		CustomerList customerList = ((LossAdjuster) loginedUser).getCustomerList();
 		Customer selectedCustomer = customerList.search(selectedEvent.getCustomerID());
 		if (selectedCustomer == null) {
 			System.out.println("해당하는 고객이 없습니다.");
@@ -561,46 +570,111 @@ public class SystemManager {
 			System.out.println("고객 상세 정보 조회로 돌아갑니다.");
 			return CustomerDetailView(selectedEvent);
 		case UserSelection.Cancel:
-			System.out.println("보상 심사가 취소되었습니다.");
+			System.out.println("취소되었습니다.");
 			return null;
 		}
 		return null;
 	}
 
-	private Event eventDetailVeiw(EventList eventList) {
-		System.out.println("===EventList===");
-		ArrayList<Event> events = eventList.searchEvent("state_of_evaluation", "0"); // 심사 대기중 리스트 가져옴
-		if (events.size() <= 0) {
-			System.out.println("보상 지급 대기중인 항목이 없습니다");
-			return null;
-		}
-		for (int i = 0; i < events.size(); i++) {
-			System.out.println((i + 1) + ": Customer:" + events.get(i).getCustomerID() + ", eventID: "
-					+ events.get(i).getEventID());
-		}
-		System.out.println("Select Line Number: ");
-		int userSelectNum = getUserSelectInt() - 1;
-		if (userSelectNum >= events.size()) {
-			System.out.println("선택 범위를 초과했습니다. 다시 시도해주세요"); // Exception으로 바꾸면 좋을텐데
-			return null;
-		}
-		Event selectedEvent = events.get(userSelectNum);
-		System.out.println("==상세정보==\n" + selectedEvent + "\n 해당 사고를 선택하시겠습니까?");
-		switch (getUserSelectYorN()) {
-		case UserSelection.Yes:
-			return selectedEvent;
-		case UserSelection.No:
-			System.out.println("사고 정보 리스트로 돌아갑니다.");
-			return eventDetailVeiw(eventList);
-		case UserSelection.Cancel:
-			System.out.println("보상 심사가 취소되었습니다.");
-			return null;
-		}
-		return null;
+	//UW
+	private void underWriting(){
+		UnderWriter underWriter = (UnderWriter)loginedUser;
+		CustomerList customerList =underWriter.getCustomerList();
+		InsuranceProductList insuranceProductList =underWriter.getInsuranceProductList();
+		ContractList contractList = underWriter.getContractList();
+		Contract contract = genericPageSelection(contractList.searchByKeyValue("state","0"),5);
+		if(contract == null) return;
+		showCustomerDetail(customerList.search(contract.getCustomerID()));
+		InsuranceProduct insuranceProduct = showProductDetail(insuranceProductList.search(contract.getProductID()));
+		showProductDetail(insuranceProduct);
+		System.out.println("계약을 승인하시겠습니까");
+		switch (getUserSelectYorN()){
+			case UserSelection.Yes:
+				System.out.println("계약 심사가 "+(underWriter.underwrite(contract.getContractID(),true)?"승인되었습니다.":"실패하였습니다."));
+				break;
+			case UserSelection.No:
+				System.out.println("계약 심사가 "+(underWriter.underwrite(contract.getContractID(),false)?"거절되었습니다.":"실패하였습니다."));
+				break;
+			case UserSelection.Cancel:
+				System.out.println("계약 심사가 취소되었습니다.");
+				break;
+		};
+
 	}
 
 
 	// Common method =============================================================
+
+	/**
+	 * 아무 리스트 받아서, 보여주고, 선택된거 반환
+	 * @param <T> 리스트에 포함될 요소의 타입(무시해도 됨)
+	 * @param items 선택할 요소들이 담긴 ArrayList
+	 * @param itemsPerPage 한 페이지에 보여줄 요소의 개수 (예: 5)
+	 * @return 사용자가 선택한 요소, 선택을 취소하거나 잘못된 입력 시 null 반환
+	 */
+	private  <T> T genericPageSelection(List<T> items, int itemsPerPage) {
+		if (items == null || items.isEmpty()) {
+			System.out.println("선택할 항목이 없습니다.");
+			return null;
+		}
+		if (itemsPerPage <= 0) {
+			System.out.println("한 페이지에 보여줄 항목 수는 1 이상이어야 합니다.");
+			return null;
+		}
+
+		int totalItems = items.size();
+		int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+		int currentPage = 0; // 0-indexed 페이지 번호
+
+		while (true) {
+			System.out.println("\n--- 페이지 " + (currentPage + 1) + " / " + totalPages + " ---");
+			int startIndex = currentPage * itemsPerPage;
+			int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+			if (startIndex >= totalItems) { // 마지막 페이지를 넘어갔을 때 다시 이전 페이지로
+				currentPage = totalPages - 1;
+				startIndex = currentPage * itemsPerPage;
+				endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+			}
+			for (int i = startIndex; i < endIndex; i++) {
+				// 사용자에게 보여줄 1부터 시작하는 인덱스 번호
+				System.out.println((i - startIndex + 1) + ". " + items.get(i));
+			}
+
+			System.out.println("\n[ 이전 페이지로 이동, ] 다음 페이지로 이동, (1-" + (endIndex - startIndex) + ") 항목 선택, q 종료");
+			System.out.print("입력: ");
+			String input = scanner.nextLine().trim();
+
+			if (input.equalsIgnoreCase("q")) {
+				System.out.println("항목 선택을 취소합니다.");
+				return null;
+			} else if (input.equals("[")) {
+				if (currentPage > 0) {
+					currentPage--;
+				} else {
+					System.out.println("첫 페이지입니다.");
+				}
+			} else if (input.equals("]")) {
+				if (currentPage < totalPages - 1) {
+					currentPage++;
+				} else {
+					System.out.println("마지막 페이지입니다.");
+				}
+			} else {
+				try {
+					int selection = Integer.parseInt(input);
+					if (selection >= 1 && selection <= (endIndex - startIndex)) {
+						// 사용자가 선택한 번호(1-indexed)를 실제 ArrayList 인덱스(0-indexed)로 변환
+						return items.get(startIndex + selection - 1);
+					} else {
+						System.out.println("유효하지 않은 번호입니다. 다시 시도해주세요.");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+				}
+			}
+		}
+	}
 
 	private String getInputOrKeepStr(String title, String prevValue) {
 		String userInput = "";
@@ -617,7 +691,8 @@ public class SystemManager {
 	}
 	public int getUserSelectInt() {
 		System.out.print(">> ");
-		return Integer.parseInt(scanner.nextLine());
+		String userInput = scanner.nextLine();
+		return Integer.parseInt(userInput == null ? "-1" : userInput);
 	}
 
 	public UserSelection getUserSelectYorN() {

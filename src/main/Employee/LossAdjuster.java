@@ -3,6 +3,8 @@ package main.Employee;
 import main.Data.Compensation;
 import main.Data.Evaluation;
 import main.Data.Event;
+import main.List.CustomerList;
+import main.List.CustomerListImpl;
 import main.List.EventList;
 import main.List.EventListImpl;
 
@@ -14,14 +16,17 @@ import main.List.EventListImpl;
  public class LossAdjuster extends User {
 
 	private final EventList EventList;
+	private final CustomerList customerList;
 
 	public LossAdjuster(int numOfEmployees, UserType employeeType) {
 		super(numOfEmployees, employeeType);
 		this.EventList = new EventListImpl();
+		this.customerList = new CustomerListImpl();
 	}
 	public LossAdjuster(String userId, UserType employeeType) {
 		super(userId, employeeType);
 		this.EventList = new EventListImpl();
+		this.customerList = new CustomerListImpl();
 	}
 
 	/**
@@ -67,26 +72,8 @@ import main.List.EventListImpl;
 		return EventList.update(targetEvent);
 	}
 
-	//임시, 더미데이터생성기
-	public void genrateDummy(int count) {
-
-		for (int i = 0; i < count; i++) {
-			String customerID = "CustomerN" + i;
-			String EventID = "EventN" + i;
-			String EvaluationID = "EvaluationN" + i;
-			String CompensationID = "CompensationN" + i;
-			Event e = new Event.Builder(EventID, customerID).build();
-			Evaluation ev = new Evaluation.Builder(EvaluationID, e.getEventID(), customerID).build();
-			Compensation c = new Compensation.Builder(CompensationID, ev.getEvaluationID(),
-					customerID).build();
-
-			ev.setCompensation(c);
-			e.setEvaluation(ev);
-			EventList.insert(e);
-		}
-	}
-
 	public EventList getEventList() {
 		return this.EventList;
 	}
+	public CustomerList getCustomerList() {return this.customerList;}
 }

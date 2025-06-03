@@ -119,6 +119,24 @@ public class Menu { // TODO: rename to IOManager
 		return sex;
 	}
 
+	/**
+	 * 그냥 터미널 환경에서 화면 싹 다 지워버리는 메소드, 이쁨
+	 */
+	public static void clearScreen() {
+		try {
+			final String os = System.getProperty("os.name");
+
+			if (os.contains("Windows")) {
+				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			} else {
+				// Linux, macOS, Unix 계열
+				new ProcessBuilder("clear").inheritIO().start().waitFor();
+			}
+		} catch (final Exception e) {
+			System.out.println("콘솔 클리어에 실패했습니다: " + e.getMessage());
+		}
+	}
+
 
 	// inner class =================================
 	public static class CustomerMenu extends Menu {
@@ -245,19 +263,18 @@ public class Menu { // TODO: rename to IOManager
 	public static class LossAdjusterMenu extends Menu {
 		public LossAdjusterMenu() {
 
-			String[] menuList = { "보상 지급", "보상 심사" };
+			String[] menuList = {"종료", "보상 지급", "보상 심사" };
 			setMenuList(menuList);
-			setUserTypeStr("영업사원");
+			setUserTypeStr("손해사정시");
 
 		}
 	}
 
 	public static class UnderWriterMenu extends Menu {
 		public UnderWriterMenu() {
-			String[] menuList = { "신규고객 등록", "고객 삭제", "고객 정보 수정", "고객 정보 조회", "신규 계약 등록", "계약 삭제", "계약 정보 수정",
-					"계약 정보 조회" };
+			String[] menuList = { "종료","계약 심사" };
 			setMenuList(menuList);
-			setUserTypeStr("영업사원");
+			setUserTypeStr("U/W");
 
 		}
 	}

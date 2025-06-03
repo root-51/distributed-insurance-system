@@ -90,7 +90,6 @@ public class LoadData {
 		for (int i = 0; i < 3; i++) { // add temp three lossAdjuster
 			int numOfEmployees = userList.employees.size();
 			LossAdjuster lossAdjuster = new LossAdjuster(numOfEmployees, UserType.LossAdjuster);
-			lossAdjuster.genrateDummy(10);
 			userList.insert(lossAdjuster);
 		}
 

@@ -160,4 +160,18 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 		for(InsuranceProduct product: products)
 			System.out.println(product.toString());
 	}
+
+	@Override
+	public ArrayList<InsuranceProduct> getProductsByCustomerID(String customerID) {
+		try (DAO dao = new DAO()){
+			return (ArrayList<InsuranceProduct>) dao.executeQuery(
+					"SELECT insurance_product.*\n"
+					+ "FROM contract\n"
+					+ "JOIN insurance_product ON insurance_product.product_id = contract.product_id\n"
+					+ "WHERE contract.customer_id = ?", customerID).toInsuranceProduct();
+		}
+		catch (Exception e){
+			return null;
+		}
+	}
 }

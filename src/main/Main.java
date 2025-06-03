@@ -1,7 +1,9 @@
 package main;
 
 import main.DAO.DAO;
+import main.Employee.UnderWriter;
 import main.Employee.User;
+import main.Employee.User.UserType;
 import main.List.*;
 
 public class Main {
@@ -25,7 +27,8 @@ public class Main {
 //		loadData.loadInsuranceProductData();
 //		loadData.loadContractData();
 
-		loginedUser = login("manager1");
+		loginedUser = login("overwriter");
+//		loginedUser = new UnderWriter("아이디임",UserType.UnderWriter);
 
 		menu = new SystemManager(customerList, insuranceProductList, contractList,
 				loginedUser);

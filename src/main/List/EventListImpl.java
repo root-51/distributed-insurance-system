@@ -1,6 +1,7 @@
 
 package main.List;
 import java.util.ArrayList;
+import java.util.List;
 import main.DAO.DAO;
 import main.Data.Compensation;
 import main.Data.Evaluation;
@@ -54,7 +55,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public ArrayList<Event> searchEvent(String key, String value) {
 		try (DAO dao = new DAO()) {
-			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM Event WHERE ? = ?", key, value)
+			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM event WHERE ? = ?", key, value)
 					.toEvents();
 		} catch (Exception e) {
 			return null;
@@ -81,6 +82,15 @@ public class EventListImpl implements EventList {
 			return true;
 		}catch(Exception e){
 			return false;
+		}
+	}
+
+	@Override
+	public List<Event> getAll(){
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM event").toEvents();
+		}catch (Exception e){
+			return null;
 		}
 	}
 }//end EventListImpl

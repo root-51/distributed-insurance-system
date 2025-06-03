@@ -195,10 +195,10 @@ public class ResultSetWrapper {
     // row.get()을 사용하여 Map에서 값을 가져옵니다.
     return new Evaluation.Builder(
         (String) row.get("event_id"), // event_id
-        (String) row.get("evaluation_id"), // evaluation_id (가정)
+        (String) row.get("event_id"), // evaluation_id (가정)
         (String) row.get("customer_id") // customer_id
     )
-        .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromString((String) row.get("state_of_evaluation")) : null) // String to Enum 변환
+        .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromInteger((Integer) row.get("state_of_evaluation")) : null) // String to Enum 변환
         .compensation(map2Compensation(row)) // 중첩된 객체 매핑
         .build();
   } catch (NullPointerException | ClassCastException e) {
@@ -225,11 +225,11 @@ public class ResultSetWrapper {
     // row.get()을 사용하여 Map에서 값을 가져옵니다.
     return new Compensation.Builder(
         (String) row.get("event_id"), // event_id
-        (String) row.get("compensation_id"), // compensation_id (가정)
+        (String) row.get("event_id"), // compensation_id (가정)
         (String) row.get("customer_id") // customer_id
     )
         .claimsPaid((Integer) row.get("amount_of_paid"))
-        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromString((String) row.get("state_of_compensation")) : null) // String to Enum 변환
+        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromInteger((Integer) row.get("state_of_compensation")) : null) // String to Enum 변환
         .build();
   } catch (NullPointerException | ClassCastException e) {
     System.err.println("Compensation 매핑 중 타입/널 오류: " + e.getMessage() + " - 데이터: " + row);
