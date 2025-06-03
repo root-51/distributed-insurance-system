@@ -1,5 +1,4 @@
 package main.DAO;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,11 +9,7 @@ import main.Data.Customer;
 import main.Data.Evaluation;
 import main.Data.Event;
 import main.Data.InsuranceProduct;
-import main.Employee.LossAdjuster;
-import main.Employee.ProductManagement;
-import main.Employee.Sales;
-import main.Employee.UnderWriter;
-import main.Employee.User;
+import main.Employee.*;
 import main.Employee.User.UserType;
 import main.Enum.ProcessState;
 import main.Enum.Sex;
