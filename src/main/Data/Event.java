@@ -81,7 +81,7 @@ public class Event {
 		private final String eventID;
 		private int claimValue;
 		private String documents;
-		private Date eventDate;
+		private LocalDate eventDate;
 		private String eventDescription;
 		private String eventLocation;
 		private Date receiptDate;
