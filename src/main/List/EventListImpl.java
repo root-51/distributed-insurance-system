@@ -55,8 +55,17 @@ public class EventListImpl implements EventList {
 	@Override
 	public ArrayList<Event> searchEvent(String key, String value) {
 		try (DAO dao = new DAO()) {
-			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM `event` WHERE ? = ?", key, value)
-					.toEvents();
+			String sql="";
+			switch (key){
+				case "user_id":
+					sql = "SELECT * FROM `event` WHERE user_id = ?";
+					break;
+				case "event_id":
+					sql = "SELECT * FROM `event` WHERE event_id = ?";
+					break;
+			}
+			ArrayList<Event> events =(ArrayList<Event>) dao.executeQuery(sql, value).toEvents();
+			return events;
 		} catch (Exception e) {
 			return null;
 		}
