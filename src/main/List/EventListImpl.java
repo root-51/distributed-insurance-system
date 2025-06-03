@@ -21,7 +21,7 @@ public class EventListImpl implements EventList {
 	 */
 	public boolean delete(String eventID){
 		try (DAO dao = new DAO()){
-			dao.executeQuery("DELETE FROM `event` WHERE EventID = ?", eventID);
+			dao.executeQuery("DELETE FROM `event` WHERE event_id = ?", eventID);
 			return true;
 		}catch(Exception e){
 			return false;
