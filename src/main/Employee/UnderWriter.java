@@ -6,11 +6,9 @@ import main.Data.Contract;
 
 public class UnderWriter extends User {
 
-  public UnderWriter(int numOfEmployees, UserType userType){
-    super(numOfEmployees, userType);
-  }
-  public UnderWriter(String id, UserType userType){
-    super(id, userType);
+
+  public UnderWriter(String id, String userPW, UserType userType){
+    super(id,userPW, userType);
   }
 
 

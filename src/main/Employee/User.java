@@ -27,12 +27,9 @@ public class User {
 		}
 	}
 
-	public User(int numOfUsers, UserType userType) {
-		this.userID = Integer.toString(numOfUsers+1);
-		this.userType = userType;
-	}
-	public User(String userID, UserType userType){
+	public User(String userID, String userPW, UserType userType){
 		this.userID = userID;
+		this.userPW = userPW;
 		this.userType = userType;
 	}
 
