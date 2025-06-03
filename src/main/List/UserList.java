@@ -1,7 +1,7 @@
 package main.List;
 
 
-import main.Employee.User;
+import main.User.User;
 
 public interface UserList {
 		/**
