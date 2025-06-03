@@ -9,8 +9,8 @@ import main.Data.Customer;
 import main.Data.Evaluation;
 import main.Data.Event;
 import main.Data.InsuranceProduct;
-import main.Employee.*;
-import main.Employee.User.UserType;
+import main.User.*;
+import main.User.User.UserType;
 import main.Enum.ProcessState;
 import main.Enum.Sex;
 
@@ -130,7 +130,7 @@ public class ResultSetWrapper {
               .expirationDate(((java.sql.Date) row.get("expiration_date")).toLocalDate())
               .productID((String) row.get("product_id"))
               .salesID((String) row.get("sales_id"))
-              .state(ProcessState.valueOf((String) row.get("state")))
+              .state(ProcessState.fromInteger((int) row.get("state")))
               .build()
       );
     } catch (NullPointerException | ClassCastException e) {
