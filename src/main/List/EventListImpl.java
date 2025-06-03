@@ -45,6 +45,7 @@ public class EventListImpl implements EventList {
 					0); // paid_value
 			return true;
 		}catch(Exception e){
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}
