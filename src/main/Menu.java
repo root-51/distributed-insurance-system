@@ -68,7 +68,7 @@ public class Menu { // TODO: rename to IOManager
 		System.out.print(">> ");
 		return Integer.parseInt(scanner.nextLine());
 	}
-	private static String getInputStr(String title) {
+	public static String getInputStr(String title) {
 		String input = "";
 		do {
 			System.out.print("   " + title + ": ");
