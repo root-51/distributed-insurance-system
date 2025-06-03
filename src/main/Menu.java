@@ -46,7 +46,7 @@ public class Menu { // TODO: rename to IOManager
 			System.out.println("   " + (i) + ". " + menuList[i]);
 		}
 	}public void printMenuGuide(String message) {
-		System.out.println(message);
+		System.out.println("\n"+message);
 	}
 	public void printLog(String message, boolean isSuccessed) {
 		if (isSuccessed) {
