@@ -196,8 +196,8 @@ public class ResultSetWrapper {
     // row.get()을 사용하여 Map에서 값을 가져옵니다.
     return new Evaluation.Builder(
         (String) row.get("event_id"), // event_id
-        (String) row.get("evaluation_id"), // evaluation_id (가정)
-        (String) row.get("customer_id") // customer_id
+        (String) (row.get("event_id")), // evaluation_id (가정)
+        (String) row.get("user_id") // customer_id
     )
         .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromString((String) row.get("state_of_evaluation")) : null) // String to Enum 변환
         .compensation(map2Compensation(row)) // 중첩된 객체 매핑
