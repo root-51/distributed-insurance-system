@@ -116,7 +116,7 @@ public class Event {
 			return this;
 		}
 
-		public Builder receiptDate(Date receiptDate) {
+		public Builder receiptDate(LocalDate receiptDate) {
 			this.receiptDate = receiptDate;
 			return this;
 		}
