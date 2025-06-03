@@ -21,7 +21,7 @@ public class EventListImpl implements EventList {
 	 */
 	public boolean delete(String eventID){
 		try (DAO dao = new DAO()){
-			dao.executeQuery("DELETE FROM Event WHERE EventID = ?", eventID);
+			dao.executeQuery("DELETE FROM `event` WHERE EventID = ?", eventID);
 			return true;
 		}catch(Exception e){
 			return false;
@@ -31,7 +31,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public boolean insert(Event event) {
 		try (DAO dao = new DAO()){
-			dao.executeQuery("INSERT INTO Event (event_id, claim_value, documents, event_date, event_description, event_location, event_receipt_date, state_of_evaluation, state_of_compensation, user_id, paid_value)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			dao.executeQuery("INSERT INTO `event` (event_id, claim_value, documents, event_date, event_description, event_location, event_receipt_date, state_of_evaluation, state_of_compensation, user_id, paid_value)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					event.getEventID(),
 					event.getClaimValue(),
 					event.getDocuments(),
@@ -66,7 +66,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public boolean update(Event updatedEvent) {
 		try (DAO dao = new DAO()){
-			dao.executeQuery("UPDATE Event SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? WHERE event_id = ?",
+			dao.executeQuery("UPDATE `event` SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? WHERE event_id = ?",
 					updatedEvent.getClaimValue(),
 					updatedEvent.getDocuments(),
 					updatedEvent.getEventDate(),
