@@ -88,7 +88,7 @@ public class Menu { // TODO: rename to IOManager
 		}
 		return userInput;
 	}
-	private static int getInputInt(String title) {
+	public static int getInputInt(String title) {
 		return Integer.parseInt(getInputStr(title));
 	}
 	public static int getInputOrKeepInt(String title, int prevValue) {
