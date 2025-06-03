@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class CustomerService extends User{
     private final EventList eventList;
-    public CustomerService(String userID, UserType userType) {
-        super(userID, userType);
+    public CustomerService(String userID, String userPW, UserType userType) {
+        super(userID,userPW, userType);
         this.eventList = new EventListImpl();
     }
     public boolean createEvent(){
