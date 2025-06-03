@@ -42,7 +42,7 @@ public class EventListImpl implements EventList {
 					0, // state_of_evaluation
 					0, // state_of_compensation
 					event.getCustomerID(),
-					event.getEvaluation().getCompensation().getAmountOfPaid());
+					0); // paid_value
 			return true;
 		}catch(Exception e){
 			return false;
