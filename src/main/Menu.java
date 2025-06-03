@@ -141,6 +141,11 @@ public class Menu { // TODO: rename to IOManager
 		LocalDate localDate = LocalDate.parse(dateStr, formatter);
 		return localDate;
 	}
+	public static LocalDate getInputOrKeepLocalDate(String title, LocalDate prevValue) {
+		LocalDate date = getInputLocalDate(title);
+		if(date==null) date = prevValue;
+		return date;
+	}
 
 	// inner class =================================
 	public static class CustomerMenu extends Menu {
