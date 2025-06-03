@@ -10,21 +10,10 @@ public interface InsuranceProductList {
 
 	public boolean insert(InsuranceProduct insuranceProduct);
 
-	public InsuranceProduct search(String productID);
-
-	public ArrayList<InsuranceProduct> searchProducts(String key,String value);
+	public ArrayList<InsuranceProduct> searchProductsByKey(String key, String value);
 
 	public boolean update(InsuranceProduct insuranceProduct);
 
-//	public String generateProductID();
+	public ArrayList<InsuranceProduct> getAll();
 
-	public boolean checkProduct(String productName);
-
-	public int size();
-
-	//	public InsuranceProduct getProduct(int index);
-	public ArrayList<InsuranceProduct> getAllProducts();
-	public void printAllProducts();
-
-	public InsuranceProduct getProduct(int index);
 }

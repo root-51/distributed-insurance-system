@@ -1,16 +1,11 @@
 package main.List;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-
 import main.DAO.DAO;
 import main.Data.Contract;
-import main.Data.InsuranceProduct;
 
 public class ContractListImpl implements ContractList {
-
 	/**
-	 *
+	 * 
 	 * @param contractID
 	 */
 	public boolean delete(String contractID){
@@ -22,7 +17,7 @@ public class ContractListImpl implements ContractList {
 		}
 	}
 	/**
-	 *
+	 * 
 	 * @param contract
 	 */
 	public boolean insert(Contract contract){
@@ -39,10 +34,10 @@ public class ContractListImpl implements ContractList {
 		}catch(Exception e){
 			return false;
 		}
-	}
+  }
 
 	/**
-	 *
+	 * 
 	 * @param contractID
 	 */
 	public Contract search(String contractID){
@@ -54,7 +49,7 @@ public class ContractListImpl implements ContractList {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param contract
 	 */
 	public boolean update(Contract contract){
@@ -71,12 +66,4 @@ public class ContractListImpl implements ContractList {
 		}catch(Exception e){ return false; }
 	}
 
-	public int size(){
-		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM contract").toInsuranceProduct().size();
-		}catch(Exception e){
-			return -1;
-		}
-	}
-	
 }

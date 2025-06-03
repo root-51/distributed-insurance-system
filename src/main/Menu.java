@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import main.Data.Customer;
+import main.Data.CustomerDTO;
 import main.Data.InsuranceProduct;
 import main.Enum.Sex;
 
@@ -140,19 +140,19 @@ public class Menu { // TODO: rename to IOManager
 			printMenuHeader("신규 고객 등록");
 			printMenuGuide("신규 고객의 정보를 입력해주세요.");
 		}
-		public void show(ArrayList<Customer> customers, int currentPage) {
+		public void show(ArrayList<CustomerDTO> customers, int currentPage) {
 			if (customers.size() == 0) {
 				System.out.println("   등록된 고객이 없습니다.");
 			}
 			System.out.println("   ID \tName");
-			for (Customer customer : customers) {
+			for (CustomerDTO customer : customers) {
 				System.out.println("   "+customer.getCustomerID() + "\t" + customer.getName());
 			}
 			System.out.println();
 			printMenuGuide("메뉴를 선택해주세요.");
 		}
-		public ArrayList<Customer> getNextCustomersInPage(ArrayList<Customer> customers,int currentPage, int startIndex){
-			ArrayList<Customer> customersInPage= new ArrayList<>();
+		public ArrayList<CustomerDTO> getNextCustomersInPage(ArrayList<CustomerDTO> customers, int currentPage, int startIndex){
+			ArrayList<CustomerDTO> customersInPage= new ArrayList<>();
 			int maxPage = super.computeMaxPage(customers.size());
 			for(int i=startIndex ; i<currentPage*3 && currentPage<=maxPage ; i++){
 				if(i<customers.size()) { customersInPage.add(customers.get(i));}
@@ -160,7 +160,7 @@ public class Menu { // TODO: rename to IOManager
 
 			return customersInPage;
 		}
-		public void showDetail(Customer customer) {
+		public void showDetail(CustomerDTO customer) {
 			System.out.println("이름\t\t" + customer.getName());
 			System.out.println("나이\t\t" + customer.getAge());
 			System.out.println("주민번호\t" + customer.getRrn());
@@ -214,27 +214,36 @@ public class Menu { // TODO: rename to IOManager
 			System.out.println("   감액기간\t\t" + product.getReductionPeriod());
 			System.out.println("   감액률\t\t" + product.getReductionRatio());
 			System.out.println("   상품개발자ID\t" + product.getProductManagementID());
+			showCoverageByAge(product.getCoverageByAge());
 			System.out.println();
+		}
+		public void showCoverageByAge(HashMap<String,String> map){
+			String cover = "";
+			for(String key : map.keySet()){
+				cover += (key + "대 : "+map.get(key)+"\n           \t");
+			}
+			System.out.println("   연령별 보장범위\t"+cover);
 		}
 		public InsuranceProduct updateProductPrompt(InsuranceProduct product, String productManagementID){
 			InsuranceProduct insuranceProduct = new InsuranceProduct.Builder()
-					.productID(product.getProductID())
-					.productName(getInputOrKeepStr("보험상품 이름",product.getProductName()))
-					.maxAge(getInputOrKeepInt("최대가입연령",product.getMaxAge()))
-					.premium(getInputOrKeepInt("보험료",product.getPremium()))
-					.coverageByAge(inputCoverageByAge())
-					.sex(getInputSex())
-					.maxNumberEvent(getInputOrKeepInt("최대사고횟수",product.getMaxNumberEvent()))
-					.exemptionPeriod(getInputOrKeepInt("면책기간",product.getExemptionPeriod()))
-					.reductionPeriod(getInputOrKeepInt("감액기간",product.getReductionPeriod()))
-					.reductionRatio(getInputOrKeepInt("감액비율", product.getReductionRatio()))
-					.productManagementID(productManagementID).build();
+							.productID(product.getProductID())
+							.productName(getInputOrKeepStr("보험상품 이름",product.getProductName()))
+							.maxAge(getInputOrKeepInt("최대가입연령",product.getMaxAge()))
+							.premium(getInputOrKeepInt("보험료",product.getPremium()))
+							.coverageByAge(inputCoverageByAge())
+							.sex(getInputSex())
+							.maxNumberEvent(getInputOrKeepInt("최대사고횟수",product.getMaxNumberEvent()))
+							.exemptionPeriod(getInputOrKeepInt("면책기간",product.getExemptionPeriod()))
+							.reductionPeriod(getInputOrKeepInt("감액기간",product.getReductionPeriod()))
+							.reductionRatio(getInputOrKeepInt("감액비율", product.getReductionRatio()))
+							.productManagementID(productManagementID).build();
+
 			return insuranceProduct;
 		}
 		public HashMap<String,String> inputCoverageByAge(){
 			HashMap<String, String> coverageByAge = new HashMap<>();
 			System.out.println("   연령대별 보장금액:");
-			for(int i=0;i<100;i+=10){
+			for(int i=0;i<70;i+=10){
 				String coverage = getInputStr(i+"세~"+(i+9)+"세");
 				coverageByAge.put(Integer.toString(i),coverage);
 			}
@@ -261,7 +270,8 @@ public class Menu { // TODO: rename to IOManager
 
 		}
 	}
-}
+	}
+
 
 
 

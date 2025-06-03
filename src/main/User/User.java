@@ -1,4 +1,4 @@
-package main.Employee;
+package main.User;
 
 public class User {
 
@@ -26,14 +26,9 @@ public class User {
 			};
 		}
 	}
-
-	public User(int numOfUsers, UserType userType) {
-		this.userID = Integer.toString(numOfUsers+1);
-		this.userType = userType;
-	}
-	public User(String userID, UserType userType){
+	public User(String userID, int userType){
 		this.userID = userID;
-		this.userType = userType;
+		this.userType = UserType.fromValue(userType);
 	}
 
 	public String getUserID() {

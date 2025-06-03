@@ -33,7 +33,6 @@ public class InsuranceProduct {
 	/**
 	 * @param customerAge
 	 */
-//	getCoverageByAge의 매개변수 중 int타입의 연령대 변수가 있는데 필요 없는거 같아서 일단 지웠어요
 	public String getCoverageByAge(int customerAge){
 		int ageGroup = customerAge/10;
 		if(coverageByAge.containsKey(Integer.toString(ageGroup)))
@@ -89,41 +88,6 @@ public class InsuranceProduct {
 	public Sex getSex(){
 		return sex;
 	}
-	public boolean setSex(Sex sex){
-		this.sex = sex;
-		return true;
-	}
-
-	public boolean setCoverageByAge(HashMap<String, String> coverageByAge) {
-		this.coverageByAge = coverageByAge;
-		return true;
-	}
-
-	public void setProductID(String productID){
-		this.productID = productID;
-	}
-
-	public String toString() {
-		StringBuilder coverageStr = new StringBuilder();
-		for (HashMap.Entry<String, String> entry : coverageByAge.entrySet()) {
-			coverageStr.append(entry.getKey()).append("대 : ")
-					.append(entry.getValue()).append("원\n");
-		}
-
-		return "productID :'" + productID + '\'' +
-				",\n  productName : '" + productName + '\'' +
-				",\n  productManagementID : '" + productManagementID + '\'' +
-				",\n  coverageByAge\n" + coverageStr.toString() +
-				"  exemptionPeriod : " + exemptionPeriod +
-				",\n  maxAge: " + maxAge +
-				",\n  maxNumberEvent : " + maxNumberEvent +
-				",\n  premium : " + premium +
-				",\n  reductionPeriod : " + reductionPeriod +
-				",\n  reductionRatio: " + reductionRatio +
-				",\n  sex=" + sex +
-				"\n ================================================";
-	}
-
 
 	public static Builder builder() {
 		return new Builder();

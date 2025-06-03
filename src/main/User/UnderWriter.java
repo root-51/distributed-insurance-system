@@ -1,4 +1,4 @@
-package main.Employee;
+package main.User;
 
 import main.DAO.DAO;
 import main.Data.Contract;
@@ -6,10 +6,7 @@ import main.Data.Contract;
 
 public class UnderWriter extends User {
 
-  public UnderWriter(int numOfEmployees, UserType userType){
-    super(numOfEmployees, userType);
-  }
-  public UnderWriter(String id, UserType userType){
+  public UnderWriter(String id, int userType){
     super(id, userType);
   }
 
@@ -21,7 +18,7 @@ public class UnderWriter extends User {
   public boolean underwrite(String ContractID , boolean approve){
     try (DAO dao = new DAO()){
       dao.executeQuery("UPDATE contract SET state = ? WHERE contract_id = ?",
-              approve? 1 : -1, ContractID);
+          approve? 1 : -1, ContractID);
       return true;
     }catch (Exception e) {
       return false;

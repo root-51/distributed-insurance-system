@@ -1,11 +1,12 @@
 package main;
+
 import java.util.*;
 
+import main.User.User.UserType;
 import main.Menu.*;
 
 import main.Data.*;
-import main.Employee.*;
-import main.Employee.User.*;
+import main.User.*;
 import main.Enum.*;
 import main.List.*;
 
@@ -13,22 +14,13 @@ public class SystemManager {
 
 	private User loginedUser;
 	private UserType loginedUserType;
-	private CustomerList customerList;
-	private UserList UserList;
-	private InsuranceProductList insuranceProductList;
-	private ContractList contractList;
 	private Scanner scanner;
 
 	private Menu menu;
 
-	public SystemManager(CustomerListImpl customerList, UserListImpl UserList,
-						 InsuranceProductList insuranceProductList, ContractList contractList, User loginedUser) {
+	public SystemManager(User loginedUser) {
 		this.loginedUser = loginedUser;
 		this.loginedUserType = loginedUser.getUserType();
-		this.customerList = customerList;
-		this.UserList = UserList;
-		this.insuranceProductList = insuranceProductList;
-		this.contractList = contractList;
 		this.scanner = new Scanner(System.in);
 
 		setMenu();
@@ -37,18 +29,18 @@ public class SystemManager {
 
 	public void setMenu() {
 		switch (loginedUserType) {
-			case Sales:
-				this.menu = new SalesMenu();
-				break;
-			case ProductManagement:
-				this.menu = new ProductManagementMenu();
-				break;
-			case LossAdjuster:
-				this.menu = new LossAdjusterMenu();
-				break;
-			case UnderWriter:
-				this.menu = new UnderWriterMenu();
-				break;
+		case Sales:
+			this.menu = new SalesMenu();
+			break;
+		case ProductManagement:
+			this.menu = new ProductManagementMenu();
+			break;
+		case LossAdjuster:
+			this.menu = new LossAdjusterMenu();
+			break;
+		case UnderWriter:
+			this.menu = new UnderWriterMenu();
+			break;
 		}
 	}
 
@@ -62,83 +54,83 @@ public class SystemManager {
 		UserType loginedUserType = loginedUser.getUserType();
 		if (loginedUserType == UserType.Sales) {
 			switch (selectedMenu) {
-				case 0:
-					System.out.println("Good Bye...");
-					System.exit(0);
-				case 1:
-					createCustomer();
-					break;
-				case 2:
-					showCustomers("상세정보조회");
-					break;
-				case 3:
-					updateCustomer();
-					break;
-				case 4:
-					deleteCustomer();
-					break;
-				case 5:
-					// createContract();
-					break;
-				case 6:
-					// deleteContract();
-					break;
-				case 7:
-					// updateContract();
-					break;
-				case 8:
-					// searchContract();
-				default:
-					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-					break;
+			case 0:
+				System.out.println("Good Bye...");
+				System.exit(0);
+			case 1:
+				createCustomer();
+				break;
+			case 2:
+				showCustomers("상세정보조회");
+				break;
+			case 3:
+				updateCustomer();
+				break;
+			case 4:
+				deleteCustomer();
+				break;
+			case 5:
+				// createContract();
+				break;
+			case 6:
+				// deleteContract();
+				break;
+			case 7:
+				// updateContract();
+				break;
+			case 8:
+				// searchContract();
+			default:
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+				break;
 			}
 		} else if (loginedUserType == UserType.ProductManagement) {
 			switch (selectedMenu) {
-				case 0:
-					System.out.println("Good Bye...");
-					System.exit(0);
-				case 1:
-					createInsuranceProduct();
-					break;
-				case 2:
-					showInsuranceProduct("상세정보조회");
-					break;
-				case 3:
-					updateInsuranceProduct();
-					break;
-				case 4:
-					deleteInsuaranceProduct();
-					break;
-				default:
-					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-					break;
+			case 0:
+				System.out.println("Good Bye...");
+				System.exit(0);
+			case 1:
+				createInsuranceProduct();
+				break;
+			case 2:
+				showInsuranceProduct("상세정보조회");
+				break;
+			case 3:
+				updateInsuranceProduct();
+				break;
+			case 4:
+				deleteInsuranceProduct();
+				break;
+			default:
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+				break;
 			}
 		} else if (loginedUserType == UserType.LossAdjuster) {
 			switch (selectedMenu) {
-				case 0:
-					System.out.println("Good Bye...");
-					System.exit(0);
-				case 1:
-					payCompensation();
-					break;
-				case 2:
-					evaluateCompensation();
-					break;
-				default:
-					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-					break;
+			case 0:
+				System.out.println("Good Bye...");
+				System.exit(0);
+			case 1:
+				payCompensation();
+				break;
+			case 2:
+				evaluateCompensation();
+				break;
+			default:
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+				break;
 			}
 		}
 
 	}
 
 	// Sales =============================================================
-	// 0529 완
+	// 0603수정 - pw 추가
 	private void createCustomer() { //
 		menu.createPrompt();
 		if (((Sales) loginedUser).createCustomer(getInputStr("계좌번호"), getInputStr("주소"), getInputInt("나이"),
-				Integer.toString(customerList.getAll().size()), // TODO: CustomerID는 DB에서 부여하나?
-				getInputStr("직업"), getInputStr("이름"), getInputStr("전화번호"), getInputStr("주민번호"), checkSexInput())) {
+				getInputStr("아이디"), // TODO: CustomerID는 DB에서 부여하나?
+				getInputStr("비밀번호"), getInputStr("직업"), getInputStr("이름"), getInputStr("전화번호"), getInputStr("주민번호"), checkSexInput())) {
 			menu.printLog("신규고객 등록에 성공하였습니다.", true);
 		} else {
 			menu.printLog("신규고객 등록에 실패하였습니다.", false);
@@ -149,56 +141,58 @@ public class SystemManager {
 	private void showCustomers(String nextCommand) {
 		menu.printMenuHeader(nextCommand);
 		Sales sales = (Sales) loginedUser;
-		ArrayList<Customer> customers = sales.getAllCustomer();
-		int maxPage = menu.computeMaxPage(customers.size());
-		int currentPage = 1;
-		int startIndex = 0;
+		ArrayList<CustomerDTO> customers = sales.getAllCustomer();
+        int maxPage=menu.computeMaxPage(customers.size());
+        int currentPage=1;
+        int startIndex=0;
 
-		((SalesMenu) menu).show(((SalesMenu) menu).getNextCustomersInPage(customers, currentPage, startIndex),
-				currentPage);
+        ((SalesMenu)menu).show(((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex), currentPage);
 		boolean escapeMenu = false;
-		do {
-			menu.printMenuList(
-					new String[] { nextCommand.equals("상세정보조회") ? "종료" : nextCommand, "상세정보조회", "키워드검색", "다음페이지" });
+		do{
+			menu.printMenuList(new String[]{
+					nextCommand.equals("상세정보조회")?"종료":nextCommand,
+					"상세정보조회", "키워드검색","다음페이지"});
 			int userSelect = getUserSelectInt();
-			switch (userSelect) {
+			switch(userSelect){
 				case 0:
-					escapeMenu = true;
+					escapeMenu=true;
 					break;
 				case 1: // 상세정보조회
 					menu.printMenuGuide("상세정보를 조회할 고객의 ID를 입력해주세요");
-					int selectedUserID = getInputInt("고객 ID");
+					String selectedUserID=getInputStr("고객 ID");
 					menu.printMenuHeader(nextCommand);
-					showCustomerDetail(customers.get(selectedUserID - 1));
+					showCustomerDetail(sales.getCustomer(selectedUserID));
 					break;
 				case 2: // TODO: 키워드검색
 					System.out.println("서비스 준비중입니다.");
 					break;
 				case 3: // 다음 페이지 출력
-					if (currentPage == maxPage) {
-						startIndex = 0;
-						currentPage = 1;
-					} else {
+					if(currentPage==maxPage){
+						startIndex=0;
+						currentPage=1;
+					}else {
 						startIndex = currentPage * 3;
 						currentPage++;
 					}
-					((SalesMenu) menu).show(((SalesMenu) menu).getNextCustomersInPage(customers, currentPage, startIndex),
-							currentPage);
+					((SalesMenu)menu).show(
+							((SalesMenu)menu).getNextCustomersInPage(customers,currentPage,startIndex),
+							currentPage
+					);
 					break;
 			}
-		} while (!escapeMenu);
+		}while(!escapeMenu);
 	}
 
 	// TODO: searchCustomer 키워드 검색 메뉴
-	private Customer searchCustomer() {
+	private CustomerDTO searchCustomer() {
 		String customerID = getInputStr("검색할 고객 ID를 입력해주세요");
 		Sales sales = (Sales) loginedUser;
-		Customer selectedCustomer = sales.getCustomer(customerID);
+		CustomerDTO selectedCustomer = sales.getCustomer(customerID);
 		return showCustomerDetail(selectedCustomer);
 	}
 
 	// 0529 완
-	private Customer showCustomerDetail(Customer customer) {
+	private CustomerDTO showCustomerDetail(CustomerDTO customer) {
 		((SalesMenu) menu).showDetail(customer);
 		return customer;
 	}
@@ -209,16 +203,22 @@ public class SystemManager {
 		showCustomers("고객정보 수정");
 
 		menu.printMenuGuide("수정할 고객의 ID를 선택해주세요");
-		Customer customer = sales.getCustomer(getInputStr("고객ID"));
+		CustomerDTO customer = sales.getCustomer(getInputStr("고객ID"));
 		String customerID = customer.getCustomerID(); // 입력한 고객 ID 에 해당하는 고객이 없는 경우 방지
-
-		if (sales.updateCustomer(getInputOrKeepStr("계좌번호", customer.getAccountNumber()),
-				getInputOrKeepStr("주소", customer.getAddress()), getInputOrKeepInt("나이", customer.getAge()),
-				customer.getCustomerID(), getInputOrKeepStr("직업", customer.getJob()),
-				getInputOrKeepStr("이름", customer.getName()), getInputOrKeepStr("전화번호", customer.getPhoneNumber()),
-				getInputOrKeepStr("주민번호", customer.getRrn()), checkSexInput() // TODO: keep 확장 필요
-		)) {
-			menu.printLog("고객 정보 수정에 성공했습니다.", true);
+		System.out.println("수정하려는 정보를 입력해주세요.");
+		if (sales.updateCustomer(
+				getInputOrKeepStr("계좌번호", customer.getAccountNumber()),
+				getInputOrKeepStr("주소", customer.getAddress()),
+				getInputOrKeepInt("나이", customer.getAge()),
+				customer.getCustomerID(),
+				getInputOrKeepStr("직업", customer.getJob()),
+				getInputOrKeepStr("이름", customer.getName()),
+				getInputOrKeepStr("전화번호", customer.getPhoneNumber()),
+				getInputOrKeepStr("주민번호", customer.getRrn()),
+				checkSexInput() //TODO: keep 확장 필요
+			)
+		) {
+			menu.printLog("고객 정보 수정에 성공했습니다.",true);
 			showCustomerDetail(sales.getCustomer(customerID));
 		} else {
 			menu.printLog("고객 정보 수정에 실패했습니다.", false);
@@ -232,24 +232,22 @@ public class SystemManager {
 		menu.printMenuGuide("삭제할 고객의 ID를 선택해주세요");
 		String customerID = getInputStr("고객 ID");
 
-		if (sales.deleteCustomer(customerID)) {
-			menu.printLog("고객 삭제에 성공했습니다.", true);
+		if (sales.deleteCustomer(customerID)){
+			menu.printLog("고객 삭제에 성공했습니다.",true);
 		} else {
 			menu.printLog("고객 삭제에 실패했습니다.", false);
 		}
 
 	}
 
-	// ProductManagement
-	// =============================================================
+	// ProductManagement =============================================================
 	// 0529 완
 	public void createInsuranceProduct() {
 		menu.createPrompt();
 
-		// TODO: createProduct에 insuranceProductList 를 파라미터로 넣는 이유?
-		if (((ProductManagement) loginedUser).createProduct(checkHashMap(), getInputInt("면책기간(년)"),
-				getInputInt("감액기간(년)"), getInputInt("감액기간 보장금액 비율(%)"), getInputStr("보험상품 이름"), checkSexInput(),
-				getInputInt("보험료"), getInputInt("최대 가입 연령"), getInputInt("최대 사고 횟수")))
+		if (((ProductManagement) loginedUser).createProduct(getInputInt("면책기간(년)"), getInputInt("감액기간(년)"),
+				getInputInt("감액기간 보장금액 비율(%)"), getInputStr("보험상품 이름"), checkSexInput(), getInputInt("보험료"),
+				getInputInt("최대 가입 연령"),checkHashMap(), getInputInt("최대 사고 횟수")))
 			menu.printLog("상품이 정상적으로 등록되었습니다.", true);
 
 		else
@@ -257,73 +255,77 @@ public class SystemManager {
 	}
 
 	// 0529 완
-	private void showInsuranceProduct(String nextCommand) {
+	private void showInsuranceProduct(String nextCommand){
 		menu.printMenuHeader(nextCommand);
-		ProductManagement productManagement = (ProductManagement) loginedUser;
 
-		ArrayList<InsuranceProduct> products = productManagement.getAllProducts();
-		int maxPage = menu.computeMaxPage(products.size());
-		int currentPage = 1;
-		int startIndex = 0;
-		((ProductManagementMenu) menu).show(
-				((ProductManagementMenu) menu).getNextProductsInPage(products, currentPage, startIndex), currentPage);
+		ArrayList<InsuranceProduct> products = ((ProductManagement) loginedUser).getAllProduct();
+		int maxPage=menu.computeMaxPage(products.size());
+		int currentPage=1;
+		int startIndex=0;
+		((ProductManagementMenu)menu).show(((ProductManagementMenu)menu).getNextProductsInPage(products,currentPage,startIndex),currentPage);
 		boolean escapeMenu = false;
-		do {
-			menu.printMenuList(
-					new String[] { nextCommand.equals("상세정보조회") ? "종료" : nextCommand, "상세정보조회", "키워드검색", "다음페이지" });
+		do{
+			menu.printMenuList(new String[]{
+					nextCommand.equals("상세정보조회")?"종료":nextCommand,
+					"상세정보조회", "키워드검색","다음페이지"});
 			int userSelect = getUserSelectInt();
-			switch (userSelect) {
+			switch(userSelect){
 				case 0:
-					escapeMenu = true;
+					escapeMenu=true;
 					break;
 				case 1: // 상세정보조회
 					menu.printMenuGuide("상세정보를 조회할 상품의 ID를 입력해주세요");
-					String selectedProductID = getInputStr("상품 ID");
+					String selectedProductID=getInputStr("상품 ID");
 					menu.printMenuHeader(nextCommand);
-					showProductDetail(productManagement.searchProduct(selectedProductID));
+					if(showProductDetail(((ProductManagement) loginedUser).searchProductsByKey("product_id",selectedProductID))==null)
+						System.out.println("일치하는 상품이 없습니다.");
 					break;
 				case 2: // TODO: 키워드검색
-					System.out.println("서비스 준비중입니다.");
+					searchKeyWord();
 					break;
 				case 3: // 다음 페이지 출력
-					if (currentPage == maxPage) {
-						startIndex = 0;
-						currentPage = 1;
-					} else {
+					if(currentPage==maxPage){
+						startIndex=0;
+						currentPage=1;
+						System.out.println("마지막 페이지입니다.");
+					}else {
 						startIndex = currentPage * 3;
 						currentPage++;
 					}
-					((ProductManagementMenu) menu).show(
-							((ProductManagementMenu) menu).getNextProductsInPage(products, currentPage, startIndex),
-							currentPage);
+					((ProductManagementMenu)menu).show(
+							((ProductManagementMenu)menu).getNextProductsInPage(products,currentPage,startIndex),
+							currentPage
+					);
 					break;
 			}
-		} while (!escapeMenu);
+		}while(!escapeMenu);
 	}
 
-	// TODO: 검토
+	// 0603 수정
 	public void searchInsuranceProduct() {
 
 		int index = 0;
 		final int maxCount = 10;
 		String input = "";
 
-		if (insuranceProductList.size() == 0) {
+		ArrayList<InsuranceProduct> insuranceProducts = ((ProductManagement) loginedUser).getAllProduct();
+
+		if (insuranceProducts.size() == 0) {
 			System.out.println("등록된 상품이 없습니다.");
 			return;
 		}
 
-		while (index < insuranceProductList.size()) {
-			int end = Math.min(index + maxCount, insuranceProductList.size());
+		while (index < insuranceProducts.size()) {
+			int end = Math.min(index + maxCount, insuranceProducts.size());
 			System.out.println("=== 보험 상품 ===");
 			for (int i = index; i < end; i++) {
-				InsuranceProduct product = insuranceProductList.getProduct(i);
+				InsuranceProduct product = insuranceProducts.get(i);
 				System.out.println(index + 1 + ". " + product.getProductID() + " " + product.getProductName() + " "
 						+ product.getProductManagementID());
 			}
 			index = end;
 			System.out.println("조회하고 싶은 상품을 선택해주세요.");
-			if (index >= insuranceProductList.size())
+			if (index >= insuranceProducts.size())
 				System.out.println("모든 상품을 다 출력했습니다.");
 			else
 				System.out.println("다음 페이지로 넘어가려면 'next', 키워드 검색을 원하시면 'search', 조회 종료를 원하시면 'end'를 입력해주세요.");
@@ -340,65 +342,75 @@ public class SystemManager {
 				} catch (NumberFormatException e) {
 					index = getInputInt("잘못된 입력입니다. 번호를 다시 입력해주세요 ");
 				}
-				System.out.println(((ProductManagement) loginedUser).getProduct(index - 1).toString());
+				System.out.println( insuranceProducts.get( index - 1).toString());
 				break;
 			}
 		}
 	}
-
+	
+	//0603 수정
 	public void searchKeyWord() {
 		ProductManagement manager = (ProductManagement) loginedUser;
-		InsuranceProductList products = null;
+		ArrayList<InsuranceProduct> products = null;
 
 		System.out.println("원하는 키워드를 선택해주세요.");
-		System.out.println("1.product id \n2.product name \n3.product management id");
+		System.out.println("1. 상품 ID \n2.상품이름 \n3.상품관리자 ID");
 		int chooseMenu = getUserSelectInt();
 
 		switch (chooseMenu) {
 			case 1:
 				String checkProductID = getInputStr("찾으려는 상품의 ID를 입력하세요");
-				products = manager.searchProducts("productID", checkProductID);
+				products = manager.searchProductsByKey("product_id", checkProductID);
 				break;
 			case 2:
 				String checkProductName = getInputStr("찾으려는 상품의 이름을 입력하세요");
-				products = manager.searchProducts("productName", checkProductName);
+				products = manager.searchProductsByKey("product_name", checkProductName);
 				break;
 			case 3:
 				String checkProductManagerID = getInputStr("찾으려는 상품의 상품관리자 id를 입력하세요");
-				products = manager.searchProducts("productManagementID", checkProductManagerID);
+				products = manager.searchProductsByKey("user_id", checkProductManagerID);
 				break;
+			default :
+				System.out.println("키워드 검색을 종료합니다.");
+				return;
 		}
 
-		insuranceProductList.printAllProducts();
+		for(InsuranceProduct product : products){
+			System.out.println(product.toString());
+		}
 	}
 
 	// 0529 완
-	private InsuranceProduct showProductDetail(InsuranceProduct product) {
-		((ProductManagementMenu) menu).showDetail(product);
-		return product;
+	private InsuranceProduct showProductDetail(ArrayList<InsuranceProduct> products) {
+		if(products!=null)
+			((ProductManagementMenu) menu).showDetail(products.get(0));
+		else return null;
+		return products.get(0);
 	}
 
+
 	public void updateInsuranceProduct() {
-		ProductManagement productManagement = (ProductManagement) loginedUser;
+		ProductManagement manager = (ProductManagement) loginedUser;
 		showInsuranceProduct("상품정보 수정");
 
 		menu.printMenuGuide("수정할 상품의 ID를 선택해주세요");
-		InsuranceProduct product = productManagement.searchProduct(getInputStr("상품ID"));
+		InsuranceProduct product = manager.searchProductsByKey("product_id",getInputStr("상품ID")).get(0);
 		String productID = product.getProductID();
-		String productManagementID = productManagement.getUserID();
+		String productManagementID= manager.getUserID();
 		menu.printMenuGuide("상품 정보를 수정해주세요.(비어있으면 이전 정보가 유지됩니다)");
 
-		if (productManagement
-				.updateProduct(((ProductManagementMenu) menu).updateProductPrompt(product, productManagementID))) {
-			menu.printLog("상품 정보 수정에 성공했습니다.", true);
-			showProductDetail(productManagement.searchProduct(productID));
+		if (manager.updateProduct(
+				((ProductManagementMenu)menu).updateProductPrompt(product,productManagementID))
+		) {
+			menu.printLog("상품 정보 수정에 성공했습니다.",true);
+			showProductDetail(manager.searchProductsByKey("product_id",productID));
 		} else {
 			menu.printLog("상품 정보 수정에 실패했습니다.", false);
 		}
 
 	}
 
-	public void deleteInsuaranceProduct() {
+	public void deleteInsuranceProduct() {
 		ProductManagement manager = (ProductManagement) loginedUser;
 		String input = null;
 		boolean result = false;
@@ -418,21 +430,44 @@ public class SystemManager {
 
 	public HashMap<String, String> checkHashMap() {
 		HashMap<String, String> hash = new HashMap<>();
+		String ageg[] = {"0","10","20","30","40","50","60"};
+		ArrayList<String> inputs = new ArrayList<>();
+		System.out.println("연령대별 보장금액");
 		while (true) {
-			System.out.println("연령대별 보장금액: ");
-			String coverageByAgStrings = scanner.nextLine();
-			String[] array = coverageByAgStrings.split(" ");
-			if (array.length % 2 != 0) {
-				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+			for(String age : ageg){
+				System.out.print(age+"대 : ");
+				String input = scanner.nextLine();
+				inputs.add(input);
+			}
+			if(inputs.size()!=6){
+				System.out.println("모든 값을 입력해주세요.");
 				continue;
 			}
-			for (int i = 0; i < array.length - 1; i += 2)
-				hash.put(array[i], array[i + 1]);
+			boolean isInt = true;
+			for(String input : inputs){
+				if(!isInteger(input)){
+					System.out.println("숫자를 입력해주세요.");
+					isInt = false;
+					break;
+				}
+			}
+			if(!isInt)
+				continue;
+			for (int i = 0; i < ageg.length - 1; i += 2)
+				hash.put(ageg[i], inputs.get(i));
 			break;
 		}
 		return hash;
 	}
 
+	public boolean isInteger(String s){
+		try{
+			Integer.parseInt(s);
+			return true;
+		}catch (Exception e){
+			return false;
+		}
+	}
 	public Sex checkSexInput() {
 		Sex sex = null;
 		String value = "";
@@ -463,9 +498,9 @@ public class SystemManager {
 
 		// 보상 지급 대기중인 보상 조회 로직, 라인넘버 통해서 선택함,
 		System.out.println("===CompensationList===");
-		List<Event> events = eventList.searchCompensation("state", "Awaiting"); // 일반 보상 지급이 아직 되지 않은 경우만 골라오긴 하는데,
-		// 보상 지급 결정이 내려졌는지가 반영이 되야할것같음..
-		// DB 마렵네
+		ArrayList<Event> events = eventList.searchEvent("state_of_compensation", "0"); // 일반 보상 지급이 아직 되지 않은 경우만 골라오긴 하는데,
+																						// 보상 지급 결정이 내려졌는지가 반영이 되야할것같음..
+																						// DB 마렵네
 		if (events.size() <= 0) {
 			System.out.println("보상 지급 대기중인 항목이 없습니다");
 			return;
@@ -488,21 +523,19 @@ public class SystemManager {
 		// 상세정보 표시 및 보상 지급 선택
 		System.out.println("==상세정보==\n" + selectedEvent + ", Amount charged: "
 				+ selectedEvaluation.getCompensation().getAmountOfPaid());
-
-
 		System.out.println("보상을 지급하시겠습니까?");
 		switch (getUserSelectYorN()) {
-			case UserSelection.Yes:
-				if (!lossAdjuster.payCompensation(selectedCompensation.getCompensationID(), true))
-					System.out.println("시스템 오류로 인해 보상을 지급할 수 없습니다");
-				break;
-			case UserSelection.No:
-				if (!lossAdjuster.payCompensation(selectedCompensation.getCompensationID(), false))
-					System.out.println("시스템 오류로 인해 보상을 지급할 수 없습니다");
-				break;
-			case UserSelection.Cancel:
-				System.out.println("보상 지급이 취소되었습니다.");
-				break;
+		case UserSelection.Yes:
+			if (!lossAdjuster.payCompensation(selectedCompensation.getCompensationID(), true))
+				System.out.println("시스템 오류로 인해 보상을 지급할 수 없습니다");
+			break;
+		case UserSelection.No:
+			if (!lossAdjuster.payCompensation(selectedCompensation.getCompensationID(), false))
+				System.out.println("시스템 오류로 인해 보상을 지급할 수 없습니다");
+			break;
+		case UserSelection.Cancel:
+			System.out.println("보상 지급이 취소되었습니다.");
+			break;
 		}
 	}
 
@@ -516,67 +549,53 @@ public class SystemManager {
 			System.out.println("메뉴로 돌아갑니다.");
 			return;
 		}
-		Customer selectedCustomer = CustomerDetailView(selectedEvent);
-		if (selectedCustomer == null) {
-			System.out.println("메뉴로 돌아갑니다.");
-			return;
-		}
+//		Customer selectedCustomer = CustomerDetailView(selectedEvent);
+//		if (selectedCustomer == null) {
+//			System.out.println("메뉴로 돌아갑니다.");
+//			return;
+//		}
 		// 계약이 아직 구현되지 않아, 계약 조회는 이후 구현
-		List<Contract> contractList = lossAdjuster.getContractByCustomerID(selectedEvent.customerID);
-		List<InsuranceProduct> insuranceProductList = lossAdjuster.getProductsByContractID(contractList);
-
-		System.out.println("고객의 나이 : "+selectedCustomer.getAge());
-		System.out.println("==고객보험정보==\n    상품 이름     연령별 보장범위");
-		for(int i=0;i<insuranceProductList.size();i++){
-			InsuranceProduct product = insuranceProductList.get(i);
-			System.out.print((i+1)+". "+product.getProductName());
-			HashMap<String, String> coverageMap = product.getCoverageByAge();
-			for (Map.Entry<String, String> entry : coverageMap.entrySet()) {
-				System.out.println("  " + entry.getKey() + " : " + entry.getValue());
-			}
-		}
-
 		System.out.println("심사 결과를 선택해주세요 pass = Yes, nonpass = No, cancel = Cancel");
 		switch (getUserSelectYorN()) {
-			case UserSelection.Yes:
-				if (!lossAdjuster.evaluateCompensation(selectedEvent.getEventID(), true))
-					System.out.println("시스템 오류로 인해 심사를 진행할 수 없습니다");
-				break;
-			case UserSelection.No:
-				if (!lossAdjuster.payCompensation(selectedEvent.getEventID(), false))
-					System.out.println("시스템 오류로 인해 심사를 진행할 수 없습니다");
-				break;
-			case UserSelection.Cancel:
-				System.out.println("심사가 취소되었습니다.");
-				break;
+		case UserSelection.Yes:
+			if (!lossAdjuster.evaluateCompensation(selectedEvent.getEventID(), true))
+				System.out.println("시스템 오류로 인해 심사를 진행할 수 없습니다");
+			break;
+		case UserSelection.No:
+			if (!lossAdjuster.payCompensation(selectedEvent.getEventID(), false))
+				System.out.println("시스템 오류로 인해 심사를 진행할 수 없습니다");
+			break;
+		case UserSelection.Cancel:
+			System.out.println("심사가 취소되었습니다.");
+			break;
 		}
 
 	}
 
-	private Customer CustomerDetailView(Event selectedEvent) {
-		Customer selectedCustomer = customerList.search(selectedEvent.getCustomerID());
-		if (selectedCustomer == null) {
-			System.out.println("해당하는 고객이 없습니다.");
-			return null;
-		}
-		System.out.println("===CustomerDetail===\n" + selectedCustomer);
-		System.out.println("고객정보 확인이 끝나셨다면 Yes를 눌러주세요");
-		switch (getUserSelectYorN()) {
-			case UserSelection.Yes:
-				return selectedCustomer;
-			case UserSelection.No:
-				System.out.println("고객 상세 정보 조회로 돌아갑니다.");
-				return CustomerDetailView(selectedEvent);
-			case UserSelection.Cancel:
-				System.out.println("보상 심사가 취소되었습니다.");
-				return null;
-		}
-		return null;
-	}
+//	private Customer CustomerDetailView(Event selectedEvent) {
+//		Customer selectedCustomer = customerList.search(selectedEvent.getCustomerID());
+//		if (selectedCustomer == null) {
+//			System.out.println("해당하는 고객이 없습니다.");
+//			return null;
+//		}
+//		System.out.println("===CustomerDetail===\n" + selectedCustomer);
+//		System.out.println("고객정보 확인이 끝나셨다면 Yes를 눌러주세요");
+//		switch (getUserSelectYorN()) {
+//		case UserSelection.Yes:
+//			return selectedCustomer;
+//		case UserSelection.No:
+//			System.out.println("고객 상세 정보 조회로 돌아갑니다.");
+//			return CustomerDetailView(selectedEvent);
+//		case UserSelection.Cancel:
+//			System.out.println("보상 심사가 취소되었습니다.");
+//			return null;
+//		}
+//		return null;
+//	}
 
 	private Event eventDetailVeiw(EventList eventList) {
 		System.out.println("===EventList===");
-		List<Event> events = eventList.searchEvaluation("state", "Awaiting"); // 심사 대기중 리스트 가져옴
+		ArrayList<Event> events = eventList.searchEvent("state_of_evaluation", "0"); // 심사 대기중 리스트 가져옴
 		if (events.size() <= 0) {
 			System.out.println("보상 지급 대기중인 항목이 없습니다");
 			return null;
@@ -594,17 +613,18 @@ public class SystemManager {
 		Event selectedEvent = events.get(userSelectNum);
 		System.out.println("==상세정보==\n" + selectedEvent + "\n 해당 사고를 선택하시겠습니까?");
 		switch (getUserSelectYorN()) {
-			case UserSelection.Yes:
-				return selectedEvent;
-			case UserSelection.No:
-				System.out.println("사고 정보 리스트로 돌아갑니다.");
-				return eventDetailVeiw(eventList);
-			case UserSelection.Cancel:
-				System.out.println("보상 심사가 취소되었습니다.");
-				return null;
+		case UserSelection.Yes:
+			return selectedEvent;
+		case UserSelection.No:
+			System.out.println("사고 정보 리스트로 돌아갑니다.");
+			return eventDetailVeiw(eventList);
+		case UserSelection.Cancel:
+			System.out.println("보상 심사가 취소되었습니다.");
+			return null;
 		}
 		return null;
 	}
+
 
 	// Common method =============================================================
 
@@ -621,23 +641,34 @@ public class SystemManager {
 	private int getInputOrKeepInt(String title, int prevValue) {
 		return Integer.parseInt(getInputOrKeepStr(title, Integer.toString(prevValue)));
 	}
-
 	public int getUserSelectInt() {
-		System.out.print(">> ");
-		return Integer.parseInt(scanner.nextLine());
+		while (true) {
+			try {
+				System.out.print(">> ");
+				String choose = scanner.nextLine();
+				if (choose.isEmpty()) {
+					System.out.println("메뉴를 선택해주세요.");
+					continue;
+				}
+				return Integer.parseInt(choose);
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요.");
+			}
+		}
 	}
+
 
 	public UserSelection getUserSelectYorN() {
 		System.out.print("Yes/No/Cancel >> ");
 		String userInput = scanner.nextLine();
 		return switch (userInput.toLowerCase()) {
-			case "yes", "y" -> UserSelection.Yes;
-			case "no", "n" -> UserSelection.No;
-			case "cancel", "c" -> UserSelection.Cancel;
-			default -> {
-				System.out.println("잘못된 입력입니다. 다시 시도해주세요");
-				yield getUserSelectYorN();
-			}
+		case "yes", "y" -> UserSelection.Yes;
+		case "no", "n" -> UserSelection.No;
+		case "cancel", "c" -> UserSelection.Cancel;
+		default -> {
+			System.out.println("잘못된 입력입니다. 다시 시도해주세요");
+			yield getUserSelectYorN();
+		}
 		};
 
 	}

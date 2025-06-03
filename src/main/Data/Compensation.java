@@ -62,7 +62,7 @@ public class Compensation {
 
 	public void setAmountOfPaid(int paid){
 		this.amountOfPaid = paid;
-	}
+  }
 
 	public static class Builder {
 		private final String evaluationID;

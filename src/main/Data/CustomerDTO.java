@@ -2,7 +2,7 @@ package main.Data;
 
 import main.Enum.Sex;
 
-public class Customer {
+public class CustomerDTO {
 	private final String accountNumber;
 	private final String address;
 	private final int age;
@@ -12,12 +12,14 @@ public class Customer {
 	private final String phoneNumber;
 	private final String rrn;
 	private final Sex sex;
+	private final String pw;
 
-	private Customer(Builder builder) {
+	public CustomerDTO(Builder builder) {
 		this.accountNumber = builder.accountNumber;
 		this.address = builder.address;
 		this.age = builder.age;
 		this.customerID = builder.customerID;
+		this.pw = builder.pw;
 		this.job = builder.job;
 		this.name = builder.name;
 		this.phoneNumber = builder.phoneNumber;
@@ -39,6 +41,10 @@ public class Customer {
 
 	public String getCustomerID() {
 		return customerID;
+	}
+
+	public String getPw(){
+		return pw;
 	}
 
 	public String getJob() {
@@ -72,7 +78,7 @@ public class Customer {
 				", name='" + name + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", rrn='" + rrn + '\'' +
-				", sex=" + sex +
+				", sex=" + sex + 
 				'}';
 	}
 
@@ -86,6 +92,7 @@ public class Customer {
 		private String address;
 		private int age;
 		private String customerID;
+		private String pw;
 		private String job;
 		private String name;
 		private String phoneNumber;
@@ -106,9 +113,14 @@ public class Customer {
 			this.age = age;
 			return this;
 		}
-
+		
 		public Builder customerID(String customerID) {
 			this.customerID = customerID;
+			return this;
+		}
+
+		public Builder pw(String pw){
+			this.pw = pw;
 			return this;
 		}
 
@@ -137,12 +149,12 @@ public class Customer {
 			return this;
 		}
 
-		public Customer build() {
+		public CustomerDTO build() {
 
 			// if (name == null || customerID == null) {
 			//     throw new IllegalStateException("Name and CustomerID cannot be null");
 			// }
-			return new Customer(this);
+			return new CustomerDTO(this);
 		}
 	}
 }

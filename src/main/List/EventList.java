@@ -1,7 +1,5 @@
 package main.List;
 import java.util.ArrayList;
-import java.util.List;
-
 import main.Data.Compensation;
 import main.Data.Evaluation;
 import main.Data.Event;
@@ -23,12 +21,4 @@ public interface EventList {
 	//update
 	public boolean update(Event event);
 
-	boolean updateEvaluation(Evaluation targetEvaluation);
-	boolean updateCompensation(Compensation targetCompensation);
-
-	List<Event> searchCompensation(String state, String awaiting);
-
-	List<Event> searchEvaluation(String state, String awaiting);
-
-//	public ArrayList<Event> searchCompensation(String state, String awaiting);
 }

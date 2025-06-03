@@ -1,50 +1,32 @@
 package main.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import main.DAO.DAO;
 import main.DAO.Utillity;
 import main.Data.InsuranceProduct;
+import main.Enum.Sex;
 
 public class InsuranceProductListImpl implements InsuranceProductList {
 
 	private ArrayList<InsuranceProduct> insuranceProducts;
-//	private int index = 1;
 
 	public InsuranceProductListImpl(){
 		insuranceProducts = new ArrayList<>();
 	}
 
-	/**
-	 * 보험 상품 삭제
-	 * @param productID
-	 * @return delete 성공 시 true, 실패 시 false
-	 */
 	public boolean delete(String productID){
 		try (DAO dao = new DAO()){
-			dao.executeQuery("DELETE FROM InsuranceProduct WHERE product_id = ?", productID);
+			dao.executeQuery("DELETE FROM insurance_product WHERE product_id = ?", productID);
 			return true;
 		}catch(Exception e){
 			return false;
 		}
 	}
 
-	public boolean checkProduct(String productName){
-		try (DAO dao = new DAO()){
-			dao.executeQuery("SELECT * FROM InsuranceProduct WHERE product_name = ?", productName);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	/**
-	 * 새로운 보험 상품 추가
-	 * @param insuranceProduct
-	 * @return insert 성공 시 true, 실패 시 false
-	 */
 	public boolean insert(InsuranceProduct insuranceProduct){
 		try (DAO dao = new DAO()){
-			dao.executeQuery("INSERT INTO InsuranceProduct (product_id,coverage_by_age,exemption_period,max_age,max_number_event,premium,product_name,reduction_period,reduction_ratio,sex,user_id) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			dao.executeQuery("INSERT INTO insurance_product (product_id,coverage_by_age,exemption_period,max_age,max_number_event,premium,product_name,reduction_period,reduction_ratio,sex,user_id) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					insuranceProduct.getProductID(),
 					Utillity.map2Json(insuranceProduct.getCoverageByAge()),
 					insuranceProduct.getExemptionPeriod(),
@@ -62,100 +44,59 @@ public class InsuranceProductListImpl implements InsuranceProductList {
 		}
 	}
 
-	/**
-	 * 일치하는 productID 보험 상품 조회
-	 * @param productID
-	 * @return search 성공 시 해당 상품, 실패 시 null
-	 */
-	public InsuranceProduct search(String productID){
+	public ArrayList<InsuranceProduct> searchProductsByKey(String key, String value) {
 		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM insurance_product WHERE product_id = ?",productID).toInsuranceProduct().get(0);
+			String sql = "SELECT * FROM insurance_product WHERE "+key+" = ?";
+			return (ArrayList<InsuranceProduct>) dao.executeQuery(sql, value).toInsuranceProduct();
 		}catch(Exception e){
 			return null;
 		}
 	}
 
-	/**
-	 * 보험 상품 키워드 조회
-	 * @param key
-	 * @param value
-	 * @return
-	 */
-	public ArrayList<InsuranceProduct> searchProducts(String key, String value) {
-		try (DAO dao = new DAO()){
-			return(ArrayList<InsuranceProduct>) dao.executeQuery("SELECT * FROM insurance_product WHERE ? = ?", key, value).toInsuranceProduct();
+	public boolean update(InsuranceProduct product){
+		try(DAO dao = new DAO()){
+			String sql = "UPDATE insurance_product set product_name = ? , max_age = ? , premium = ? , max_number_event = ? , sex = ? , exemption_period = ? , reduction_period = ? , reduction_ratio = ? , coverage_by_age = ? WHERE product_id = ?";
+			dao.executeQuery(sql,product.getProductName(),
+					product.getMaxAge(),
+					product.getPremium(),
+					product.getMaxNumberEvent(),
+					product.getSex().getValue(),
+					product.getExemptionPeriod(),
+					product.getReductionPeriod(),
+					product.getReductionRatio(),
+					mapToJson(product.getCoverageByAge()),
+					product.getProductID());
+			return true;
 		}catch(Exception e){
-			return null;
+			return false;
 		}
 	}
 
-
-	/**
-	 *보험 상품 정보 업데이트
-	 * @param updatedInsuranceProduct
-	 * @return update 성공 시 true, 실패 시 false
-	 */
-	public boolean update(InsuranceProduct updatedInsuranceProduct){
-		for (int i = 0; i < insuranceProducts.size(); i++) {
-			InsuranceProduct existingInsuranceProduct = insuranceProducts.get(i);
-			if (existingInsuranceProduct.getProductID().equals(updatedInsuranceProduct.getProductID())) {
-				insuranceProducts.set(i, updatedInsuranceProduct);
-				return true;
+	public String mapToJson(HashMap<String, String> map) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		int count = 0;
+		for (HashMap.Entry<String, String> entry : map.entrySet()) {
+			sb.append("\"")
+					.append(entry.getKey())
+					.append("\":\"")
+					.append(entry.getValue())
+					.append("\"");
+			if (++count < map.size()) {
+				sb.append(",");
 			}
 		}
-		return false;
+		sb.append("}");
+		return sb.toString();
 	}
 
-//	/**
-//	 * 보험 상품의 productID를 자동으로 생성
-//	 * @return 생성된 productID
-//	 */
-//	public String generateProductID(){
-//		return "P"+String.format("%08d",index++);
-//	}
 
-	/**
-	 * 보험 상품 리스트의 사이즈 값
-	 * @return 보험 상품 개수
-	 */
-	public int size(){
+	public ArrayList<InsuranceProduct> getAll() {
 		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM insurance_product").toInsuranceProduct().size();
-		}catch(Exception e){
-			return -1;
-		}
-	}
-
-//	/**
-//	 * 해당 index값의 보험 상품 반환
-//	 * @param index
-//	 * @return 해당 index값의 보험 상품 반환
-//	 */
-//	public InsuranceProduct getProduct(int index){
-//		return this.insuranceProducts.get(index);
-//	}
-
-	@Override
-	public ArrayList<InsuranceProduct> getAllProducts() {
-		try (DAO dao = new DAO()){
-			return (ArrayList<InsuranceProduct>) dao.executeQuery("SELECT * FROM InsuranceProduct").toInsuranceProduct();
+			return (ArrayList<InsuranceProduct>) dao.executeQuery("SELECT * FROM insurance_product").toInsuranceProduct();
 		}catch(Exception e){
 			return null;
 		}
-
 	}
 
-	public void printAllProducts(){
-		ArrayList<InsuranceProduct> products= this.getAllProducts();
-		if(products.isEmpty()){
-			System.out.println("등록된 보험 상품이 없습니다.");
-			return;
-		}
-		for(InsuranceProduct product: products)
-			System.out.println(product.toString());
-	}
-
-	public InsuranceProduct getProduct(int index){
-		return insuranceProducts.get(index);
-	}
 }

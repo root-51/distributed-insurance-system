@@ -26,7 +26,7 @@ public class Utillity {
       String key = entry.getKey().replace("\"", "\\\"");
       String value = entry.getValue().replace("\"", "\\\"");
       jsonBuilder.append("\"").append(key).append("\":")
-              .append("\"").append(value).append("\"");
+          .append("\"").append(value).append("\"");
       if (++count < map.size()) {
         jsonBuilder.append(",");
       }

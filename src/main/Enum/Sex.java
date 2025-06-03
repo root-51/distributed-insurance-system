@@ -13,11 +13,11 @@ public enum Sex {
     return this.value;
   }
 
- public static Sex fromInt(int value){
-   return switch (value) {
+  public static Sex fromInt(int value){
+    return switch (value) {
       case 0 -> MALE;
       case 1 -> FEMALE;
       default -> UNKNOWN;
-   };
-}
+    };
+  }
 }
