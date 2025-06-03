@@ -199,7 +199,7 @@ public class ResultSetWrapper {
         (String) (row.get("event_id")), // evaluation_id (가정)
         (String) row.get("user_id") // customer_id
     )
-        .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromString((String) row.get("state_of_evaluation")) : null) // String to Enum 변환
+        .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromInteger((int)row.get("state_of_evaluation")) : null) // String to Enum 변환
         .compensation(map2Compensation(row)) // 중첩된 객체 매핑
         .build();
   } catch (NullPointerException | ClassCastException e) {
