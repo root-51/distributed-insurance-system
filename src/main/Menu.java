@@ -32,7 +32,7 @@ public class Menu { // TODO: rename to IOManager
 
 	}
 	public void printMenuHeader(String message) {
-		System.out.println("============================");
+		System.out.println("\n============================");
 		System.out.println(message + "\t\t      " + userTypeText);
 		System.out.println("============================\n");
 	}
