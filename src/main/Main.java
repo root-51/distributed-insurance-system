@@ -25,8 +25,7 @@ public class Main {
 //		loadData.loadInsuranceProductData();
 //		loadData.loadContractData();
 
-		loginedUser = login("manager1");
-
+		loginedUser = login("gogek");
 		menu = new SystemManager(customerList, insuranceProductList, contractList,
 				loginedUser);
 		while (true) {
