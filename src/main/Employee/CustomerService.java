@@ -11,8 +11,8 @@ public class CustomerService extends User{
         super(userID,userPW, userType);
         this.eventList = new EventListImpl();
     }
-    public boolean createEvent(){
-        return false;
+    public boolean createEvent(Event event) {
+        return eventList.insert(event);
     }
     public boolean searchEvent(){
         return false;
