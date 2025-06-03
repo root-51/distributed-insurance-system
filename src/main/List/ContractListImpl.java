@@ -7,22 +7,16 @@ import main.DAO.DAO;
 import main.Data.Contract;
 
 public class ContractListImpl implements ContractList {
-	/**
-	 * 
-	 * @param contractID
-	 */
+
 	public boolean delete(String contractID){
 		try (DAO dao = new DAO()){
-			dao.executeQuery("DELETE FROM contract WHERE ContractID = ?", contractID);
+			dao.executeQuery("DELETE FROM contract WHERE contract_id = ?", contractID);
 			return true;
 		}catch(Exception e){
 			return false;
 		}
 	}
-	/**
-	 * 
-	 * @param contract
-	 */
+
 	public boolean insert(Contract contract){
 		try (DAO dao = new DAO()){
 			dao.executeQuery("INSERT INTO contract (contract_id,contract_date,expiration_date,product_id,sales_id,state,customer_id) VALUE(?,?,?,?,?,?,?)",
@@ -39,22 +33,14 @@ public class ContractListImpl implements ContractList {
 		}
   }
 
-	/**
-	 * 
-	 * @param contractID
-	 */
 	public Contract search(String contractID){
 		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM contract WHERE ContractID = ?", contractID).toContracts().get(0);
+			return dao.executeQuery("SELECT * FROM contract WHERE contract_id = ?", contractID).toContracts().get(0);
 		}catch(Exception e){
 			return null;
 		}
 	}
 
-	/**
-	 * 
-	 * @param contract
-	 */
 	public boolean update(Contract contract){
 		try (DAO dao = new DAO()){
 			dao.executeQuery("UPDATE contract SET contract_date = ?, expiration_date = ?, product_id = ?, sales_id = ?, state = ?, customer_id = ? WHERE contract_id = ?",
@@ -70,27 +56,19 @@ public class ContractListImpl implements ContractList {
 	}
 
 	@Override
-	public List<Contract> getAll() {
+	public ArrayList<Contract> getAll() {
 		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM contract").toContracts();
-		} catch(Exception e){ return null; }
-  }
+			return (ArrayList<Contract>) dao.executeQuery("SELECT * FROM contract").toContracts();
+		} catch(Exception e){
+			e.printStackTrace();
+			return null; }
+	}
 	@Override
-	public List<Contract> searchByKeyValue(String key, String value){
+	public ArrayList<Contract> searchByKeyValue(String key, String value){
 		try (DAO dao = new DAO()){
-			return dao.executeQuery("SELECT * FROM contract WHERE ? = ?",key,value).toContracts();
+			String sql = "SELECT * FROM contract WHERE "+key+" = ?";
+			return (ArrayList<Contract>) dao.executeQuery(sql,value).toContracts();
 		} catch(Exception e){ return null; }
 	}
 
-	@Override
-	public List<Contract> getByCustomerID(String customerID) {
-		try (DAO dao = new DAO()) {
-			return dao.executeQuery("SELECT contracts.*\n"
-					+ "FROM customer\n"
-					+ "JOIN contract ON customer.user_id = contract.customer_id\n"
-					+ "WHERE contract.customer_id = ?", customerID).toContracts();
-		} catch (Exception e) {
-			return null;
-		}
-	}
 }
