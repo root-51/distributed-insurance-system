@@ -163,7 +163,7 @@ public class ResultSetWrapper {
           new Event.Builder((String) row.get("event_id"), (String) row.get("user_id"))
               .claimValue((Integer) row.get("claim_value"))
               .documents((String) row.get("documents"))
-              .eventDate(row.get("event_date") != null ? new Date(((java.sql.Date) row.get("event_date")).getTime()) : null)
+              .eventDate(row.get("event_date") != null ? ((java.sql.Date) row.get("event_date")).toLocalDate() : null)
               .eventDescription((String) row.get("event_description"))
               .eventLocation((String) row.get("event_location"))
               .receiptDate(row.get("event_receipt_date") != null ? new Date(((java.sql.Date) row.get("event_receipt_date")).getTime()) : null)
