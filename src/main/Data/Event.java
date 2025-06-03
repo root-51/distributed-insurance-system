@@ -60,7 +60,7 @@ public class Event {
 		return eventLocation;
 	}
 
-	public Date getReceiptDate() {
+	public LocalDate getReceiptDate() {
 		return receiptDate;
 	}
 
