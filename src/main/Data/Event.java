@@ -26,7 +26,7 @@ public class Event {
 		this.documents = builder.documents;
 		this.eventDate = builder.eventDate;
 		this.eventDescription = builder.eventDescription;
-		this.eventID = builder.customerID;
+		this.eventID = builder.eventID;
 		this.eventLocation = builder.eventLocation;
 		this.receiptDate = builder.receiptDate;
 		this.evaluation = builder.evaluation;
