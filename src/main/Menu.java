@@ -151,7 +151,7 @@ public class Menu { // TODO: rename to IOManager
 	// inner class =================================
 	public static class CustomerMenu extends Menu {
 		public CustomerMenu() {
-			String[] menuList = { "보험료 납부", "사고 접수", "사고 갱신", "사고 접수 이력 조회" };
+			String[] menuList = { "종료", "사고 접수", "사고 조회","사고 갱신", "사고 삭제","보험료 납부","보험료 조회"};
 			setMenuList(menuList);
 			setUserTypeStr("고객");
 		}
