@@ -91,7 +91,7 @@ public class Menu { // TODO: rename to IOManager
 	private static int getInputInt(String title) {
 		return Integer.parseInt(getInputStr(title));
 	}
-	private static int getInputOrKeepInt(String title, int prevValue) {
+	public static int getInputOrKeepInt(String title, int prevValue) {
 		return Integer.parseInt(getInputOrKeepStr(title, Integer.toString(prevValue)));
 	}
 	public static int computeMaxPage(int listSize){
