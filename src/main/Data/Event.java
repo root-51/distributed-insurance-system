@@ -44,7 +44,7 @@ public class Event {
 		return documents;
 	}
 
-	public Date getEventDate() {
+	public LocalDate getEventDate() {
 		return eventDate;
 	}
 
