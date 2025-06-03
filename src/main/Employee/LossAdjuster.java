@@ -15,12 +15,8 @@ import main.List.EventListImpl;
 
 	private final EventList EventList;
 
-	public LossAdjuster(int numOfEmployees, UserType employeeType) {
-		super(numOfEmployees, employeeType);
-		this.EventList = new EventListImpl();
-	}
-	public LossAdjuster(String userId, UserType employeeType) {
-		super(userId, employeeType);
+	public LossAdjuster(String userId, String userPW, UserType employeeType) {
+		super(userId,userPW, employeeType);
 		this.EventList = new EventListImpl();
 	}
 
