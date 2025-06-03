@@ -109,21 +109,19 @@ public class InsuranceProduct {
 			coverageStr.append(entry.getKey()).append("대 : ")
 					.append(entry.getValue()).append("원\n");
 		}
-
-		return "productID :'" + productID + '\'' +
-				",\n  productName : '" + productName + '\'' +
-				",\n  productManagementID : '" + productManagementID + '\'' +
-				",\n  coverageByAge\n" + coverageStr.toString() +
-				"  exemptionPeriod : " + exemptionPeriod +
-				",\n  maxAge: " + maxAge +
-				",\n  maxNumberEvent : " + maxNumberEvent +
-				",\n  premium : " + premium +
-				",\n  reductionPeriod : " + reductionPeriod +
-				",\n  reductionRatio: " + reductionRatio +
-				",\n  sex=" + sex +
-				"\n ================================================";
+		return "상품 ID :'" + productID + '\'' +
+				",\n  상품이름 : '" + productName + '\'' +
+				",\n  면책기간 : " + exemptionPeriod +'\'' +
+				",\n  최대가입연령: " + maxAge +
+				",\n  최대사고횟수 : " + maxNumberEvent +
+				",\n  보험료 : " + premium +
+				",\n  감액기간 : " + reductionPeriod +
+				",\n  감액률: " + reductionRatio +
+				",\n  성별=" + sex +
+				",\n  상품개발자ID : '" + productManagementID + '\'' +
+				",\n  coverageByAge\n" + coverageStr +
+				" ================================================";
 	}
-
 
 	public static Builder builder() {
 		return new Builder();

@@ -1,6 +1,7 @@
 
 package main.List;
 import java.util.ArrayList;
+import java.util.List;
 import main.DAO.DAO;
 import main.Data.Compensation;
 import main.Data.Evaluation;
@@ -92,6 +93,15 @@ public class EventListImpl implements EventList {
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 			return false;
+		}
+	}
+
+	@Override
+	public List<Event> getAll(){
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM event").toEvents();
+		}catch (Exception e){
+			return null;
 		}
 	}
 }//end EventListImpl

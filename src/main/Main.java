@@ -1,7 +1,9 @@
 package main;
 
 import main.DAO.DAO;
+import main.Employee.UnderWriter;
 import main.Employee.User;
+import main.Employee.User.UserType;
 import main.List.*;
 
 public class Main {
@@ -18,14 +20,9 @@ public class Main {
 		customerList = new CustomerListImpl();
 		insuranceProductList = new InsuranceProductListImpl();
 		contractList = new ContractListImpl();
-//		loadData = new LoadData(customerList, employeeList,insuranceProductList);
-//
-//		loadData.loadCustomerData();
-//		loadData.loadEmployeeData();
-//		loadData.loadInsuranceProductData();
-//		loadData.loadContractData();
 
-		loginedUser = login("gogek");
+		loginedUser = login("overwriter");
+
 		menu = new SystemManager(customerList, insuranceProductList, contractList,
 				loginedUser);
 		while (true) {
@@ -35,10 +32,6 @@ public class Main {
 		}
 
 	}
-
-//	public static User login(String loginID) {
-//		return employeeList.search(loginID);
-//	}
 
 	public static User login(String userID) {
 		try (DAO dao = new DAO()){

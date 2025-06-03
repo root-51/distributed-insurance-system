@@ -1,5 +1,8 @@
 package main.List;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import main.DAO.DAO;
 import main.Data.Contract;
 
@@ -66,4 +69,28 @@ public class ContractListImpl implements ContractList {
 		}catch(Exception e){ return false; }
 	}
 
+	@Override
+	public List<Contract> getAll() {
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM contract").toContracts();
+		} catch(Exception e){ return null; }
+  }
+	@Override
+	public List<Contract> searchByKeyValue(String key, String value){
+		try (DAO dao = new DAO()){
+			return dao.executeQuery("SELECT * FROM contract WHERE ? = ?",key,value).toContracts();
+		} catch(Exception e){ return null; }
+	}
+
+	@Override
+	public List<Contract> getByCustomerID(String customerID) {
+		try (DAO dao = new DAO()) {
+			return dao.executeQuery("SELECT contracts.*\n"
+					+ "FROM customer\n"
+					+ "JOIN contract ON customer.user_id = contract.customer_id\n"
+					+ "WHERE contract.customer_id = ?", customerID).toContracts();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

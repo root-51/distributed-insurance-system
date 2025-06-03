@@ -24,6 +24,7 @@ public interface InsuranceProductList {
 
 	public InsuranceProduct getProduct(int index);
 	public ArrayList<InsuranceProduct> getAllProducts();
+	public ArrayList<InsuranceProduct> getProductsByCustomerID(String customerID);
 	public void printAllProducts();
 
 }

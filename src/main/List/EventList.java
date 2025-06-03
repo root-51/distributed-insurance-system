@@ -1,5 +1,6 @@
 package main.List;
 import java.util.ArrayList;
+import java.util.List;
 import main.Data.Compensation;
 import main.Data.Evaluation;
 import main.Data.Event;
@@ -20,5 +21,6 @@ public interface EventList {
 
 	//update
 	public boolean update(Event event);
+	public List<Event> getAll();
 
 }
