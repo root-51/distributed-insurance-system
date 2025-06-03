@@ -60,7 +60,7 @@ public class Menu { // TODO: rename to IOManager
 		System.out.println("+--------------------------+\n");
 		System.out.println("         보험사 프로그램         \n");
 		System.out.println("             박솔민, 이종민 장소윤 ");
-		System.out.println("+--------------------------+\n\n");
+		System.out.println("+--------------------------+\n");
 
 		System.out.println();
 	}
