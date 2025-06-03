@@ -1,10 +1,14 @@
 package main;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import main.DAO.Utillity;
 import main.Data.Customer;
+import main.Data.Event;
 import main.Data.InsuranceProduct;
 import main.Enum.Sex;
 
@@ -32,7 +36,7 @@ public class Menu { // TODO: rename to IOManager
 
 	}
 	public void printMenuHeader(String message) {
-		System.out.println("============================");
+		System.out.println("\n============================");
 		System.out.println(message + "\t\t      " + userTypeText);
 		System.out.println("============================\n");
 	}
@@ -46,7 +50,7 @@ public class Menu { // TODO: rename to IOManager
 			System.out.println("   " + (i) + ". " + menuList[i]);
 		}
 	}public void printMenuGuide(String message) {
-		System.out.println(message);
+		System.out.println("\n"+message);
 	}
 	public void printLog(String message, boolean isSuccessed) {
 		if (isSuccessed) {
@@ -60,7 +64,7 @@ public class Menu { // TODO: rename to IOManager
 		System.out.println("+--------------------------+\n");
 		System.out.println("         보험사 프로그램         \n");
 		System.out.println("             박솔민, 이종민 장소윤 ");
-		System.out.println("+--------------------------+\n\n");
+		System.out.println("+--------------------------+\n");
 
 		System.out.println();
 	}
@@ -68,7 +72,7 @@ public class Menu { // TODO: rename to IOManager
 		System.out.print(">> ");
 		return Integer.parseInt(scanner.nextLine());
 	}
-	private static String getInputStr(String title) {
+	public static String getInputStr(String title) {
 		String input = "";
 		do {
 			System.out.print("   " + title + ": ");
@@ -79,7 +83,7 @@ public class Menu { // TODO: rename to IOManager
 		} while (input.isEmpty());
 		return input;
 	}
-	private static String getInputOrKeepStr(String title, String prevValue) {
+	public static String getInputOrKeepStr(String title, String prevValue) {
 		String userInput = "";
 		System.out.print("   "+title + ": ");
 		userInput = scanner.nextLine().trim();
@@ -88,10 +92,10 @@ public class Menu { // TODO: rename to IOManager
 		}
 		return userInput;
 	}
-	private static int getInputInt(String title) {
+	public static int getInputInt(String title) {
 		return Integer.parseInt(getInputStr(title));
 	}
-	private static int getInputOrKeepInt(String title, int prevValue) {
+	public static int getInputOrKeepInt(String title, int prevValue) {
 		return Integer.parseInt(getInputOrKeepStr(title, Integer.toString(prevValue)));
 	}
 	public static int computeMaxPage(int listSize){
@@ -118,6 +122,22 @@ public class Menu { // TODO: rename to IOManager
 		}while(value.isEmpty());
 		return sex;
 	}
+	public static Sex getInputOrKeepSex(Sex prevValue){
+		Sex sex =null;
+		String value="";
+		do{
+			System.out.println("   성별 [M/F]:");
+			if(!(value.equalsIgnoreCase("m")||value.equalsIgnoreCase("f"))){
+				System.out.println("   * m 또는 f 를 입력해주세요.");
+			}else if(value.isEmpty()){
+				sex = prevValue;
+			} else{
+				if(value.equalsIgnoreCase("f")) sex = Sex.FEMALE;
+				else sex=Sex.MALE;
+			}
+		}while(sex==null);
+		return sex;
+	}
 
 	/**
 	 * 그냥 터미널 환경에서 화면 싹 다 지워버리는 메소드, 이쁨
@@ -138,12 +158,83 @@ public class Menu { // TODO: rename to IOManager
 	}
 
 
+	public static LocalDate getInputLocalDate(String title) {
+		String dateStr = getInputStr(title+"(YYYY-MM-DD)");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(dateStr, formatter);
+		return localDate;
+	}
+	public static LocalDate getInputOrKeepLocalDate(String title, LocalDate prevValue) {
+		String dateStr = getInputOrKeepStr(title+"(YYYY-MM-DD)",prevValue.toString());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(dateStr, formatter);
+		return localDate;
+	}
+
 	// inner class =================================
 	public static class CustomerMenu extends Menu {
 		public CustomerMenu() {
-			String[] menuList = { "보험료 납부", "사고 접수", "사고 갱신", "사고 접수 이력 조회" };
+			String[] menuList = { "종료", "사고 접수", "사고 조회","사고 갱신", "사고 삭제","보험료 납부","보험료 조회"};
 			setMenuList(menuList);
 			setUserTypeStr("고객");
+		}
+		@Override
+		public void createPrompt() {
+			printMenuHeader("사고 접수");
+			printMenuGuide("사고 정보를 입력해주세요.");
+		}
+		public Event inputNewEventInfo(String userID){
+			Event event = new Event.Builder(Utillity.generateID('E'),userID)
+					.claimValue(getInputInt("보상액"))
+					.documents(getInputStr("증빙자료"))
+					.eventDate(getInputLocalDate("사고일자"))
+					.eventDescription(getInputStr("사고설명"))
+					.eventLocation(getInputStr("사고장소"))
+					.receiptDate(Utillity.getTodayLocalDate())
+					.build();
+			return event;
+		}
+		public void showEvents(ArrayList<Event> events, int currentPage ) {
+			if (events.size() == 0) {
+				System.out.println("   접수된 사고가 없습니다.");
+			}
+			System.out.println("   사고ID\t\t\t사고날짜\t\t\t고객ID");
+			for (Event event : events) {
+				System.out.println("   "+event.getEventID() + "\t\t" + event.getEventDate()+ "\t\t" + event.getCustomerID());
+			}
+			System.out.println();
+
+		}
+		public void showEventDetail(Event event) {
+			System.out.println("   사고ID\t" + event.getEventID());
+			System.out.println("   청구액\t" + event.getClaimValue());
+			System.out.println("   고객ID\t" + event.getCustomerID());
+			System.out.println("   사고날짜\t" + event.getEventDate());
+			System.out.println("   설명\t\t"+event.getEventDescription());
+			System.out.println("   사고장소\t" + event.getEventLocation());
+			System.out.println("   증빙자료\t" + event.getDocuments());
+			System.out.println("   접수날짜\t" + event.getReceiptDate());
+		}
+		public Event inputNewOrKeepEventInfo(Event currentEvent){
+			Event updatedEvent = new Event.Builder(currentEvent.getEventID(),currentEvent.getCustomerID())
+					.claimValue(getInputOrKeepInt("   보상액", currentEvent.getClaimValue()))
+					.documents(getInputOrKeepStr("   증빙자료", currentEvent.getDocuments()))
+					.eventDate(getInputOrKeepLocalDate("   사고일자", currentEvent.getEventDate()))
+					.eventDescription(getInputOrKeepStr("   사고설명",currentEvent.getEventDescription()))
+					.eventLocation(getInputOrKeepStr("   사고장소",currentEvent.getEventLocation()))
+					.receiptDate(currentEvent.getReceiptDate())
+					.evaluation(currentEvent.getEvaluation())
+					.build();
+			return updatedEvent;
+		}
+		public ArrayList<Event> getNextEventsInPage(ArrayList<Event> events,int currentPage, int startIndex){
+			ArrayList<Event> eventsInPage= new ArrayList<>();
+			int maxPage = super.computeMaxPage(events.size());
+			for(int i=startIndex ; i<currentPage*3 && currentPage<=maxPage ; i++){
+				if(i<events.size()) { eventsInPage.add(events.get(i));}
+			}
+
+			return eventsInPage;
 		}
 	}
 	public static class SalesMenu extends Menu {

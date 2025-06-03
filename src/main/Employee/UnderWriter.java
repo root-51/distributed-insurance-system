@@ -11,14 +11,16 @@ import main.List.InsuranceProductListImpl;
 
 
 public class UnderWriter extends User {
+
   private final ContractList contractList;
   private final CustomerList customerList;
   private final InsuranceProductList insuranceProductList;
-  public UnderWriter(String id, UserType userType){
-    super(id, userType);
+  public UnderWriter(String id, String userPW, UserType userType){
+    super(id,userPW, userType);
     this.contractList = new ContractListImpl();
     this.customerList = new CustomerListImpl();
     this.insuranceProductList = new InsuranceProductListImpl();
+
   }
 
   public ContractList getContractList() {

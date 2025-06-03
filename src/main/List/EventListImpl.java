@@ -22,7 +22,7 @@ public class EventListImpl implements EventList {
 	 */
 	public boolean delete(String eventID){
 		try (DAO dao = new DAO()){
-			dao.executeQuery("DELETE FROM Event WHERE EventID = ?", eventID);
+			dao.executeQuery("DELETE FROM `event` WHERE event_id = ?", eventID);
 			return true;
 		}catch(Exception e){
 			return false;
@@ -32,7 +32,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public boolean insert(Event event) {
 		try (DAO dao = new DAO()){
-			dao.executeQuery("INSERT INTO Event (event_id, claim_value, documents, event_date, event_description, event_location, event_receipt_date, state_of_evaluation, state_of_compensation, user_id, paid_value)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			dao.executeQuery("INSERT INTO `event` (event_id, claim_value, documents, event_date, event_description, event_location, event_receipt_date, state_of_evaluation, state_of_compensation, user_id, paid_value)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					event.getEventID(),
 					event.getClaimValue(),
 					event.getDocuments(),
@@ -40,12 +40,13 @@ public class EventListImpl implements EventList {
 					event.getEventDescription(),
 					event.getEventLocation(),
 					event.getReceiptDate(),
-					event.getEvaluation().getResultOfEvaluation().getValue(),
-					event.getEvaluation().getCompensation().getResultOfPaid().getValue(),
+					0, // state_of_evaluation
+					0, // state_of_compensation
 					event.getCustomerID(),
-					event.getEvaluation().getCompensation().getAmountOfPaid());
+					0); // paid_value
 			return true;
 		}catch(Exception e){
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}
@@ -55,8 +56,17 @@ public class EventListImpl implements EventList {
 	@Override
 	public ArrayList<Event> searchEvent(String key, String value) {
 		try (DAO dao = new DAO()) {
-			return (ArrayList<Event>) dao.executeQuery("SELECT * FROM event WHERE ? = ?", key, value)
-					.toEvents();
+			String sql="";
+			switch (key){
+				case "user_id":
+					sql = "SELECT * FROM `event` WHERE user_id = ?";
+					break;
+				case "event_id":
+					sql = "SELECT * FROM `event` WHERE event_id = ?";
+					break;
+			}
+			ArrayList<Event> events =(ArrayList<Event>) dao.executeQuery(sql, value).toEvents();
+			return events;
 		} catch (Exception e) {
 			return null;
 		}
@@ -67,7 +77,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public boolean update(Event updatedEvent) {
 		try (DAO dao = new DAO()){
-			dao.executeQuery("UPDATE Event SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? WHERE event_id = ?",
+			dao.executeQuery("UPDATE `event` SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? WHERE event_id = ?",
 					updatedEvent.getClaimValue(),
 					updatedEvent.getDocuments(),
 					updatedEvent.getEventDate(),
@@ -81,6 +91,7 @@ public class EventListImpl implements EventList {
 					updatedEvent.getEventID());
 			return true;
 		}catch(Exception e){
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}

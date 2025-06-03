@@ -1,4 +1,5 @@
 package main.Data;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,15 +10,17 @@ import java.util.Objects;
  * @created 11-5-2025 ���� 11:25:09
  */
 public class Event {
-
-	private int claimValue;
-	public String customerID;
-	private String documents;
-	private Date eventDate;
-	private String eventDescription;
 	public String eventID;
+	private int claimValue;
+	private String documents;
+	private LocalDate eventDate;
+	private String eventDescription;
 	private String eventLocation;
-	private Date receiptDate;
+	private LocalDate receiptDate;
+	// state_of_evealuation
+	// state_of_compensation
+	public String customerID;
+	// paid_value
 	private Evaluation evaluation;
 
 	private Event(Builder builder) {
@@ -26,7 +29,7 @@ public class Event {
 		this.documents = builder.documents;
 		this.eventDate = builder.eventDate;
 		this.eventDescription = builder.eventDescription;
-		this.eventID = builder.customerID;
+		this.eventID = builder.eventID;
 		this.eventLocation = builder.eventLocation;
 		this.receiptDate = builder.receiptDate;
 		this.evaluation = builder.evaluation;
@@ -44,7 +47,7 @@ public class Event {
 		return documents;
 	}
 
-	public Date getEventDate() {
+	public LocalDate getEventDate() {
 		return eventDate;
 	}
 
@@ -60,7 +63,7 @@ public class Event {
 		return eventLocation;
 	}
 
-	public Date getReceiptDate() {
+	public LocalDate getReceiptDate() {
 		return receiptDate;
 	}
 
@@ -81,10 +84,10 @@ public class Event {
 		private final String eventID;
 		private int claimValue;
 		private String documents;
-		private Date eventDate;
+		private LocalDate eventDate;
 		private String eventDescription;
 		private String eventLocation;
-		private Date receiptDate;
+		private LocalDate receiptDate;
 		private Evaluation evaluation;
 
 		public Builder(String eventID,String customerID){
@@ -101,7 +104,7 @@ public class Event {
 			return this;
 		}
 
-		public Builder eventDate(Date eventDate) {
+		public Builder eventDate(LocalDate eventDate) {
 			this.eventDate = eventDate;
 			return this;
 		}
@@ -116,7 +119,7 @@ public class Event {
 			return this;
 		}
 
-		public Builder receiptDate(Date receiptDate) {
+		public Builder receiptDate(LocalDate receiptDate) {
 			this.receiptDate = receiptDate;
 			return this;
 		}

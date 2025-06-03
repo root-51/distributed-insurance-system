@@ -1,11 +1,16 @@
 package main.DAO;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Utillity {
 
+  // 오늘 날짜를 반환하는 메소드
+  public static LocalDate getTodayLocalDate(){
+    return LocalDate.now();
+  }
   public static String generateID(char startChar) {
     SecureRandom RANDOM = new SecureRandom();
     StringBuilder sb = new StringBuilder(9);
@@ -67,4 +72,5 @@ public class Utillity {
   private static String unescapeJsonString(String str) {
     return str.replace("\\\"", "\"");
   }
+
 }

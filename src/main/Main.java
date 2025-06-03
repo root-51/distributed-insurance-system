@@ -20,15 +20,8 @@ public class Main {
 		customerList = new CustomerListImpl();
 		insuranceProductList = new InsuranceProductListImpl();
 		contractList = new ContractListImpl();
-//		loadData = new LoadData(customerList, employeeList,insuranceProductList);
-//
-//		loadData.loadCustomerData();
-//		loadData.loadEmployeeData();
-//		loadData.loadInsuranceProductData();
-//		loadData.loadContractData();
 
 		loginedUser = login("overwriter");
-//		loginedUser = new UnderWriter("아이디임",UserType.UnderWriter);
 
 		menu = new SystemManager(customerList, insuranceProductList, contractList,
 				loginedUser);
@@ -39,10 +32,6 @@ public class Main {
 		}
 
 	}
-
-//	public static User login(String loginID) {
-//		return employeeList.search(loginID);
-//	}
 
 	public static User login(String userID) {
 		try (DAO dao = new DAO()){

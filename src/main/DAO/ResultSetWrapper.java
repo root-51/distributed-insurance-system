@@ -1,5 +1,4 @@
 package main.DAO;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,11 +9,7 @@ import main.Data.Customer;
 import main.Data.Evaluation;
 import main.Data.Event;
 import main.Data.InsuranceProduct;
-import main.Employee.LossAdjuster;
-import main.Employee.ProductManagement;
-import main.Employee.Sales;
-import main.Employee.UnderWriter;
-import main.Employee.User;
+import main.Employee.*;
 import main.Employee.User.UserType;
 import main.Enum.ProcessState;
 import main.Enum.Sex;
@@ -35,14 +30,15 @@ public class ResultSetWrapper {
   public User toUser(){
     Map<String,Object> userData = resultSetList.get(0);
     String userID = (String) userData.get("user_id");
+    String userPW = (String)userData.get("user_pw");
     int userTypeID = (Integer) userData.get("user_type_id");
     if (userData != null) {
       switch (userTypeID){
-//        case 1:return new Customer(userID, UserType.fromValue(userTypeID));
-        case 2:return new Sales(userID, UserType.fromValue(userTypeID));
-        case 3:return new UnderWriter(userID, UserType.fromValue(userTypeID));
-        case 4:return new ProductManagement(userID, UserType.fromValue(userTypeID));
-        case 5:return new LossAdjuster(userID, UserType.fromValue(userTypeID));
+        case 1:return new CustomerService(userID, userPW,UserType.fromValue(userTypeID));
+        case 2:return new Sales(userID,userPW, UserType.fromValue(userTypeID));
+        case 3:return new UnderWriter(userID, userPW,UserType.fromValue(userTypeID));
+        case 4:return new ProductManagement(userID, userPW,UserType.fromValue(userTypeID));
+        case 5:return new LossAdjuster(userID, userPW, UserType.fromValue(userTypeID));
         default:
       }
     }
@@ -159,13 +155,13 @@ public class ResultSetWrapper {
     try {
       // Event 빌더 패턴 사용. 생성자에 필수 파라미터가 있다고 가정합니다.
       events.add(
-          new Event.Builder((String) row.get("event_id"), (String) row.get("customer_id"))
+          new Event.Builder((String) row.get("event_id"), (String) row.get("user_id"))
               .claimValue((Integer) row.get("claim_value"))
               .documents((String) row.get("documents"))
-              .eventDate(row.get("event_date") != null ? new Date(((java.sql.Date) row.get("event_date")).getTime()) : null)
+              .eventDate(row.get("event_date") != null ? ((java.sql.Date) row.get("event_date")).toLocalDate() : null)
               .eventDescription((String) row.get("event_description"))
               .eventLocation((String) row.get("event_location"))
-              .receiptDate(row.get("event_receipt_date") != null ? new Date(((java.sql.Date) row.get("event_receipt_date")).getTime()) : null)
+              .receiptDate(row.get("event_receipt_date") != null ? ((java.sql.Date) row.get("event_date")).toLocalDate() : null)
               .evaluation(map2Evaluation(row)) // 중첩된 객체 매핑
               .build()
       );
@@ -195,10 +191,10 @@ public class ResultSetWrapper {
     // row.get()을 사용하여 Map에서 값을 가져옵니다.
     return new Evaluation.Builder(
         (String) row.get("event_id"), // event_id
-        (String) row.get("event_id"), // evaluation_id (가정)
-        (String) row.get("customer_id") // customer_id
+        (String) (row.get("event_id")), // evaluation_id (가정)
+        (String) row.get("user_id") // customer_id
     )
-        .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromInteger((Integer) row.get("state_of_evaluation")) : null) // String to Enum 변환
+        .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromInteger((int)row.get("state_of_evaluation")) : null) // String to Enum 변환
         .compensation(map2Compensation(row)) // 중첩된 객체 매핑
         .build();
   } catch (NullPointerException | ClassCastException e) {
@@ -226,10 +222,10 @@ public class ResultSetWrapper {
     return new Compensation.Builder(
         (String) row.get("event_id"), // event_id
         (String) row.get("event_id"), // compensation_id (가정)
-        (String) row.get("customer_id") // customer_id
+        (String) row.get("user_id") // customer_id
     )
-        .claimsPaid((Integer) row.get("amount_of_paid"))
-        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromInteger((Integer) row.get("state_of_compensation")) : null) // String to Enum 변환
+        .claimsPaid((Integer) row.get("paid_value"))
+        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromInteger((int) row.get("state_of_compensation")) : null) // String to Enum 변환
         .build();
   } catch (NullPointerException | ClassCastException e) {
     System.err.println("Compensation 매핑 중 타입/널 오류: " + e.getMessage() + " - 데이터: " + row);

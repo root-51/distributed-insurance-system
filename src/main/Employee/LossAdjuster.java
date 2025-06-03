@@ -17,14 +17,9 @@ import main.List.EventListImpl;
 
 	private final EventList EventList;
 	private final CustomerList customerList;
+	public LossAdjuster(String userId, String userPW, UserType employeeType) {
+		super(userId,userPW, employeeType);
 
-	public LossAdjuster(int numOfEmployees, UserType employeeType) {
-		super(numOfEmployees, employeeType);
-		this.EventList = new EventListImpl();
-		this.customerList = new CustomerListImpl();
-	}
-	public LossAdjuster(String userId, UserType employeeType) {
-		super(userId, employeeType);
 		this.EventList = new EventListImpl();
 		this.customerList = new CustomerListImpl();
 	}
