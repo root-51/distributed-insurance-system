@@ -142,9 +142,10 @@ public class Menu { // TODO: rename to IOManager
 		return localDate;
 	}
 	public static LocalDate getInputOrKeepLocalDate(String title, LocalDate prevValue) {
-		LocalDate date = getInputLocalDate(title);
-		if(date==null) date = prevValue;
-		return date;
+		String dateStr = getInputOrKeepStr(title+"(YYYY-MM-DD)",prevValue.toString());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(dateStr, formatter);
+		return localDate;
 	}
 
 	// inner class =================================
