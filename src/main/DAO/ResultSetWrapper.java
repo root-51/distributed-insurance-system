@@ -229,8 +229,8 @@ public class ResultSetWrapper {
         (String) row.get("event_id"), // compensation_id (가정)
         (String) row.get("user_id") // customer_id
     )
-        .claimsPaid((Integer) row.get("amount_of_paid"))
-        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromString((String) row.get("state_of_compensation")) : null) // String to Enum 변환
+        .claimsPaid((Integer) row.get("paid_value"))
+        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromInteger((int) row.get("state_of_compensation")) : null) // String to Enum 변환
         .build();
   } catch (NullPointerException | ClassCastException e) {
     System.err.println("Compensation 매핑 중 타입/널 오류: " + e.getMessage() + " - 데이터: " + row);
