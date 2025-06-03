@@ -101,7 +101,7 @@ public class Event {
 			return this;
 		}
 
-		public Builder eventDate(Date eventDate) {
+		public Builder eventDate(LocalDate eventDate) {
 			this.eventDate = eventDate;
 			return this;
 		}
