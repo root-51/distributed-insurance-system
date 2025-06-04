@@ -30,10 +30,6 @@ public class InsuranceProduct {
 		this.exemptionPeriod=builder.exemptionPeriod;
 	}
 
-	/**
-	 * @param customerAge
-	 */
-//	getCoverageByAge의 매개변수 중 int타입의 연령대 변수가 있는데 필요 없는거 같아서 일단 지웠어요
 	public String getCoverageByAge(int customerAge){
 		int ageGroup = customerAge/10;
 		if(coverageByAge.containsKey(Integer.toString(ageGroup)))
@@ -94,33 +90,25 @@ public class InsuranceProduct {
 		return true;
 	}
 
-	public boolean setCoverageByAge(HashMap<String, String> coverageByAge) {
-		this.coverageByAge = coverageByAge;
-		return true;
-	}
-
-	public void setProductID(String productID){
-		this.productID = productID;
-	}
-
 	public String toString() {
 		StringBuilder coverageStr = new StringBuilder();
 		for (HashMap.Entry<String, String> entry : coverageByAge.entrySet()) {
 			coverageStr.append(entry.getKey()).append("대 : ")
 					.append(entry.getValue()).append("원\n");
 		}
-		return "상품 ID :'" + productID + '\'' +
+
+		return "상품ID :'" + productID + '\'' +
 				",\n  상품이름 : '" + productName + '\'' +
-				",\n  면책기간 : " + exemptionPeriod +'\'' +
-				",\n  최대가입연령: " + maxAge +
+				",\n  상품관리자ID : '" + productManagementID + '\'' +
+				",\n  연령별 보장범위\n" + coverageStr.toString() +
+				"  면책기간 : " + exemptionPeriod +
+				",\n  최대가입연령 : " + maxAge +
 				",\n  최대사고횟수 : " + maxNumberEvent +
 				",\n  보험료 : " + premium +
-				",\n  감액기간 : " + reductionPeriod +
-				",\n  감액률: " + reductionRatio +
-				",\n  성별=" + sex +
-				",\n  상품개발자ID : '" + productManagementID + '\'' +
-				",\n  coverageByAge\n" + coverageStr +
-				" ================================================";
+				",\n  면책기간 : " + reductionPeriod +
+				",\n  면책비율 : " + reductionRatio +
+				",\n  성별 :" + sex +
+				"\n ================================================";
 	}
 
 	public static Builder builder() {

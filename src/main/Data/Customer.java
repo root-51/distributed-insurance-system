@@ -12,12 +12,14 @@ public class Customer {
 	private final String phoneNumber;
 	private final String rrn;
 	private final Sex sex;
+	private final String pw;
 
 	private Customer(Builder builder) {
 		this.accountNumber = builder.accountNumber;
 		this.address = builder.address;
 		this.age = builder.age;
 		this.customerID = builder.customerID;
+		this.pw = builder.pw;
 		this.job = builder.job;
 		this.name = builder.name;
 		this.phoneNumber = builder.phoneNumber;
@@ -40,6 +42,8 @@ public class Customer {
 	public String getCustomerID() {
 		return customerID;
 	}
+
+	public String getPw(){return pw;}
 
 	public String getJob() {
 		return job;
@@ -86,6 +90,7 @@ public class Customer {
 		private String address;
 		private int age;
 		private String customerID;
+		private String pw;
 		private String job;
 		private String name;
 		private String phoneNumber;
@@ -109,6 +114,11 @@ public class Customer {
 		
 		public Builder customerID(String customerID) {
 			this.customerID = customerID;
+			return this;
+		}
+
+		public Builder pw(String pw){
+			this.pw = pw;
 			return this;
 		}
 

@@ -1,4 +1,4 @@
-package main.Employee;
+package main.User;
 
 import main.Data.Compensation;
 import main.Data.Evaluation;

@@ -59,34 +59,15 @@ public class Contract {
 		return state;
 	}
 
-	/**
-	 * @param isReceipt 심사 통과하려면 False, 거부하려면 False
-	 */
-	public Contract receiptEvaluation(boolean isReceipt){
-		if(isReceipt) {
-			this.state = ProcessState.Completed;
-		}
-		else {
-			this.state = ProcessState.Rejected;
-		}
-		return this;
-	}
-
-
-
-
-	@Override
-	public String toString() {
-		return "Contract{" +
-				"contractDate=" + contractDate +
-				", contractID='" + contractID + '\'' +
-				", customerID='" + customerID + '\'' +
-				", expirationDate=" + expirationDate +
-				", productID='" + productID + '\'' +
-				", salesID='" + salesID + '\'' +
-				", state=" + state +
-				", insuranceProduct=" + insuranceProduct +
-				'}';
+	public String toString(){
+		return "계약ID :'" + contractID + '\'' +
+				"\n계약날짜 :" + contractDate + '\'' +
+				"\n만료일자 : " + expirationDate + '\'' +
+				"\n상품ID : "+ productID + '\''+
+				"\n영업사원ID : "+salesID+'\''+
+				"\n상태 : "+state+'\''+
+				"\n고객ID : "+customerID+
+				"\n ================================================";
 	}
 
 	// --- Builder Class ---
