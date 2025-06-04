@@ -2,6 +2,7 @@ package main.List;
 import java.util.ArrayList;
 import java.util.List;
 import main.Data.Contract;
+import main.Enum.ProcessState;
 
 public interface ContractList {
 
@@ -13,8 +14,10 @@ public interface ContractList {
 
 	public boolean update(Contract contract);
 
-	public ArrayList<Contract> searchByKeyValue(String key, String value);
+	public List<Contract> searchByKeyValue(String key, String value);
 
-	public ArrayList<Contract> getAll();
+	public List<Contract> searchByStateKeyValue(ProcessState state, String key, String value);
+
+	public List<Contract> getAll();
 
 }

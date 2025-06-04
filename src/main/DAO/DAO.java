@@ -53,20 +53,16 @@ public class DAO implements AutoCloseable {
       System.err.println("DB 연결이 유효하지 않습니다. DAO 객체를 다시 생성해야 합니다.");
       throw new SQLException("데이터베이스 연결이 닫혀있거나 유효하지 않습니다.");
     }
-
     String trimmedSql = sql.trim().toUpperCase();
     PreparedStatement preparedStatement = null; // PreparedStatement 선언
     ResultSet rs = null; // ResultSet 선언
-
     try {
       // 현재 DAO 인스턴스의 Connection 객체를 사용합니다.
       preparedStatement = this.con.prepareStatement(sql);
-
       // 파라미터 설정
       for (int i = 0; i < params.length; i++) {
         preparedStatement.setObject(i + 1, params[i]);
       }
-
       if (trimmedSql.startsWith("SELECT")) {
         rs = preparedStatement.executeQuery();
         // ResultSetWrapper로 래핑하고 메모리에 로드한 후, rs와 preparedStatement를 닫습니다.

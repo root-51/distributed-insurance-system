@@ -125,7 +125,7 @@ public class ResultSetWrapper {
       contracts.add(
           new Contract.Builder()
               .contractID((String) row.get("contract_id"))
-              .contractDate(new Date(((java.sql.Date) row.get("contract_date")).getTime()))
+              .contractDate(((java.sql.Date) row.get("contract_date")).toLocalDate())
               .customerID((String) row.get("customer_id"))
               .expirationDate(((java.sql.Date) row.get("expiration_date")).toLocalDate())
               .productID((String) row.get("product_id"))
@@ -191,11 +191,9 @@ public class ResultSetWrapper {
     // row.get()을 사용하여 Map에서 값을 가져옵니다.
     return new Evaluation.Builder(
         (String) row.get("event_id"), // event_id
-        (String) (row.get("event_id")), // evaluation_id (가정)
-        (String) row.get("user_id") // customer_id
+        map2Compensation(row)
     )
         .resultOfEvaluation(row.get("state_of_evaluation") != null ? ProcessState.fromInteger((int)row.get("state_of_evaluation")) : null) // String to Enum 변환
-        .compensation(map2Compensation(row)) // 중첩된 객체 매핑
         .build();
   } catch (NullPointerException | ClassCastException e) {
     System.err.println("Evaluation 매핑 중 타입/널 오류: " + e.getMessage() + " - 데이터: " + row);
@@ -220,12 +218,11 @@ public class ResultSetWrapper {
     // Compensation 빌더 패턴 사용. 생성자에 필수 파라미터가 있다고 가정합니다.
     // row.get()을 사용하여 Map에서 값을 가져옵니다.
     return new Compensation.Builder(
-        (String) row.get("event_id"), // event_id
-        (String) row.get("event_id"), // compensation_id (가정)
-        (String) row.get("user_id") // customer_id
+        (String) row.get("event_id") // event_id
     )
-        .claimsPaid((Integer) row.get("paid_value"))
-        .paidState(row.get("state_of_compensation") != null ? ProcessState.fromInteger((int) row.get("state_of_compensation")) : null) // String to Enum 변환
+        .paidValue((Integer) row.get("paid_value"))
+        .compensationValue((Integer) row.get("compensation_value"))
+        .resultOfPaid(row.get("state_of_compensation") != null ? ProcessState.fromInteger((int) row.get("state_of_compensation")) : null) // String to Enum 변환
         .build();
   } catch (NullPointerException | ClassCastException e) {
     System.err.println("Compensation 매핑 중 타입/널 오류: " + e.getMessage() + " - 데이터: " + row);

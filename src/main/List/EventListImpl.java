@@ -2,11 +2,9 @@
 package main.List;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import main.DAO.DAO;
-import main.Data.Compensation;
-import main.Data.Evaluation;
 import main.Data.Event;
-import main.Enum.ProcessState;
 
 public class EventListImpl implements EventList {
 
@@ -54,24 +52,48 @@ public class EventListImpl implements EventList {
 
 //Search
 	@Override
-	public ArrayList<Event> searchEvent(String key, String value) {
+	public List<Event> searchEvent(String key, String value) {
 		try (DAO dao = new DAO()) {
-			String sql="";
-			switch (key){
-				case "user_id":
-					sql = "SELECT * FROM `event` WHERE user_id = ?";
-					break;
-				case "event_id":
-					sql = "SELECT * FROM `event` WHERE event_id = ?";
-					break;
-			}
-			ArrayList<Event> events =(ArrayList<Event>) dao.executeQuery(sql, value).toEvents();
-			return events;
+			return dao.executeQuery("SELECT * FROM event WHERE "+key+" = ?",value).toEvents();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
+	public List<Event> searchEvent(String eventID){
+		try (DAO dao = new DAO()) {
+			return dao.executeQuery("SELECT * FROM event WHERE event_id = ?",eventID).toEvents();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public List<Event> searchEvent(Map<String, String> queryMap) {
+		String sql;
+		StringBuilder whereClause = new StringBuilder();
+		boolean firstCondition = true;
+		for (Map.Entry<String, String> entry : queryMap.entrySet()) {
+			String column = entry.getKey();
+			String value = entry.getValue();
+			if (!firstCondition) {
+				whereClause.append(" AND ");
+			} else {
+				firstCondition = false;
+			}
+			whereClause.append(column).append(" = '").append(value).append("'");
+		}
+		sql = "SELECT * FROM event";
+		if (whereClause.length() > 0) {
+			sql += " WHERE " + whereClause.toString();
+		}
+		try (DAO dao = new DAO()) {
+			return dao.executeQuery(sql).toEvents();
+		} catch (Exception e) {
+			System.err.println("Error searching events: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 //Update
 	@Override
@@ -87,7 +109,7 @@ public class EventListImpl implements EventList {
 					updatedEvent.getEvaluation().getResultOfEvaluation().getValue(),
 					updatedEvent.getEvaluation().getCompensation().getResultOfPaid().getValue(),
 					updatedEvent.getCustomerID(),
-					updatedEvent.getEvaluation().getCompensation().getAmountOfPaid(),
+					updatedEvent.getEvaluation().getCompensation().getPaidValue(),
 					updatedEvent.getEventID());
 			return true;
 		}catch(Exception e){

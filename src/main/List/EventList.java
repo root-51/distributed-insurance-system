@@ -1,6 +1,7 @@
 package main.List;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import main.Data.Compensation;
 import main.Data.Evaluation;
 import main.Data.Event;
@@ -17,7 +18,10 @@ public interface EventList {
 	public boolean insert(Event event);
 
 	//search
-	public ArrayList<Event> searchEvent(String key, String value);
+	public List<Event> searchEvent(String key, String value);
+	public List<Event> searchEvent(Map<String,String> queryMap);
+	public List<Event> searchEvent(String eventID);
+
 
 	//update
 	public boolean update(Event event);

@@ -16,7 +16,7 @@ public class CustomerService extends User {
         return eventList.insert(event);
     }
     public ArrayList<Event> getMyEvents(String userID) {
-        try{ return eventList.searchEvent("user_id", userID); }
+        try{ return(ArrayList<Event>) eventList.searchEvent("user_id", userID); }
         catch (Exception e) { return null; }
 
     }

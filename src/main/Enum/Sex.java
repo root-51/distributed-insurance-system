@@ -20,4 +20,11 @@ public enum Sex {
       default -> UNKNOWN;
     };
   }
+  public static String getKoString(Sex sex){
+    return switch (sex) {
+      case MALE -> "남자";
+      case FEMALE -> "여자";
+      default -> "미상";
+    };
+  }
 }
