@@ -11,7 +11,7 @@ public class LoginMenu {
     Scanner scanner;
     DAO dao;
 
-    public User login() throws SQLException {
+    public User login() {
         User user;
         System.out.print("==로그인==\n ID : ");
         scanner = new Scanner(System.in);
