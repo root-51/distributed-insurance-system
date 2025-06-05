@@ -53,10 +53,7 @@ import main.List.InsuranceProductListImpl;
 		Evaluation targetEvaluation = targetEvent.getEvaluation();
 		targetEvaluation.receiptEvaluation(isReceipt);
 		targetEvaluation.getCompensation().setCompensationValue(predictedCompensationValue);
-		System.out.println(targetEvaluation);
 		targetEvent.setEvaluation(targetEvaluation);
-		System.out.println(targetEvent);
-		System.out.println(targetEvaluation.getCompensation().getCompensationValue());
 		return EventList.update(targetEvent);
 	}
 

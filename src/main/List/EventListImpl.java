@@ -99,7 +99,7 @@ public class EventListImpl implements EventList {
 	@Override
 	public boolean update(Event updatedEvent) {
 		try (DAO dao = new DAO()){
-			dao.executeQuery("UPDATE `event` SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? WHERE event_id = ?",
+			dao.executeQuery("UPDATE `event` SET claim_value = ?, documents = ?, event_date = ?, event_description = ?, event_location = ?, event_receipt_date = ?, state_of_evaluation = ?, state_of_compensation = ?, user_id = ?, paid_value = ? , compensation_value = ? WHERE event_id = ?",
 					updatedEvent.getClaimValue(),
 					updatedEvent.getDocuments(),
 					updatedEvent.getEventDate(),
@@ -110,6 +110,7 @@ public class EventListImpl implements EventList {
 					updatedEvent.getEvaluation().getCompensation().getResultOfPaid().getValue(),
 					updatedEvent.getCustomerID(),
 					updatedEvent.getEvaluation().getCompensation().getPaidValue(),
+					updatedEvent.getEvaluation().getCompensation().getCompensationValue(),
 					updatedEvent.getEventID());
 			return true;
 		}catch(Exception e){
