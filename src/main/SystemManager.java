@@ -1029,7 +1029,7 @@ public class SystemManager {
 	public int getUserSelectInt() {
 		System.out.print(">> ");
 		String userInput = scanner.nextLine();
-		return Integer.parseInt(isNumeric(userInput) ? "-1" : userInput);
+		return Integer.parseInt(isNumeric(userInput) ? userInput : "-1" );
 	}
 	private boolean isNumeric(String strNum){
 		if(strNum == null){
