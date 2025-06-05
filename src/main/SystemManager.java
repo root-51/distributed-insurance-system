@@ -820,7 +820,7 @@ public class SystemManager {
 			System.out.println("오류가 발생했습니다.");
 			return;
 		}
-		System.out.println("보상을 지급하시겠습니까? 예상 지급액: "+targetEvent.getEvaluation().getCompensation().getPaidValue()+"원");
+		System.out.println("보상을 지급하시겠습니까? 예상 지급액: "+targetEvent.getEvaluation().getCompensation().getCompensationValue()+"원");
 		switch (getUserSelectYorN()) {
 			case UserSelection.Yes:
 				System.out.println("보상 지급이 " + (lossAdjuster.payCompensation(targetEvent.getEventID(),true) ? "승인되었습니다." : "실패하였습니다."));
@@ -865,6 +865,7 @@ public class SystemManager {
 
 
 		int predictedCompensationValue = lossAdjuster.predictCompensationValue(selectedContract,targetEvent);
+		System.out.println(predictedCompensationValue);
 		if(predictedCompensationValue < 0) {
 			System.out.println("보상액을 산정할수 없습니다");
 			return;
@@ -881,7 +882,7 @@ public class SystemManager {
 				System.out.println("보상 심사가 "+((lossAdjuster.evaluateCompensation(targetEvent.getEventID(),true,predictedCompensationValue)) ?"거부되었습니다.":"실패하였습니다."));
 				break;
 			case UserSelection.Cancel:
-				System.out.println("계약 심사가 취소되었습니다.");
+				System.out.println("보상 심사가 취소되었습니다.");
 				break;
 		};
 	}

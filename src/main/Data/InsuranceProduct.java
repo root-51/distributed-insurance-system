@@ -33,10 +33,11 @@ public class InsuranceProduct {
 		this.exemptionPeriod=builder.exemptionPeriod;
 	}
 
+//오류수정 0605
 	public String getCoverageByAge(int customerAge){
 		int ageGroup = customerAge/10;
-		if(coverageByAge.containsKey(Integer.toString(ageGroup)))
-			return coverageByAge.get(Integer.toString(ageGroup));
+		if(coverageByAge.containsKey(Integer.toString(ageGroup*10)))
+			return coverageByAge.get(Integer.toString(ageGroup*10));
 		return null;
 	}
 
@@ -130,7 +131,7 @@ public class InsuranceProduct {
 		formattedOutput.append(String.format(" %-" + getKoreanCount(labelWidth, "최대사고횟수") + "s: %s회\n", "최대사고횟수", maxNumberEvent));
 		formattedOutput.append(String.format(" %-" + getKoreanCount(labelWidth, "보험료") + "s: %s원\n", "보험료", (int)premium)); // 정수로 출력
 		formattedOutput.append(String.format(" %-" + getKoreanCount(labelWidth, "면책기간(감액)") + "s: %s일\n", "면책기간(감액)", reductionPeriod));
-		formattedOutput.append(String.format(" %-" + getKoreanCount(labelWidth, "감액비율") + "s: %s%%\n", "감액비율", (int)(reductionRatio * 100))); // 퍼센트로 출력
+		formattedOutput.append(String.format(" %-" + getKoreanCount(labelWidth, "감액비율") + "s: %s%%\n", "감액비율", (int)(reductionRatio))); // 퍼센트로 출력
 		formattedOutput.append(String.format(" %-" + getKoreanCount(labelWidth, "성별") + "s: %s\n", "성별", sex));
 
 		formattedOutput.append("========================================\n"); // 끝나는 푸터
