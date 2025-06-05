@@ -2,6 +2,9 @@ package main.Data;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import main.Enum.ProcessState;
 
 
 /**
@@ -134,18 +137,43 @@ public class Event {
 	}
 	@Override
 	public String toString() {
-		return "Event{" +
-				"claimValue=" + claimValue +
-				", customerID=" + customerID +
-				", documents='" + documents + '\'' +
-				", eventDate=" + eventDate +
-				", eventDescription=" + eventDescription +
-				", eventID=" + eventID +
-				", eventLocation='" + eventLocation + '\'' +
-				", receiptDate=" + receiptDate +
-				", m_Evaluation=" + evaluation +
-				'}';
+		final int labelWidth = 8;
+		final int valueWidth = 15;
+
+		String claimValueString = String.valueOf(claimValue);
+		String evaluationStateString = (evaluation != null && evaluation.getResultOfEvaluation() != null) ?
+				ProcessState.toKoString(evaluation.getResultOfEvaluation()) : "";
+		String compensationStateString = (evaluation != null && evaluation.getCompensation() != null && evaluation.getCompensation().getState() != null) ?
+				ProcessState.toKoString(evaluation.getCompensation().getState()) : "";
+
+
+		return String.format(
+				" || %-" + getKoreanCount(labelWidth, "사고ID") + "s: %-" + getKoreanCount(valueWidth, eventID) + "s || %-" + getKoreanCount(labelWidth, "청구액") + "s: %-" + getKoreanCount(valueWidth, claimValueString) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "고객ID") + "s: %-" + getKoreanCount(valueWidth, customerID) + "s || %-" + getKoreanCount(labelWidth, "문서") + "s: %-" + getKoreanCount(valueWidth, documents) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "사고날짜") + "s: %-" + getKoreanCount(valueWidth, eventDate.toString()) + "s || %-" + getKoreanCount(labelWidth, "사고내용") + "s: %-" + getKoreanCount(valueWidth, eventDescription) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "사고장소") + "s: %-" + getKoreanCount(valueWidth, eventLocation) + "s || %-" + getKoreanCount(labelWidth, "사고신청일") + "s: %-" + getKoreanCount(valueWidth, receiptDate.toString()) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "심사상태") + "s: %-" + getKoreanCount(valueWidth, evaluationStateString) + "s || %-" + getKoreanCount(labelWidth, "보상상태") + "s: %-" + getKoreanCount(valueWidth, compensationStateString) + "s ||",
+				// 각 라인별 레이블과 실제 값
+				"사고ID", eventID, "청구액", claimValueString,
+				"고객ID", customerID, "문서", documents,
+				"사고날짜", eventDate, "사고내용", eventDescription,
+				"사고장소", eventLocation, "사고신청일", receiptDate,
+				"심사상태", evaluationStateString,
+				"보상상태", compensationStateString
+		);
 	}
+	private int getKoreanCount(int width,String str) {
+		if (str == null || str.isEmpty()) {
+			return width;
+		}
+		Matcher matcher = Pattern.compile("[\\uAC00-\\uD7A3]").matcher(str);
+		int koreanCount = 0;
+		while (matcher.find()) {
+			koreanCount++;
+		}
+		return width - koreanCount/2;
+	}
+
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;

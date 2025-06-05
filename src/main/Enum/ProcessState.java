@@ -27,4 +27,11 @@ public enum ProcessState {
             default -> throw new IllegalArgumentException("Invalid ReceiptState: " + state);
         };
     }
+    public static String toKoString(ProcessState state){
+        return switch (state) {
+            case Awaiting -> "대기중";
+            case Completed -> "완료";
+            case Rejected -> "거절";
+        };
+    }
 }

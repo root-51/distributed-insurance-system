@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import main.DAO.Utillity;
@@ -301,7 +302,7 @@ public class Menu { // TODO: rename to IOManager
 			System.out.println();
 			printMenuGuide("메뉴를 선택해주세요.");
 		}
-		public ArrayList<Contract> getNextContractsInPage(ArrayList<Contract> contracts,int currentPage, int startIndex){
+		public ArrayList<Contract> getNextContractsInPage(List<Contract> contracts,int currentPage, int startIndex){
 			ArrayList<Contract> customersInPage= new ArrayList<>();
 			int maxPage = super.computeMaxPage(contracts.size());
 			for(int i=startIndex ; i<currentPage*3 && currentPage<=maxPage ; i++){
@@ -394,7 +395,7 @@ public class Menu { // TODO: rename to IOManager
 
 			String[] menuList = {"종료", "보상 지급", "보상 심사" };
 			setMenuList(menuList);
-			setUserTypeStr("손해사정시");
+			setUserTypeStr("손해사정사");
 
 		}
 	}

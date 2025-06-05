@@ -1,5 +1,6 @@
 package main.User;
 
+import main.Data.Contract;
 import main.Data.InsuranceProduct;
 import main.List.ContractList;
 import main.List.ContractListImpl;
@@ -40,8 +41,9 @@ public class UnderWriter extends User {
    * @param ContractID
    */
   public boolean underwrite(String ContractID , boolean approve){
-//    return contractList.update(contractList.search(ContractID).receiptEvaluation(approve));
-    return false;
+    Contract contract = contractList.search(ContractID);
+    contract.receiptContract(approve);
+    return contractList.update(contract);
   }
 
 }//end UnderWriter

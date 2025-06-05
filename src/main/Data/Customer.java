@@ -1,5 +1,7 @@
 package main.Data;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import main.Enum.Sex;
 
 public class Customer {
@@ -67,19 +69,36 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer{" +
-				"accountNumber='" + accountNumber + '\'' +
-				", address='" + address + '\'' +
-				", age=" + age +
-				", customerID='" + customerID + '\'' +
-				", job='" + job + '\'' +
-				", name='" + name + '\'' +
-				", phoneNumber='" + phoneNumber + '\'' +
-				", rrn='" + rrn + '\'' +
-				", sex=" + sex + 
-				'}';
-	}
+		final int labelWidth = 8;
+		final int valueWidth = 25;
 
+		String ageString = String.valueOf(age);
+		String sexString = Sex.getKoString(sex);
+
+		return String.format(
+				" || %-" + getKoreanCount(labelWidth, "계좌번호") + "s: %-" + getKoreanCount(valueWidth, accountNumber) + "s || %-" + getKoreanCount(labelWidth, "주소") + "s: %-" + getKoreanCount(valueWidth, address) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "나이") + "s: %-" + getKoreanCount(valueWidth, ageString) + "s || %-" + getKoreanCount(labelWidth, "고객ID") + "s: %-" + getKoreanCount(valueWidth, customerID) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "직업") + "s: %-" + getKoreanCount(valueWidth, job) + "s || %-" + getKoreanCount(labelWidth, "이름") + "s: %-" + getKoreanCount(valueWidth, name) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "전화번호") + "s: %-" + getKoreanCount(valueWidth, phoneNumber) + "s || %-" + getKoreanCount(labelWidth, "주민번호") + "s: %-" + getKoreanCount(valueWidth, rrn) + "s ||\n" +
+						" || %-" + getKoreanCount(labelWidth, "성별") + "s: %-" + getKoreanCount(valueWidth, sexString) + "s || %-" + getKoreanCount(labelWidth, "") + "s: %-" + getKoreanCount(valueWidth, "") + "s ||",
+				"계좌번호", accountNumber, "주소", address,
+				"나이", ageString, "고객ID", customerID,
+				"직업", job, "이름", name,
+				"전화번호", phoneNumber, "주민번호", rrn,
+				"성별", sexString, "", ""
+		);
+	}
+	private int getKoreanCount(int width,String str) {
+		if (str == null || str.isEmpty()) {
+			return width;
+		}
+		Matcher matcher = Pattern.compile("[\\uAC00-\\uD7A3]").matcher(str);
+		int koreanCount = 0;
+		while (matcher.find()) {
+			koreanCount++;
+		}
+		return width - koreanCount/2;
+	}
 	public static Builder builder() {
 		return new Builder();
 	}

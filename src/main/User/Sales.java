@@ -58,7 +58,7 @@ public class Sales extends User {
 
 
 
-	public boolean createContract(Date contract_date, LocalDate expiration_date, String productID,String customerID) {
+	public boolean createContract(LocalDate contract_date, LocalDate expiration_date, String productID,String customerID) {
 		InsuranceProduct product = searchProduct(productID);
 		Customer customer = searchCustomer(customerID);
 		if(product!=null && customer !=null){
@@ -74,9 +74,9 @@ public class Sales extends User {
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		Contract contract = null;
 		try {
-			contract = new Contract.Builder().contractDate(localFormatter.parse(contract_date)).customerID(customerID).expirationDate(LocalDate.parse(expirationDate,dateFormatter)).productID(productID).state(ProcessState.fromInteger(state)).build();
+			contract = new Contract.Builder().contractDate(LocalDate.parse(contract_date)).customerID(customerID).expirationDate(LocalDate.parse(expirationDate,dateFormatter)).productID(productID).state(ProcessState.fromInteger(state)).build();
 			return contractList.update(contract);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
@@ -87,11 +87,11 @@ public class Sales extends User {
 		return insuranceProductList.searchProductsByKey("product_id",productID).get(0);
 	}
 
-	public ArrayList<Contract> getAllContract() {
+	public List<Contract> getAllContract() {
 		return contractList.getAll();
 	}
 
-	public ArrayList<Contract> searchContractsByKey(String key, String value) {
+	public List<Contract> searchContractsByKey(String key, String value) {
 		return contractList.searchByKeyValue(key,value);
 	}
 }
