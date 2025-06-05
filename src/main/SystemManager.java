@@ -865,7 +865,6 @@ public class SystemManager {
 
 
 		int predictedCompensationValue = lossAdjuster.predictCompensationValue(selectedContract,targetEvent);
-		System.out.println(predictedCompensationValue);
 		if(predictedCompensationValue < 0) {
 			System.out.println("보상액을 산정할수 없습니다");
 			return;
@@ -1030,7 +1029,18 @@ public class SystemManager {
 	public int getUserSelectInt() {
 		System.out.print(">> ");
 		String userInput = scanner.nextLine();
-		return Integer.parseInt(userInput == null ? "-1" : userInput);
+		return Integer.parseInt(isNumeric(userInput) ? "-1" : userInput);
+	}
+	private boolean isNumeric(String strNum){
+		if(strNum == null){
+			return false;
+		}
+		try{
+			double d = Double.parseDouble(strNum);
+		}catch (NumberFormatException nfe){
+			return false;
+		}
+		return true;
 	}
 
 	public UserSelection getUserSelectYorN() {
