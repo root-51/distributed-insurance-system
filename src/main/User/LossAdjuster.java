@@ -67,6 +67,7 @@ import main.List.InsuranceProductListImpl;
 	public boolean payCompensation(String eventID, boolean isPaid) {
 		Event targetEvent = this.EventList.searchEvent("event_id", eventID).getFirst();
 		targetEvent.getEvaluation().getCompensation().receiptCompensation(isPaid);
+		//보상액 대로 지급
 		targetEvent.getEvaluation().getCompensation().setPaidValue(targetEvent.getEvaluation().getCompensation().getCompensationValue());
 		if (targetEvent.getEvaluation() == null
         || targetEvent.getEvaluation().getCompensation() == null) return false;
@@ -114,6 +115,9 @@ import main.List.InsuranceProductListImpl;
 			return -1;
 		}
 
+		System.out.println(customer.getAge()+"살");
+		System.out.println(product.getCoverageByAge(customer.getAge())+"원");
+
 		// --- 3. 기본 보상액 산정 (나이 기반) ---
 		int baseCompensationAmount = Integer.parseInt(product.getCoverageByAge(customer.getAge()));
 
@@ -133,8 +137,8 @@ import main.List.InsuranceProductListImpl;
 		// 사고 발생일과 사고 접수일 사이의 기간이 감액 기간(reductionPeriod) 이내이면 감액 비율 적용
 		// (단, reductionPeriod가 0이거나 음수인 경우 감액을 적용하지 않음)
 		if (product.getReductionPeriod() > 0 && daysFromEventToReceipt <= product.getReductionPeriod()) {
-			System.out.println("감액 기간 이내 (" + daysFromEventToReceipt + "일 경과). 감액 비율 " + (product.getReductionRatio() * 100) + "% 적용.");
-			finalCompensation -= (finalCompensation * product.getReductionRatio());
+			System.out.println("감액 기간 이내 (" + daysFromEventToReceipt + "일 경과). 감액 비율 " + (product.getReductionRatio()) + "% 적용.");
+			finalCompensation -= (finalCompensation * product.getReductionRatio() / 100);
 		} else if (product.getReductionPeriod() == 0) {
 			// reductionPeriod가 0이면 감액기간 자체가 없다고 해석, 즉 감액 없음
 		} else {
@@ -150,8 +154,10 @@ import main.List.InsuranceProductListImpl;
 		//    또는 청구액에 대한 특정 로직이 필요합니다.
 		//    현재는 연령별 보장범위가 기준이므로, 청구액은 단순히 정보로만 사용하고 최종 보상액에 직접 반영하지 않습니다.
 
+
 		// 최종 보상액은 int로 반환 (소수점 이하 버림)
-		return (int) finalCompensation;
+		// 보상액보다 청구액이 크면, 보상액을 주게 된다.
+		return 	event.getClaimValue() < finalCompensation ? event.getClaimValue() : (int) finalCompensation;
 	}
 
 	public EventList getEventList() {

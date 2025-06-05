@@ -11,8 +11,8 @@ public class LoginMenu {
     Scanner scanner;
     DAO dao;
 
-    public User login() throws SQLException {
-        dao = new DAO();
+    public User login() {
+        User user;
         System.out.print("==로그인==\n ID : ");
         scanner = new Scanner(System.in);
         String id = scanner.nextLine();
@@ -27,15 +27,14 @@ public class LoginMenu {
             pw = scanner.nextLine();
         }
 
-
-            ResultSetWrapper wrapper = dao.executeQuery("SELECT * from user where user_id = ? and user_pw = ?",id,pw);
-
-            User user = wrapper.toUser();
-            if(user==null){
+            try (DAO dao = new DAO()){
+                user = dao.executeQuery("SELECT * from user where user_id = ? and user_pw = ?",id,pw).toUser();
+            }catch (Exception e){
+                System.out.println("로그인에 실패했습니다");
                 return null;
-            }else{
+            }
                 System.out.println("로그인 되었습니다.");
                 return user;
-            }
+
     }
 }

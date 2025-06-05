@@ -221,7 +221,7 @@ public class ResultSetWrapper {
         (String) row.get("event_id") // event_id
     )
         .paidValue((Integer) row.get("paid_value"))
-        .compensationValue((Integer) row.get("compensation_value"))
+        .compensationValue((row.get("compensation_value") == null ?  -1 : (Integer)row.get("compensation_value")))
         .resultOfPaid(row.get("state_of_compensation") != null ? ProcessState.fromInteger((int) row.get("state_of_compensation")) : null) // String to Enum 변환
         .build();
   } catch (NullPointerException | ClassCastException e) {

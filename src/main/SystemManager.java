@@ -820,7 +820,7 @@ public class SystemManager {
 			System.out.println("오류가 발생했습니다.");
 			return;
 		}
-		System.out.println("보상을 지급하시겠습니까? 예상 지급액: "+targetEvent.getEvaluation().getCompensation().getPaidValue()+"원");
+		System.out.println("보상을 지급하시겠습니까? 예상 지급액: "+targetEvent.getEvaluation().getCompensation().getCompensationValue()+"원");
 		switch (getUserSelectYorN()) {
 			case UserSelection.Yes:
 				System.out.println("보상 지급이 " + (lossAdjuster.payCompensation(targetEvent.getEventID(),true) ? "승인되었습니다." : "실패하였습니다."));
@@ -881,7 +881,7 @@ public class SystemManager {
 				System.out.println("보상 심사가 "+((lossAdjuster.evaluateCompensation(targetEvent.getEventID(),true,predictedCompensationValue)) ?"거부되었습니다.":"실패하였습니다."));
 				break;
 			case UserSelection.Cancel:
-				System.out.println("계약 심사가 취소되었습니다.");
+				System.out.println("보상 심사가 취소되었습니다.");
 				break;
 		};
 	}
@@ -1029,7 +1029,18 @@ public class SystemManager {
 	public int getUserSelectInt() {
 		System.out.print(">> ");
 		String userInput = scanner.nextLine();
-		return Integer.parseInt(userInput == null ? "-1" : userInput);
+		return Integer.parseInt(isNumeric(userInput) ? userInput : "-1" );
+	}
+	private boolean isNumeric(String strNum){
+		if(strNum == null){
+			return false;
+		}
+		try{
+			double d = Double.parseDouble(strNum);
+		}catch (NumberFormatException nfe){
+			return false;
+		}
+		return true;
 	}
 
 	public UserSelection getUserSelectYorN() {

@@ -50,8 +50,8 @@ public class Compensation {
 	public void setPaidValue(int paid){
 		this.paidValue = paid;
   }
-	public void setCompensationValue(int paid){
-		this.paidValue = paid;
+	public void setCompensationValue(int compensationValue){
+		this.compensationValue = compensationValue;
 	}
 
 	public static class Builder {
